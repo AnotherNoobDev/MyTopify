@@ -12,7 +12,8 @@ import { GameSelectorComponent } from './game/game-selector/game-selector/game-s
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
-  { path: 'auth-callback', component: AuthCallbackComponent}
+  { path: 'auth-callback', component: AuthCallbackComponent },
+  { path: 'game/select', component: GameSelectorComponent }
 ];
 
 @NgModule({
