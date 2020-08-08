@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AuthRedirectComponent } from './auth/auth-redirect/auth-redirect.component';
 import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.component';
+import { GameSelectorComponent } from './game/game-selector/game-selector/game-selector.component';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
     AppComponent,
     AuthRedirectComponent,
     AuthCallbackComponent,
+    GameSelectorComponent,
   ],
   imports: [
     BrowserModule,
