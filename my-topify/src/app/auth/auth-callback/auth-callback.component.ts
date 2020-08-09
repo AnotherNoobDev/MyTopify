@@ -25,25 +25,26 @@ export class AuthCallbackComponent implements OnInit {
 
     console.log(this.route.snapshot.queryParams);
 
-    const code: string = this.route.snapshot.queryParams.code;
+    const callbackCode: string = this.route.snapshot.queryParams.code;
     const state: string = this.route.snapshot.queryParams.state;
 
     // TODO check state matches request state
-    console.log(code);
+    console.log(callbackCode);
     console.log(state);
 
-    this.spotifyHttpClient.getAccessToken(
-      this.authService.getClientId(), 
-      this.authService.getCodeVerifier(), 
-      code, 
-      this.authService.getRedirectURI()).subscribe(responseData => {
-        console.log(responseData);
-        this.authService.authenticate(responseData);
-    });
+    this.spotifyHttpClient.getAccessToken({
+      clientId: this.authService.getClientId(), 
+      codeVerifier: this.authService.getCodeVerifier(), 
+      code: callbackCode, 
+      redirectURI: this.authService.getRedirectURI()})
+        .subscribe(responseData => {
+          console.log(responseData);
+          this.authService.authenticate(responseData);
+        });
   }
 
   onProceed() {
-    //TODO autonavigate to game-selector page
+    // TODO autonavigate to game-selector page
     this.router.navigate(['game/select']);
   }
 }

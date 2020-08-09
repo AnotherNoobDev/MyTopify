@@ -140,10 +140,11 @@ export class AuthService {
   }
 
   private onRefreshTokenTimeout() {
-      this.spotifyHttpClient.refreshAccessToken(this.clientId, this.authToken.refresh_token).subscribe(responseData => {
-      console.log(responseData);
-      this.authenticate(responseData);
-    });
+      this.spotifyHttpClient.refreshAccessToken({ clientId: this.clientId, refreshToken: this.authToken.refresh_token })
+        .subscribe(responseData => {
+          console.log(responseData);
+          this.authenticate(responseData);
+        });
   }
 
   private retrieveAuthTokenFromStorage(): SpotifyAuthToken {
