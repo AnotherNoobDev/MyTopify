@@ -8,6 +8,29 @@ export enum Period {
   LongTerm
 }
 
+export interface AccessTokenRequest {
+  clientId: string;
+  codeVerifier: string;
+  code: string;
+  redirectURI: string;
+}
+
+export interface RefreshAccessTokenRequest {
+  clientId: string;
+  refreshToken: string;
+}
+
+export interface TrackRequest {
+  accessToken: string;
+  deviceId: string;
+  trackURI: string;
+}
+
+export interface TopChartRequest {
+  accessToken: string;
+  period: Period;
+}
+
 @Injectable({providedIn: 'root'})
 export class SpotifyHttpClientService {
   private tokenEndpoint = 'https://accounts.spotify.com/api/token';
@@ -22,13 +45,13 @@ export class SpotifyHttpClientService {
   // TODO all arguments are strings --> group in custom types to avoid ordering errors!!
 
   // Authentication
-  getAccessToken(clientId: string, codeVerifier: string, code: string, redirectURI: string) {
+  getAccessToken(request: AccessTokenRequest) {
     const httpParams = new HttpParams()
-      .set('client_id', clientId)
-      .set('code_verifier', codeVerifier)
+      .set('client_id', request.clientId)
+      .set('code_verifier', request.codeVerifier)
       .set('grant_type', 'authorization_code')
-      .set('code', code)
-      .set('redirect_uri', redirectURI);
+      .set('code', request.code)
+      .set('redirect_uri', request.redirectURI);
   
     const httpOptions = {
       headers: new HttpHeaders({
@@ -40,10 +63,10 @@ export class SpotifyHttpClientService {
     return this.http.post<SpotifyAuthToken>(this.tokenEndpoint, undefined, httpOptions);
   }
 
-  refreshAccessToken(clientId: string, refreshToken: string) {
+  refreshAccessToken(request: RefreshAccessTokenRequest) {
     const httpParams = new HttpParams()
-      .set('client_id', clientId)
-      .set('refresh_token', refreshToken)
+      .set('client_id', request.clientId)
+      .set('refresh_token', request.refreshToken)
       .set('grant_type', 'refresh_token');
   
     const httpOptions = {
@@ -59,46 +82,33 @@ export class SpotifyHttpClientService {
 
   // Player
 
-  requestSong(accessToken: string, deviceId: string, songURI: string) {
+  requestTrack(request: TrackRequest) {
     const playSongUrl = this.playEndpoint + '?';
 
     const httpOptions = {
         headers: new HttpHeaders()
-          .set('Authorization', 'Bearer ' + accessToken),
+          .set('Authorization', 'Bearer ' + request.accessToken),
 
         params: new HttpParams()
-          .set('device_id', deviceId)
+          .set('device_id', request.deviceId)
       };
 
     const requestBody = {
-      uris: [songURI]
+      uris: [request.trackURI]
     };
 
     return this.http.put(playSongUrl, requestBody, httpOptions);
   }
 
 
-  // Playlist
-
-  getPlaylist(accessToken: string, playlistId: string) {
-    const getPlaylistUrl = this.playlistsEndpoint + '/' + playlistId;
-
-    const httpOptionsForPlaylist = {
-        headers: new HttpHeaders()
-          .set('Authorization', 'Bearer ' + accessToken)
-      };
-
-    return this.http.get(getPlaylistUrl, httpOptionsForPlaylist);
-  }
-
-
   // Personalization
-  getUserTopTracks(accessToken: string, period: Period) {
-    return this.getUserTop(accessToken, 'tracks', period);
+  
+  getUserTopTracks(request: TopChartRequest) {
+    return this.getUserTop(request.accessToken, 'tracks', request.period);
   }
 
-  getUserTopArtists(accessToken: string, period: Period) {
-    return this.getUserTop(accessToken, 'artists', period);
+  getUserTopArtists(request: TopChartRequest) {
+    return this.getUserTop(request.accessToken, 'artists', request.period);
   }
   
   private getUserTop(accessToken: string, what: string, period: Period) {
