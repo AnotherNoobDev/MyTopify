@@ -31,6 +31,44 @@ export interface TopChartRequest {
   period: Period;
 }
 
+export interface SpotifySimplifiedArtistObject {
+  id: string;
+  name: string;
+}
+
+export interface SpotifyImageObject {
+  height?: number;
+  url: string;
+  width?: number;
+}
+
+export interface SpotifyArtistObject extends SpotifySimplifiedArtistObject {
+  images: SpotifyImageObject[];
+}
+
+export interface SpotifySimplifiedAlbumObject {
+  name: string;
+  images: SpotifyImageObject[];
+}
+
+export interface SpotifyTrackObject {
+  id: string;
+  name: string;
+  artists: SpotifySimplifiedArtistObject[];
+  album: SpotifySimplifiedAlbumObject;
+  previewURL: string;
+}
+
+export interface SpotifyPagingObject {
+  href: string;
+  items: SpotifyArtistObject[] | SpotifyTrackObject[];
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string;
+  total: number;
+}
+
 @Injectable({providedIn: 'root'})
 export class SpotifyHttpClientService {
   private tokenEndpoint = 'https://accounts.spotify.com/api/token';
@@ -139,6 +177,6 @@ export class SpotifyHttpClientService {
         params: httpParams
       };
 
-    return this.http.get(getTopTracksURL, httpOptions);
+    return this.http.get<SpotifyPagingObject>(getTopTracksURL, httpOptions);
   }
 }
