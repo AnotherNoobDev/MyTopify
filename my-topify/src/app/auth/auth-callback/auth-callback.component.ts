@@ -44,6 +44,6 @@ export class AuthCallbackComponent implements OnInit {
 
   onProceed() {
     //TODO autonavigate to game-selector page
-    //this.router.navigate(['main']);
+    this.router.navigate(['game/select']);
   }
 }
