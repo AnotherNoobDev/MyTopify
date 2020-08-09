@@ -18,7 +18,7 @@ export class AuthCallbackComponent implements OnInit {
   ngOnInit() {
 
     if (this.authService.isAuthenticated()) {
-      //TODO autonavigate to game-selector page
+      // TODO autonavigate to game-selector page
       console.log('Already authenticated');
       return;
     }
