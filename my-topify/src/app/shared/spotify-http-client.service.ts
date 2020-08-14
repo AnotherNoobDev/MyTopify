@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { SpotifyAuthToken } from '../auth/auth.service';
-
-export enum Period {
-  ShortTerm,
-  MediumTerm,
-  LongTerm
-}
+import { Period } from './types';
 
 export interface AccessTokenRequest {
   clientId: string;
