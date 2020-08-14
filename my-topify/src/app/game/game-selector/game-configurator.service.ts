@@ -1,166 +1,158 @@
 import { Injectable } from '@angular/core';
 import { 
   SpotifyHttpClientService, 
-  Period, 
   SpotifyPagingObject, 
   SpotifyArtistObject, 
   SpotifyTrackObject } from 'src/app/shared/spotify-http-client.service';
 import { AuthService } from 'src/app/auth/auth.service';
-
-export interface GameConfiguration {
-  useTracks: boolean;
-  useArtists: boolean;
-  useShortTermPeriod: boolean;
-  useMediumTermPeriod: boolean;
-  useLongTermPeriod: boolean;
-}
-
-export interface ImageURL {
-  width: number;
-  height: number;
-  url: string;
-}
-
-export type Identifier = string;
-
-export interface Artist {
-  id: Identifier;
-  name: string;
-  images: ImageURL[];
-}
-
-export interface ArtistKnowledgeBase {
-  period: Period;
-  size: number;
-  artists: Artist[];
-}
-
-export interface Track {
-  id: Identifier;
-  name: string;
-  artists: string[];
-  album: string;
-  images: ImageURL[];
-  previewURL: string; // 30 seconds MP3
-}
-
-export interface TrackKnowledgeBase {
-  period: Period;
-  size: number;
-  tracks: Track[];
-} 
-
-export class GameKnowledgeBase {
-  gameConfiguration: GameConfiguration;
-  artistKnowledgeBase: Map<Period, ArtistKnowledgeBase>;
-  trackKnowledgeBase: Map<Period, TrackKnowledgeBase>;
-}
+import { 
+  Period, 
+  GameKnowledgeBase, 
+  GameConfiguration, 
+  ArtistKnowledgeBase, 
+  Artist, 
+  ImageURL, 
+  TrackKnowledgeBase, 
+  Track } from 'src/app/shared/types';
+import { Observable } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GameConfiguratorService {
 
   private gameKnowledgeBase: GameKnowledgeBase = new GameKnowledgeBase();
 
+  private configuringGame: Observable<boolean>;
+
   constructor(private auth: AuthService,
               private spotifyHttpClient: SpotifyHttpClientService) {
   }
 
-  configureGame(config: GameConfiguration) {
-    this.gameKnowledgeBase.gameConfiguration = config;
+  configureGame(config: GameConfiguration): Observable<boolean> {
+    this.configuringGame = new Observable((observer) => {
+      this.gameKnowledgeBase.gameConfiguration = config;
 
-    if (this.gameKnowledgeBase.gameConfiguration.useArtists) {
-      this.gameKnowledgeBase.artistKnowledgeBase = new Map();
+      if (this.gameKnowledgeBase.gameConfiguration.useArtists) {
+        this.gameKnowledgeBase.artistKnowledgeBase = new Map();
 
-      if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
-        this.spotifyHttpClient.getUserTopArtists({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.ShortTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseArtistRawData(responseData);
+        if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+          this.spotifyHttpClient.getUserTopArtists({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.ShortTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseArtistRawData(responseData);
 
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.ShortTerm;
-                this.gameKnowledgeBase.artistKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
-              }
-            });
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.ShortTerm;
+                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
+
+        if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+          this.spotifyHttpClient.getUserTopArtists({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.MediumTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseArtistRawData(responseData);
+
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.MediumTerm;
+                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
+
+        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+          this.spotifyHttpClient.getUserTopArtists({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.LongTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseArtistRawData(responseData);
+
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.LongTerm;
+                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
       }
 
-      if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
-        this.spotifyHttpClient.getUserTopArtists({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.MediumTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseArtistRawData(responseData);
+      if (this.gameKnowledgeBase.gameConfiguration.useTracks) {
+        this.gameKnowledgeBase.trackKnowledgeBase = new Map();
 
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.MediumTerm;
-                this.gameKnowledgeBase.artistKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
-              }
-            });
+        if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+          this.spotifyHttpClient.getUserTopTracks({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.ShortTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseTrackRawData(responseData);
+
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.ShortTerm;
+                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
+
+        if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+          this.spotifyHttpClient.getUserTopTracks({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.MediumTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseTrackRawData(responseData);
+
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.MediumTerm;
+                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
+
+        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+          this.spotifyHttpClient.getUserTopTracks({
+            accessToken: this.auth.getAccessToken(),
+            period: Period.LongTerm})
+              .subscribe(responseData => {
+                const knowledgeBase =  this.parseTrackRawData(responseData);
+
+                if (knowledgeBase) {
+                  knowledgeBase.period = Period.LongTerm;
+                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
+                }
+
+                if (this.dataRetrieved()) {
+                  observer.next(true);
+                }
+              });
+        }
       }
+    });
 
-      if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
-        this.spotifyHttpClient.getUserTopArtists({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.LongTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseArtistRawData(responseData);
+    return this.configuringGame;
+  }
 
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.LongTerm;
-                this.gameKnowledgeBase.artistKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
-              }
-            });
-      }
-    }
-
-    if (this.gameKnowledgeBase.gameConfiguration.useTracks) {
-      this.gameKnowledgeBase.trackKnowledgeBase = new Map();
-
-      if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
-        this.spotifyHttpClient.getUserTopTracks({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.ShortTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseTrackRawData(responseData);
-
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.ShortTerm;
-                this.gameKnowledgeBase.trackKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
-              }
-            });
-      }
-
-      if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
-        this.spotifyHttpClient.getUserTopTracks({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.MediumTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseTrackRawData(responseData);
-
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.MediumTerm;
-                this.gameKnowledgeBase.trackKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
-              }
-            });
-      }
-
-      if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
-        this.spotifyHttpClient.getUserTopTracks({
-          accessToken: this.auth.getAccessToken(),
-          period: Period.LongTerm})
-            .subscribe(responseData => {
-              const knowledgeBase =  this.parseTrackRawData(responseData);
-
-              if (knowledgeBase) {
-                knowledgeBase.period = Period.LongTerm;
-                this.gameKnowledgeBase.trackKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
-              }
-            });
-      }
-    }
-
-    console.log(this.gameKnowledgeBase);
+  getKnowledgeBase(): GameKnowledgeBase {
+    return this.gameKnowledgeBase;
   }
 
   private parseArtistRawData(data: SpotifyPagingObject): ArtistKnowledgeBase {
@@ -210,4 +202,58 @@ export class GameConfiguratorService {
 
     return { period: undefined, size: parsedTracks.length, tracks: parsedTracks };
   }
+
+  // TODO refactor --> only fire once
+  private dataRetrieved(): boolean {
+    if (this.gameKnowledgeBase.gameConfiguration.useArtists) {
+      if (!this.gameKnowledgeBase.artistKnowledgeBase) {
+        return false;
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+        if (!this.gameKnowledgeBase.artistKnowledgeBase.has(Period.ShortTerm)) {
+          return false;
+        }
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+        if (!this.gameKnowledgeBase.artistKnowledgeBase.has(Period.MediumTerm)) {
+          return false;
+        }
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+        if (!this.gameKnowledgeBase.artistKnowledgeBase.has(Period.LongTerm)) {
+          return false;
+        }
+      }
+    }
+
+    if (this.gameKnowledgeBase.gameConfiguration.useTracks) {
+      if (!this.gameKnowledgeBase.trackKnowledgeBase) {
+        return false;
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+        if (!this.gameKnowledgeBase.trackKnowledgeBase.has(Period.ShortTerm)) {
+          return false;
+        }
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+        if (!this.gameKnowledgeBase.trackKnowledgeBase.has(Period.MediumTerm)) {
+          return false;
+        }
+      }
+
+      if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+        if (!this.gameKnowledgeBase.trackKnowledgeBase.has(Period.LongTerm)) {
+          return false;
+        }
+      }
+    }
+   
+    return true;
+  }
+
 }
