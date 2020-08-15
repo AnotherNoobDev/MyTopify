@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Category, GameKnowledgeBase, Question, Difficulty } from '../shared/types';
+import { Category, GameKnowledgeBase, Question, Difficulty, ResourceType, Period } from '../shared/types';
 
 @Injectable({providedIn: 'root'})
 export class QuestionGeneratorService {
 
-  constructor() {
+  private nQuestions = 24;
+  private questions: Question[];
+
+  getQuestions(): Question[] {
+    return this.questions;
   }
 
-  private nQuestions = 24;
-
   generateQuestions(gameKnowledgeBase: GameKnowledgeBase): Question[] {
-    const questions: Question[] = [];
+    this.questions = [];
 
     const categories = gameKnowledgeBase.getCategories();
-
-    for (const cat of categories) {
-      console.log(cat);
-      console.log(gameKnowledgeBase.getCategorySize(cat));
-    }
-    
     const nQuestionsPerCat = this.nQuestions / categories.length;
     
     const questionsLeftPerCategory = [];
@@ -38,10 +34,10 @@ export class QuestionGeneratorService {
       }
 
       // generate question
-      questions.push(this.generateQuestion(categories[c], difficulty, gameKnowledgeBase));
+      this.questions.push(this.generateQuestion(categories[c], difficulty, gameKnowledgeBase));
     }
 
-    return questions;
+    return this.questions;
   }
 
   private getQuestionDistribution(): Difficulty[] {
@@ -71,16 +67,29 @@ export class QuestionGeneratorService {
   }
 
   private generateQuestion(category: Category, difficulty: Difficulty, gameKnowledgeBase: GameKnowledgeBase): Question {
+    let question: Question;
+
     switch (difficulty) {
       case Difficulty.Easy:
-        return this.generateEasyQuestion(category, gameKnowledgeBase);
+        question = this.generateEasyQuestion(category, gameKnowledgeBase);
+        break;
       
       case Difficulty.Medium:
-        return this.generateMediumQuestion(category, gameKnowledgeBase);
+        question = this.generateMediumQuestion(category, gameKnowledgeBase);
+        break;
 
       case Difficulty.Hard:
-        return this.generateHardQuestion(category, gameKnowledgeBase);
+        question = this.generateHardQuestion(category, gameKnowledgeBase);
+        break;
+
+      default:
+        question = this.generateEasyQuestion(category, gameKnowledgeBase);
+        break;
     }
+
+    this.generateTextForQuestion(question);
+
+    return question;
   }
 
   private generateEasyQuestion(category: Category, gameKnowledgeBase: GameKnowledgeBase): Question {
@@ -125,7 +134,9 @@ export class QuestionGeneratorService {
     
       iLeft: left,
       iRight: right,
-      answer: right > left ? right : left
+      answer: right > left ? right : left,
+
+      text: null, // will be set later
     };
 
     return question;
@@ -146,5 +157,41 @@ export class QuestionGeneratorService {
     } else {
       return 1;
     }
+  }
+
+  private generateTextForQuestion(question: Question) {
+    let questionText = 'To which ';
+
+    questionText += '<b>';
+    switch (question.category.type) {
+      case ResourceType.Artist:
+        questionText += 'artist';
+        break;
+
+      case ResourceType.Track:
+        questionText += 'track';
+        break;
+    }
+    questionText += '</b>';
+
+    questionText += ' have you listened more ';
+
+    switch (question.category.period) {
+      case Period.ShortTerm:
+        questionText += 'in the last 4 weeks';
+        break;
+
+      case Period.MediumTerm:
+        questionText += 'in the last 6 months';
+        break;
+
+      case Period.LongTerm:
+        questionText += 'all time';
+        break;
+    }
+
+    questionText += '?';
+
+    question.text = questionText;
   }
 }

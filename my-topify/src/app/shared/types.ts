@@ -116,6 +116,14 @@ export class GameKnowledgeBase {
         }
     }
   }
+
+  getTrack(period: Period, index: number) {
+    return this.trackKnowledgeBase.get(period).tracks[index];
+  }
+
+  getArtist(period: Period, index: number) {
+    return this.artistKnowledgeBase.get(period).artists[index];
+  }
 }
 
 export enum Difficulty {
@@ -131,5 +139,7 @@ export interface Question {
   iLeft: number;
   iRight: number;
   answer: number;
+
+  text: string;
 }
 
