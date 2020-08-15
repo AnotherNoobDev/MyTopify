@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { DisplayableQuestion } from 'src/app/shared/types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-loop',
@@ -13,7 +14,8 @@ export class GameLoopComponent implements OnInit {
   private leftText = '';
   private rightText = '';
 
-  constructor(private game: GameService) { 
+  constructor(private game: GameService,
+              private router: Router) { 
   }
 
   ngOnInit() {
@@ -32,7 +34,7 @@ export class GameLoopComponent implements OnInit {
 
   private updateQuestion() {
     if (this.game.isGameOver()) {
-      // navigate to game over component?
+      this.router.navigate(['game/end-screen']);
       return;
     }
 

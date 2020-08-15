@@ -1,16 +1,10 @@
-<div *ngIf="!game.isGameOver(); else elseBlock">
-  <p>{{leftText}}</p>
-  <button (click)="onAnswerLeft()">Select A</button>
-  <hr>
-  <p [innerHTML]="question.text"></p>
-  <hr>
-  <button (click)="onAnswerRight()">Select B</button>
-  <p>{{rightText}}</p>
-  <hr>
-  <hr>
-  <p>Lives: {{game.getLives()}} Score: {{game.getScore()}} Question: {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}}</p>
-</div>
-<ng-template #elseBlock>
-  <p>Game Over!</p>
-  <p>Lives left: {{game.getLives()}} Score: {{game.getScore()}} Question reached: {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}}</p>
-</ng-template>
+<p>{{leftText}}</p>
+<button (click)="onAnswerLeft()">Select A</button>
+<hr>
+<p [innerHTML]="question.text"></p>
+<hr>
+<button (click)="onAnswerRight()">Select B</button>
+<p>{{rightText}}</p>
+<hr>
+<hr>
+<p>Lives: {{game.getLives()}} Score: {{game.getScore()}} Question: {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}}</p>
