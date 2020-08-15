@@ -143,3 +143,8 @@ export interface Question {
   text: string;
 }
 
+export interface DisplayableQuestion extends Question {
+  leftText: string[];
+  rightText: string[];
+}
+

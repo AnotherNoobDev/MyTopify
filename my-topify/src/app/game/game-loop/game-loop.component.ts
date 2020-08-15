@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import { Question, ResourceType } from 'src/app/shared/types';
+import { Question, ResourceType, DisplayableQuestion } from 'src/app/shared/types';
 import { GameConfiguratorService } from '../game-selector/game-configurator.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { GameConfiguratorService } from '../game-selector/game-configurator.serv
 })
 export class GameLoopComponent implements OnInit {
 
-  private question: Question;
+  private question: DisplayableQuestion;
   private leftText = '';
   private rightText = '';
 
@@ -33,18 +33,7 @@ export class GameLoopComponent implements OnInit {
 
   private updateQuestion() {
     this.question = this.game.nextQuestion();
-
-    // TODO REFACTOR THIS
-    switch (this.question.category.type) {
-      case ResourceType.Artist:
-        this.leftText = this.game.getArtistName(this.question.category.period, this.question.iLeft);
-        this.rightText = this.game.getArtistName(this.question.category.period, this.question.iRight);
-        break;
-
-      case ResourceType.Track:
-        this.leftText = this.game.getTrackName(this.question.category.period, this.question.iLeft);
-        this.rightText = this.game.getTrackName(this.question.category.period, this.question.iRight);
-        break;
-    }
+    this.leftText = this.question.leftText.join(' ');
+    this.rightText = this.question.rightText.join(' ');
   }
 }
