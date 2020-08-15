@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GameConfiguratorService } from '../game-configurator.service';
 import { QuestionGeneratorService } from '../../question-generator.service';
+import { Router } from '@angular/router';
+import { GameService } from '../../game.service';
 
 @Component({
   selector: 'app-game-selector',
@@ -18,7 +20,9 @@ export class GameSelectorComponent implements OnInit {
   private useLongTermPeriod = true;
 
   constructor(private gameConfigurator: GameConfiguratorService,
-              private questionGenerator: QuestionGeneratorService) { }
+              private questionGenerator: QuestionGeneratorService,
+              private game: GameService,
+              private router: Router) { }
 
   ngOnInit() {
   }
@@ -74,14 +78,18 @@ export class GameSelectorComponent implements OnInit {
     }).subscribe(value => {
       // TODO remove just for testing
       const kb = this.gameConfigurator.getKnowledgeBase();
-
-      console.log(kb);
+      this.game.setKnowledgeBase(kb);
+      //console.log(kb);
       
       const questions = this.questionGenerator.generateQuestions(kb);
+      this.game.setQuestions(questions);
 
-      console.log(questions);
+      //console.log(questions);
 
-      // TODO navigate to game-loop page once game has been configured
+      // start resource fetching
+
+      // navigate to game-loop
+      this.router.navigate(['game/main']);
     });
   }
 
