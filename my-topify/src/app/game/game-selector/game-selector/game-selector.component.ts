@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GameConfiguratorService } from '../game-configurator.service';
 import { QuestionGeneratorService } from '../../question-generator.service';
 import { Router } from '@angular/router';
 import { GameService } from '../../game.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game-selector',
   templateUrl: './game-selector.component.html',
   styleUrls: ['./game-selector.component.css']
 })
-export class GameSelectorComponent implements OnInit {
+export class GameSelectorComponent implements OnInit, OnDestroy {
 
   private useTypeArtists = true;
   private useTypeTracks = true;
@@ -19,12 +20,20 @@ export class GameSelectorComponent implements OnInit {
   private useMediumTermPeriod = true;
   private useLongTermPeriod = true;
 
+  private configuringGameSub: Subscription;
+
   constructor(private gameConfigurator: GameConfiguratorService,
               private questionGenerator: QuestionGeneratorService,
               private game: GameService,
               private router: Router) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    if (this.configuringGameSub) {
+      this.configuringGameSub.unsubscribe();
+    }
   }
 
   onTypeSelected(form: NgForm) {
@@ -69,7 +78,11 @@ export class GameSelectorComponent implements OnInit {
   }
 
   onStartGame(form: NgForm) {
-    this.gameConfigurator.configureGame({
+    if (this.configuringGameSub) {
+      this.configuringGameSub.unsubscribe();
+    }
+
+    this.configuringGameSub = this.gameConfigurator.configureGame({
       useTracks: form.value.type_tracks,
       useArtists: form.value.type_artists,
       useShortTermPeriod: form.value.period_short_term,
@@ -83,6 +96,8 @@ export class GameSelectorComponent implements OnInit {
       
       const questions = this.questionGenerator.generateQuestions(kb);
       this.game.setQuestions(questions);
+
+      this.game.restart();
 
       //console.log(questions);
 

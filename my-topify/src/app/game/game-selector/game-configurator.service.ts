@@ -31,119 +31,161 @@ export class GameConfiguratorService {
     this.configuringGame = new Observable((observer) => {
       this.gameKnowledgeBase.gameConfiguration = config;
 
-      if (this.gameKnowledgeBase.gameConfiguration.useArtists) {
-        this.gameKnowledgeBase.artistKnowledgeBase = new Map();
+      if (this.gameKnowledgeBase.gameConfiguration.useArtists) {  
+        
+        if (!this.gameKnowledgeBase.artistKnowledgeBase) {
+          this.gameKnowledgeBase.artistKnowledgeBase = new Map();
+        }
 
         if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
-          this.spotifyHttpClient.getUserTopArtists({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.ShortTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseArtistRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.ShortTerm;
-                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+          if (this.gameKnowledgeBase.artistKnowledgeBase.has(Period.ShortTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopArtists({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.ShortTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseArtistRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.ShortTerm;
+                    this.gameKnowledgeBase.artistKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
 
         if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
-          this.spotifyHttpClient.getUserTopArtists({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.MediumTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseArtistRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.MediumTerm;
-                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+          if (this.gameKnowledgeBase.artistKnowledgeBase.has(Period.MediumTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopArtists({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.MediumTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseArtistRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.MediumTerm;
+                    this.gameKnowledgeBase.artistKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
 
         if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
-          this.spotifyHttpClient.getUserTopArtists({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.LongTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseArtistRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.LongTerm;
-                  this.gameKnowledgeBase.artistKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+          if (this.gameKnowledgeBase.artistKnowledgeBase.has(Period.LongTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopArtists({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.LongTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseArtistRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.LongTerm;
+                    this.gameKnowledgeBase.artistKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
       }
 
       if (this.gameKnowledgeBase.gameConfiguration.useTracks) {
-        this.gameKnowledgeBase.trackKnowledgeBase = new Map();
+
+        if (!this.gameKnowledgeBase.trackKnowledgeBase) {
+          this.gameKnowledgeBase.trackKnowledgeBase = new Map();
+        }
 
         if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
-          this.spotifyHttpClient.getUserTopTracks({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.ShortTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseTrackRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.ShortTerm;
-                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+          if (this.gameKnowledgeBase.trackKnowledgeBase.has(Period.ShortTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopTracks({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.ShortTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseTrackRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.ShortTerm;
+                    this.gameKnowledgeBase.trackKnowledgeBase.set(Period.ShortTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
 
         if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
-          this.spotifyHttpClient.getUserTopTracks({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.MediumTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseTrackRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.MediumTerm;
-                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+          if (this.gameKnowledgeBase.trackKnowledgeBase.has(Period.MediumTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopTracks({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.MediumTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseTrackRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.MediumTerm;
+                    this.gameKnowledgeBase.trackKnowledgeBase.set(Period.MediumTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
 
-        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
-          this.spotifyHttpClient.getUserTopTracks({
-            accessToken: this.auth.getAccessToken(),
-            period: Period.LongTerm})
-              .subscribe(responseData => {
-                const knowledgeBase =  this.parseTrackRawData(responseData);
-
-                if (knowledgeBase) {
-                  knowledgeBase.period = Period.LongTerm;
-                  this.gameKnowledgeBase.trackKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
-                }
-
-                if (this.dataRetrieved()) {
-                  observer.next(true);
-                }
-              });
+        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) { 
+          if (this.gameKnowledgeBase.trackKnowledgeBase.has(Period.LongTerm)) {
+            if (this.dataRetrieved()) {
+              observer.next(true);
+            }
+          } else {
+            this.spotifyHttpClient.getUserTopTracks({
+              accessToken: this.auth.getAccessToken(),
+              period: Period.LongTerm})
+                .subscribe(responseData => {
+                  const knowledgeBase =  this.parseTrackRawData(responseData);
+  
+                  if (knowledgeBase) {
+                    knowledgeBase.period = Period.LongTerm;
+                    this.gameKnowledgeBase.trackKnowledgeBase.set(Period.LongTerm, knowledgeBase); 
+                  }
+  
+                  if (this.dataRetrieved()) {
+                    observer.next(true);
+                  }
+                });
+          }
         }
       }
     });

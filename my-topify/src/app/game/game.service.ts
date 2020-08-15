@@ -85,6 +85,12 @@ export class GameService {
   }
 
   // game state
+  restart() {
+    this.atQuestion = -1;
+    this.lives = 3;
+    this.score = 0;
+  }
+
   isGameOver() {
     return (this.lives <= 0 || this.atQuestion === this.nQuestions - 1);
   }
