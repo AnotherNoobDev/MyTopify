@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import { Question, ResourceType, DisplayableQuestion } from 'src/app/shared/types';
-import { GameConfiguratorService } from '../game-selector/game-configurator.service';
+import { DisplayableQuestion } from 'src/app/shared/types';
 
 @Component({
   selector: 'app-game-loop',
@@ -22,16 +21,21 @@ export class GameLoopComponent implements OnInit {
   }
 
   onAnswerLeft() {
-    this.game.answerQuestion();
+    const correct = this.game.answerQuestion(this.question.iLeft);
     this.updateQuestion();
   }
 
   onAnswerRight() {
-    this.game.answerQuestion();
+    const correct = this.game.answerQuestion(this.question.iRight);
     this.updateQuestion();
   }
 
   private updateQuestion() {
+    if (this.game.isGameOver()) {
+      // navigate to game over component?
+      return;
+    }
+
     this.question = this.game.nextQuestion();
     this.leftText = this.question.leftText.join(' ');
     this.rightText = this.question.rightText.join(' ');

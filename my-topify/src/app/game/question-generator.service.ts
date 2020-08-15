@@ -134,7 +134,7 @@ export class QuestionGeneratorService {
     
       iLeft: left,
       iRight: right,
-      answer: right > left ? right : left,
+      answer: right > left ? left : right,
 
       text: null, // will be set later
     };

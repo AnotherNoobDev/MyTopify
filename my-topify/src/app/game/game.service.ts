@@ -72,7 +72,21 @@ export class GameService {
     return dq;
   }
 
-  answerQuestion() {
+  answerQuestion(answer: number): boolean {
+    const correct = answer === this.questions[this.atQuestion].answer;
+
+    if (correct) {
+      this.score++;
+    } else {
+      this.lives--;
+    }
+
+    return correct;
+  }
+
+  // game state
+  isGameOver() {
+    return (this.lives <= 0 || this.atQuestion === this.nQuestions - 1);
   }
 
   // statistics
