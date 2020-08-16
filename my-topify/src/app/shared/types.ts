@@ -1,4 +1,4 @@
-export enum ResourceType {
+export enum Item {
   Artist,
   Track
 }
@@ -10,7 +10,7 @@ export enum Period {
 }
 
 export interface Category {
-  type: ResourceType;
+  type: Item;
   period: Period;  
 }
 
@@ -70,29 +70,29 @@ export class GameKnowledgeBase {
 
     if (this.gameConfiguration.useArtists) {
       if (this.gameConfiguration.useShortTermPeriod) {
-        cat.push({type: ResourceType.Artist, period: Period.ShortTerm});
+        cat.push({type: Item.Artist, period: Period.ShortTerm});
       }
 
       if (this.gameConfiguration.useMediumTermPeriod) {
-        cat.push({type: ResourceType.Artist, period: Period.MediumTerm});
+        cat.push({type: Item.Artist, period: Period.MediumTerm});
       }
 
       if (this.gameConfiguration.useLongTermPeriod) {
-        cat.push({type: ResourceType.Artist, period: Period.LongTerm});
+        cat.push({type: Item.Artist, period: Period.LongTerm});
       }
     }
 
     if (this.gameConfiguration.useTracks) {
       if (this.gameConfiguration.useShortTermPeriod) {
-        cat.push({type: ResourceType.Track, period: Period.ShortTerm});
+        cat.push({type: Item.Track, period: Period.ShortTerm});
       }
 
       if (this.gameConfiguration.useMediumTermPeriod) {
-        cat.push({type: ResourceType.Track, period: Period.MediumTerm});
+        cat.push({type: Item.Track, period: Period.MediumTerm});
       }
 
       if (this.gameConfiguration.useLongTermPeriod) {
-        cat.push({type: ResourceType.Track, period: Period.LongTerm});
+        cat.push({type: Item.Track, period: Period.LongTerm});
       }
     }
 
@@ -101,14 +101,14 @@ export class GameKnowledgeBase {
 
   getCategorySize(category: Category): number {
     switch (category.type) {
-      case ResourceType.Artist:
+      case Item.Artist:
         if (this.artistKnowledgeBase && this.artistKnowledgeBase.has(category.period)) {
           return this.artistKnowledgeBase.get(category.period).size;
         } else {
           return -1;
         }
 
-      case ResourceType.Track:
+      case Item.Track:
         if (this.trackKnowledgeBase && this.trackKnowledgeBase.has(category.period)) {
           return this.trackKnowledgeBase.get(category.period).size;
         } else {
@@ -148,3 +148,7 @@ export interface DisplayableQuestion extends Question {
   rightText: string[];
 }
 
+export enum Resource {
+  Audio,
+  Image
+}

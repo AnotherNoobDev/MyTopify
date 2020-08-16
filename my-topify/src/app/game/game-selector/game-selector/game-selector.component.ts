@@ -5,6 +5,7 @@ import { QuestionGeneratorService } from '../../question-generator.service';
 import { Router } from '@angular/router';
 import { GameService } from '../../game.service';
 import { Subscription } from 'rxjs';
+import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 
 @Component({
   selector: 'app-game-selector',
@@ -25,6 +26,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
   constructor(private gameConfigurator: GameConfiguratorService,
               private questionGenerator: QuestionGeneratorService,
               private game: GameService,
+              private resourceManager: ResourceManagerService,
               private router: Router) { }
 
   ngOnInit() {
@@ -89,9 +91,9 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       useMediumTermPeriod: form.value.period_medium_term,
       useLongTermPeriod: form.value.period_long_term
     }).subscribe(value => {
-      // TODO remove just for testing
       const kb = this.gameConfigurator.getKnowledgeBase();
       this.game.setKnowledgeBase(kb);
+      
       //console.log(kb);
       
       const questions = this.questionGenerator.generateQuestions(kb);
@@ -102,6 +104,8 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       //console.log(questions);
 
       // start resource fetching
+      // TODO wait until some data is ready?
+      this.resourceManager.fetchResourcesForGame(questions, kb);
 
       // navigate to game-loop
       this.router.navigate(['game/main']);

@@ -239,7 +239,7 @@ export class GameConfiguratorService {
         artists: trackArtists,
         album: trackItem.album.name,
         images: trackImages,
-        previewURL: trackItem.previewURL});
+        previewURL: trackItem.preview_url});
     }
 
     return { period: undefined, size: parsedTracks.length, tracks: parsedTracks };

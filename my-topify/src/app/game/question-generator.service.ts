@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Category, GameKnowledgeBase, Question, Difficulty, ResourceType, Period } from '../shared/types';
+import { Category, GameKnowledgeBase, Question, Difficulty, Item, Period } from '../shared/types';
 
 @Injectable({providedIn: 'root'})
 export class QuestionGeneratorService {
@@ -164,11 +164,11 @@ export class QuestionGeneratorService {
 
     questionText += '<b>';
     switch (question.category.type) {
-      case ResourceType.Artist:
+      case Item.Artist:
         questionText += 'artist';
         break;
 
-      case ResourceType.Track:
+      case Item.Track:
         questionText += 'track';
         break;
     }
