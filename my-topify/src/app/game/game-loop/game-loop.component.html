@@ -1,3 +1,4 @@
+<div #leftImagePlaceholder></div>
 <p>{{leftText}}</p>
 <button (click)="onAnswerLeft()">Select A</button>
 <hr>
@@ -5,6 +6,7 @@
 <hr>
 <button (click)="onAnswerRight()">Select B</button>
 <p>{{rightText}}</p>
+<div #rightImagePlaceholder></div>
 <hr>
 <hr>
 <p>Lives: {{game.getLives()}} Score: {{game.getScore()}} Question: {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}}</p>

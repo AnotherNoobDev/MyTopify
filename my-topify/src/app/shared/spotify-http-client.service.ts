@@ -51,7 +51,7 @@ export interface SpotifyTrackObject {
   name: string;
   artists: SpotifySimplifiedArtistObject[];
   album: SpotifySimplifiedAlbumObject;
-  previewURL: string;
+  preview_url: string;
 }
 
 export interface SpotifyPagingObject {

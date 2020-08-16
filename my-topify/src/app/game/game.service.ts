@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Question, GameKnowledgeBase, Period, DisplayableQuestion, ResourceType } from '../shared/types';
+import { Question, GameKnowledgeBase, Period, DisplayableQuestion, Item } from '../shared/types';
 
 @Injectable({providedIn: 'root'})
 export class GameService {
@@ -52,12 +52,12 @@ export class GameService {
     let rText = [];
     
     switch (q.category.type) {
-      case ResourceType.Artist:
+      case Item.Artist:
         lText.push(this.getArtistName(q.category.period, q.iLeft));
         rText.push(this.getArtistName(q.category.period, q.iRight));
         break;
 
-      case ResourceType.Track:
+      case Item.Track:
         lText = this.getTrackNameArtistsAlbum(q.category.period, q.iLeft);
         rText = this.getTrackNameArtistsAlbum(q.category.period, q.iRight);
         break;
