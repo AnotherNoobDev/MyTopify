@@ -37,8 +37,6 @@ export class AuthService {
   constructor(private spotifyHttpClient: SpotifyHttpClientService) {
     this.authToken = this.retrieveAuthTokenFromStorage();
     this.authTokenValidUntil = this.retrieveAuthTokenValidUntilFromStorage();
-
-    console.log(this.authTokenValidUntil);
   }
 
   getClientId(): string {

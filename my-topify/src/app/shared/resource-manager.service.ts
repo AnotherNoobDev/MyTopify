@@ -6,6 +6,7 @@ import { ScreenService } from './screen.service';
 export class ResourceManagerService {
   private knowledgeBase: GameKnowledgeBase;
   private audioStorage: Map<Identifier, HTMLAudioElement> = new Map();
+  // TODO? do we want to store multiple images
   private imageStorage: Map<Identifier, HTMLImageElement> = new Map();
 
   constructor(private screen: ScreenService) {
@@ -43,7 +44,11 @@ export class ResourceManagerService {
   }
 
   getImage(item: Artist | Track) {
-    return this.imageStorage.get(item.id);
+    if ('album' in item) {
+      return this.imageStorage.get(item.album.id);
+    } else {
+      return this.imageStorage.get(item.id);
+    }
   }
 
   getAudio(track: Track) {
@@ -73,18 +78,15 @@ export class ResourceManagerService {
       return;
     }
 
-    // TODO do we want to store multiple images?
     this.imageStorage.set(artist.id, 
       this.fetchImage(artist.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
   }
 
   fetchResourcesForTrack(track: Track) {
     // image
-    if (!this.imageStorage.has(track.id)) {
-      // TODO do we want to store multiple images?
-      // TODO some tracks could have the same cover (use album id as key)!!
-      this.imageStorage.set(track.id, 
-        this.fetchImage(track.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
+    if (!this.imageStorage.has(track.album.id)) {
+      this.imageStorage.set(track.album.id, 
+        this.fetchImage(track.album.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
     }
 
     // audio
@@ -95,9 +97,18 @@ export class ResourceManagerService {
 
   private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
     const img = new Image(desiredWidth, desiredHeight);
+
+    // TODO? wait for image to preload
+    //img.onload
     
-    // TODO select image that is "closest" to desired size
-    img.src = availableImages[0].url;
+    for (const image of availableImages) {
+      img.src = image.url;
+    
+      // select image that is "closest" to desired size
+      if (image.width && image.width >= desiredWidth) {
+        break;
+      }
+    }
 
     return img;
   }
@@ -105,7 +116,7 @@ export class ResourceManagerService {
   private fetchAudio(url: string): HTMLAudioElement {
     const audio = new Audio(url);
 
-    // TODO wait for audio to preload
+    // TODO? wait for audio to preload
     //audio.addEventListener('canplaythrough', event => {
     //  console.log('can play!');
     //});

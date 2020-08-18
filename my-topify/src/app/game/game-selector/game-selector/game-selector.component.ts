@@ -104,7 +104,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       //console.log(questions);
 
       // start resource fetching
-      // TODO wait until some data is ready?
+      // TODO? wait until some data is ready (show loading)
       this.resourceManager.fetchResourcesForGame(questions, kb);
 
       // navigate to game-loop

@@ -42,12 +42,17 @@ export interface ArtistKnowledgeBase {
   artists: Artist[];
 }
 
+export interface Album {
+  id: Identifier;
+  name: string;
+  images: ImageURL[];
+}
+
 export interface Track {
   id: Identifier;
   name: string;
   artists: string[];
-  album: string;
-  images: ImageURL[];
+  album: Album;
   previewURL: string; // 30 seconds MP3
 }
 
