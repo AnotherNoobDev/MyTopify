@@ -8,8 +8,10 @@ export class ScreenService {
   album icons: 64, 300, 640
   */
 
-  // TODO figure image size based on canvas size
+  // TODO (STYLE) figure image size based on canvas size
+  // when this changes we need to update resource manager icons
   getImageSizeForGameView() {
+    // window.innerWidth window.innerHeight
     return 240;
   }
 }

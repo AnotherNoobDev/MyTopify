@@ -43,6 +43,7 @@ export interface SpotifyArtistObject extends SpotifySimplifiedArtistObject {
 
 export interface SpotifySimplifiedAlbumObject {
   name: string;
+  id: string;
   images: SpotifyImageObject[];
 }
 
@@ -73,9 +74,6 @@ export class SpotifyHttpClientService {
 
   constructor(private http: HttpClient) {
   }
-
-  // TODO error handling
-  // TODO all arguments are strings --> group in custom types to avoid ordering errors!!
 
   // Authentication
   getAccessToken(request: AccessTokenRequest) {

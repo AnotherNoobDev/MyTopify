@@ -22,7 +22,7 @@ export class GameService {
   getTrackNameArtistsAlbum(period: Period, index: number): string[] {
     const t = this.knowledgeBase.getTrack(period, index);
 
-    return [t.name, 'by ' + t.artists.join(', '), 'from ' + t.album];
+    return [t.name, 'by ' + t.artists.join(', '), 'from ' + t.album.name];
   }
 
   getArtistName(period: Period, index: number) {

@@ -18,18 +18,14 @@ export class AuthCallbackComponent implements OnInit {
   ngOnInit() {
 
     if (this.authService.isAuthenticated()) {
-      // TODO autonavigate to game-selector page
       console.log('Already authenticated');
       return;
     }
-
-    console.log(this.route.snapshot.queryParams);
 
     const callbackCode: string = this.route.snapshot.queryParams.code;
     const state: string = this.route.snapshot.queryParams.state;
 
     // TODO check state matches request state
-    console.log(callbackCode);
     console.log(state);
 
     this.spotifyHttpClient.getAccessToken({
@@ -38,13 +34,12 @@ export class AuthCallbackComponent implements OnInit {
       code: callbackCode, 
       redirectURI: this.authService.getRedirectURI()})
         .subscribe(responseData => {
-          console.log(responseData);
           this.authService.authenticate(responseData);
         });
   }
 
   onProceed() {
-    // TODO autonavigate to game-selector page
+    // TODO choose between chart view or game view
     this.router.navigate(['game/select']);
   }
 }
