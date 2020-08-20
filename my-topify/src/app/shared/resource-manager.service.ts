@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Identifier, GameKnowledgeBase, Question, Item, Artist, Track, ImageURL } from './types';
+import { Identifier, GameKnowledgeBase, Question, Item, Artist, Track, ImageURL, ArtistKnowledgeBase, TrackKnowledgeBase, DisplayableItem, DisplayableQuestion } from './types';
 import { ScreenService } from './screen.service';
 
 @Injectable({providedIn: 'root'})
@@ -55,6 +55,37 @@ export class ResourceManagerService {
     return this.audioStorage.get(track.id);
   }
 
+  getArtistsAsDisplayableItems(knowledgeBase: ArtistKnowledgeBase): DisplayableItem[] {
+    const items = [];
+
+    for (const artist of knowledgeBase.artists) {
+      items.push({
+        image: this.getImage(artist),
+        audio: undefined,
+        text: [artist.name],
+        knowledgeId: artist.id
+      });
+    }
+
+    return items;
+  }
+
+  getTracksAsDisplayableItems(knowledgeBase: TrackKnowledgeBase): DisplayableItem[] {
+    const items = [];
+
+    // TODO duplication with DisplayableQuestion (see text)
+    for (const track of knowledgeBase.tracks) {
+      items.push({
+        image: this.getImage(track),
+        audio: this.getAudio(track),
+        text: [track.name, 'by ' + track.artists.join(', '), 'from ' + track.album.name],
+        knowledgeId: track.id
+      });
+    }
+
+    return items;
+  }
+
   fetchResourcesForGame(questions: Question[], knowledgeBase: GameKnowledgeBase) {
     this.knowledgeBase = knowledgeBase;
 
@@ -70,6 +101,18 @@ export class ResourceManagerService {
           this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iRight));
           break;
       }
+    }
+  }
+
+  fetchResourcesForArtists(knowledgeBase: ArtistKnowledgeBase) {
+    for (const artist of knowledgeBase.artists) {
+      this.fetchResourcesForArtist(artist);
+    }
+  }
+
+  fetchResourcesForTracks(knowledgeBase: TrackKnowledgeBase) {
+    for (const track of knowledgeBase.tracks) {
+      this.fetchResourcesForTrack(track);
     }
   }
 

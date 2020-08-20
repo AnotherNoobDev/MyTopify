@@ -60,12 +60,58 @@ export interface TrackKnowledgeBase {
   period: Period;
   size: number;
   tracks: Track[];
-} 
+}
+
+export class AppKnowledgeBase {
+  artists: Map<Period, ArtistKnowledgeBase>;
+  tracks: Map<Period, TrackKnowledgeBase>;
+
+  addArtistKnowledge(period: Period, knowledgeBase: ArtistKnowledgeBase) {
+    if (!knowledgeBase) {
+      return;
+    }
+
+    if (!this.artists) {
+      this.artists = new Map();
+    }
+
+    this.artists.set(period, knowledgeBase);
+  }
+
+  addTrackKnowledge(period: Period, knowledgeBase: TrackKnowledgeBase) {
+    if (!knowledgeBase) {
+      return;
+    }
+
+    if (!this.tracks) {
+      this.tracks = new Map();
+    }
+
+    this.tracks.set(period, knowledgeBase);
+  }
+
+  getArtistsFromPeriod(period: Period) {
+    return this.artists.get(period);
+  } 
+
+  getTracksFromPeriod(period: Period) {
+    return this.tracks.get(period);
+  }
+
+  hasKnowledge(category: Category): boolean {
+    switch (category.type) {
+      case Item.Artist:
+        return (this.artists && this.artists.has(category.period));
+
+      case Item.Track:
+        return (this.tracks && this.tracks.has(category.period));
+    }
+  }
+}
 
 export class GameKnowledgeBase {
   gameConfiguration: GameConfiguration;
-  artistKnowledgeBase: Map<Period, ArtistKnowledgeBase>;
-  trackKnowledgeBase: Map<Period, TrackKnowledgeBase>;
+  knowledgeBase: AppKnowledgeBase;
 
   /** 
    * can be 1, 2, 3, 4 or 6
@@ -107,15 +153,15 @@ export class GameKnowledgeBase {
   getCategorySize(category: Category): number {
     switch (category.type) {
       case Item.Artist:
-        if (this.artistKnowledgeBase && this.artistKnowledgeBase.has(category.period)) {
-          return this.artistKnowledgeBase.get(category.period).size;
+        if (this.knowledgeBase.artists && this.knowledgeBase.artists.has(category.period)) {
+          return this.knowledgeBase.artists.get(category.period).size;
         } else {
           return -1;
         }
 
       case Item.Track:
-        if (this.trackKnowledgeBase && this.trackKnowledgeBase.has(category.period)) {
-          return this.trackKnowledgeBase.get(category.period).size;
+        if (this.knowledgeBase.tracks && this.knowledgeBase.tracks.has(category.period)) {
+          return this.knowledgeBase.tracks.get(category.period).size;
         } else {
           return -1;
         }
@@ -123,11 +169,11 @@ export class GameKnowledgeBase {
   }
 
   getTrack(period: Period, index: number) {
-    return this.trackKnowledgeBase.get(period).tracks[index];
+    return this.knowledgeBase.tracks.get(period).tracks[index];
   }
 
   getArtist(period: Period, index: number) {
-    return this.artistKnowledgeBase.get(period).artists[index];
+    return this.knowledgeBase.artists.get(period).artists[index];
   }
 }
 
@@ -146,6 +192,14 @@ export interface Question {
   answer: number;
 
   text: string;
+}
+
+export interface DisplayableItem {
+  image: HTMLImageElement;
+  audio: HTMLAudioElement;
+  text: string[];
+
+  knowledgeId: Identifier;
 }
 
 export interface DisplayableQuestion extends Question {

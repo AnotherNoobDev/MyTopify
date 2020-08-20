@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { SpotifyAuthToken } from '../auth/auth.service';
-import { Period } from './types';
+import { Period, Category, Item } from './types';
 
 export interface AccessTokenRequest {
   clientId: string;
@@ -23,7 +23,7 @@ export interface TrackRequest {
 
 export interface TopChartRequest {
   accessToken: string;
-  period: Period;
+  category: Category;
 }
 
 export interface SpotifySimplifiedArtistObject {
@@ -133,16 +133,23 @@ export class SpotifyHttpClientService {
 
 
   // Personalization
-  
-  getUserTopTracks(request: TopChartRequest) {
-    return this.getUserTop(request.accessToken, 'tracks', request.period);
-  }
+  getUserTop(request: TopChartRequest) {
+    let requestWhat: string;
 
-  getUserTopArtists(request: TopChartRequest) {
-    return this.getUserTop(request.accessToken, 'artists', request.period);
+    switch (request.category.type) {
+      case Item.Artist:
+        requestWhat = 'artists';
+        break;
+
+      case Item.Track:
+        requestWhat = 'tracks';
+        break;
+    }
+
+    return this.getUserTopHelper(request.accessToken, requestWhat, request.category.period);
   }
   
-  private getUserTop(accessToken: string, what: string, period: Period) {
+  private getUserTopHelper(accessToken: string, what: string, period: Period) {
     const getTopTracksURL = this.personalizationEndpoint + '/' + what;
     
     let periodStr = '';

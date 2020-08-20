@@ -11,13 +11,15 @@ import { AuthCallbackComponent } from './auth/auth-callback/auth-callback.compon
 import { GameSelectorComponent } from './game/game-selector/game-selector/game-selector.component';
 import { GameLoopComponent } from './game/game-loop/game-loop.component';
 import { GameOverComponent } from './game/game-over/game-over.component';
+import { ChartComponent } from './chart/chart/chart.component';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
   { path: 'auth-callback', component: AuthCallbackComponent },
   { path: 'game/select', component: GameSelectorComponent },
   { path: 'game/main', component: GameLoopComponent},
-  { path: 'game/end-screen', component: GameOverComponent}
+  { path: 'game/end-screen', component: GameOverComponent},
+  { path: 'chart/view', component: ChartComponent}
 ];
 
 @NgModule({
@@ -28,6 +30,7 @@ const appRoutes: Routes = [
     GameSelectorComponent,
     GameLoopComponent,
     GameOverComponent,
+    ChartComponent,
   ],
   imports: [
     BrowserModule,

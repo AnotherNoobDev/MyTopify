@@ -1,0 +1,29 @@
+<form #f="ngForm" (change)="onUserSelection()">
+  <div>
+    <input type="radio" id="type_tracks" value="tracks" name="type" [(ngModel)]="type">
+    <label for="type_tracks">Tracks</label>
+
+    <input type="radio" id="type_artists" value="artists" name="type" [(ngModel)]="type">
+    <label for="type_artists">Artists</label>
+  </div>
+
+  <p> Period: </p>
+  <div>
+    <input type="radio" id="period_short_term" value="short_term" name="period" [(ngModel)]="period">
+    <label for="period_short_term">Last 4 weeks</label>
+
+    <input type="radio" id="period_medium_term" value="medium_term" name="period" [(ngModel)]="period">
+    <label for="period_medium_term">Last 6 months</label>
+
+    <input type="radio" id="period_long_term" value="long_term" name="period" [(ngModel)]="period">
+    <label for="period_long_term">All time</label>
+
+  </div>
+</form>
+<hr>
+<div *ngFor="let item of displayableItems; let i = index">
+  <img src="{{item.image.src}}" width="60" height="60" (mouseenter)="playAudio(i)" (mouseleave)="pauseAudio(i)">
+  <p *ngFor="let text of item.text">
+    {{text}}
+  </p>
+</div>
