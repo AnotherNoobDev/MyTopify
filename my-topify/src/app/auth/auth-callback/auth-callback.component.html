@@ -1,1 +1,3 @@
-<button type="button" [disabled]="!authService.isAuthenticated()" (click)="onProceed()">Proceed</button>
+<button type="button" [disabled]="!authService.isAuthenticated()" (click)="onProceedToGame()">Proceed to Game</button>
+<br/>
+<button type="button" [disabled]="!authService.isAuthenticated()" (click)="onProceedToChart()">Proceed to Charts</button>

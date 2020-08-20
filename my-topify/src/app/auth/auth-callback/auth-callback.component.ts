@@ -38,8 +38,11 @@ export class AuthCallbackComponent implements OnInit {
         });
   }
 
-  onProceed() {
-    // TODO choose between chart view or game view
+  onProceedToGame() {
     this.router.navigate(['game/select']);
+  }
+
+  onProceedToChart() {
+    this.router.navigate(['chart/view']);
   }
 }
