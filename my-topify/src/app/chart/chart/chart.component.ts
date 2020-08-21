@@ -63,7 +63,7 @@ export class ChartComponent implements OnInit {
           this.createPlaylistEnabled = true;
         }
       } else {
-        const artists = this.knowledgeManager.getArtistsFromPeriod(p);
+        const artists = this.knowledgeManager.getArtistsFromPeriod(this.period);
         this.resourceManager.fetchResourcesForArtists(artists);
         this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists);
       }
