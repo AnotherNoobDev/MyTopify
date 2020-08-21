@@ -27,6 +27,17 @@ export class KnowledgeManagerService {
     return this.knowledgeBase.getTracksFromPeriod(period);
   }
 
+  getDisplayablePeriod(period: Period) {
+    switch (period) {
+      case Period.ShortTerm:
+        return 'last 4 weeks';
+      case Period.MediumTerm:
+        return 'last 6 months';
+      case Period.LongTerm:
+        return 'all time';
+    }
+  }
+
   fetchKnowledge(categories: Category[]): Observable<boolean> {
     const requests = [];
     const requestTypes: Category[] = [];

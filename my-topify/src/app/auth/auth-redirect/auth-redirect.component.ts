@@ -13,7 +13,8 @@ export class AuthRedirectComponent implements OnInit {
   private clientId: string;
   private responseType = 'code';
   private state = 'e21392da45dbf4';
-  private scope = 'playlist-read-private streaming user-read-email user-read-private user-top-read';
+  private scope = 'playlist-read-private streaming user-read-email user-read-private user-top-read playlist-modify-public';
+  //private scope = 'user-read-private user-read-top ';
 
   private codeChallengeMethod = 'S256';  
   private codeChallenge: string;

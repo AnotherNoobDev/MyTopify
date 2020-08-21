@@ -34,6 +34,9 @@ export class AuthService {
   private LS_KEY_AUTH_TOKEN = 'HOFM_authToken';
   private LS_KEY_AUTH_TOKEN_VALID_UNTIL = 'HOFM_authTokenValidUntil';
 
+  // current user id
+  private currentUserId: string;
+
   constructor(private spotifyHttpClient: SpotifyHttpClientService) {
     this.authToken = this.retrieveAuthTokenFromStorage();
     this.authTokenValidUntil = this.retrieveAuthTokenValidUntilFromStorage();
@@ -113,7 +116,7 @@ export class AuthService {
   authenticate(authToken: SpotifyAuthToken) {
     this.authToken = authToken;
 
-    // check if token is exists
+    // check if token exists
     if (!this.authToken) {
       return;
     }
@@ -167,5 +170,16 @@ export class AuthService {
     }
 
     return this.authToken.access_token;
+  }
+
+  async getCurrentUserId(): Promise<string> {
+    if (this.currentUserId) {
+      return this.currentUserId;
+    } else {
+      const response = await this.spotifyHttpClient.getUserId({accessToken: this.getAccessToken()}).toPromise();
+      this.currentUserId = response.id;
+
+      return this.currentUserId;
+    }
   }
 }

@@ -26,6 +26,22 @@ export interface TopChartRequest {
   category: Category;
 }
 
+export interface UserProfileRequest {
+  accessToken: string;
+}
+
+export interface CreatePlaylistRequest {
+  accessToken: string;
+  userId: string;
+  playlistName: string;
+}
+
+export interface AddTracksToPlaylistRequest {
+  accessToken: string;
+  playlistId: string;
+  trackIds: string[];
+}
+
 export interface SpotifySimplifiedArtistObject {
   id: string;
   name: string;
@@ -65,12 +81,22 @@ export interface SpotifyPagingObject {
   total: number;
 }
 
+export interface SpotifyUserObject {
+  id: string;
+}
+
+export interface SpotifyPlaylistObject {
+  id: string;
+}
+
 @Injectable({providedIn: 'root'})
 export class SpotifyHttpClientService {
   private tokenEndpoint = 'https://accounts.spotify.com/api/token';
   private playEndpoint = 'https://api.spotify.com/v1/me/player/play';
   private playlistsEndpoint = 'https://api.spotify.com/v1/playlists';
   private personalizationEndpoint = 'https://api.spotify.com/v1/me/top';
+  private currentUserProfileEndpoint = 'https://api.spotify.com/v1/me';
+  private usersEndpoint = 'https://api.spotify.com/v1/users';
 
   constructor(private http: HttpClient) {
   }
@@ -178,5 +204,54 @@ export class SpotifyHttpClientService {
       };
 
     return this.http.get<SpotifyPagingObject>(getTopTracksURL, httpOptions);
+  }
+
+  // User profile
+  getUserId(request: UserProfileRequest) {
+    const httpOptions = {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Bearer ' + request.accessToken)
+    };
+
+    return this.http.get<SpotifyUserObject>(this.currentUserProfileEndpoint, httpOptions);
+  }
+
+  // Playlist
+  createPlaylist(request: CreatePlaylistRequest) {
+    const url = this.usersEndpoint + '/' + request.userId + '/playlists';
+
+    const httpOptions = {
+      headers: new HttpHeaders()
+      .set('Authorization', 'Bearer ' + request.accessToken)
+      .set('Content-Type', 'application/json')
+    };
+
+    const body = {
+      name: request.playlistName
+    };
+
+    return this.http.post<SpotifyPlaylistObject>(url, body, httpOptions);
+  }
+
+  addTracksToPlaylist(request: AddTracksToPlaylistRequest) {
+    const url = this.playlistsEndpoint + '/' + request.playlistId + '/tracks';
+
+    const httpOptions = {
+      headers: new HttpHeaders()
+      .set('Authorization', 'Bearer ' + request.accessToken)
+      .set('Content-Type', 'application/json')
+    };
+
+    const trackURIs = [];
+
+    for (const trackId of request.trackIds) {
+      trackURIs.push('spotify:track:' + trackId);
+    }
+
+    const body = {
+      uris: trackURIs
+    };
+
+    return this.http.post(url, body, httpOptions);
   }
 }
