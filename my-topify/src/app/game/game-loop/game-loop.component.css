@@ -1,0 +1,35 @@
+.glowing-border-right  {
+  font-size: 13rem;
+  font-weight: 200;
+  font-style: italic;
+  color: #fff;
+  padding: 4rem 6rem 5.5rem;
+  border: 0.4rem solid #fff;
+  border-radius: 2rem;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 .5rem #fff,
+    inset 0 0 .5rem #fff,
+    0 0 2rem var(--neon-color-right),
+    inset 0 0 2rem var(--neon-color-right),
+    0 0 4rem var(--neon-color-right),
+    inset 0 0 4rem var(--neon-color-right);      
+}
+
+.glowing-border-left  {
+  font-size: 13rem;
+  font-weight: 200;
+  font-style: italic;
+  color: #fff;
+  padding: 4rem 6rem 5.5rem;
+  border: 0.4rem solid #fff;
+  border-radius: 2rem;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 .5rem #fff,
+    inset 0 0 .5rem #fff,
+    0 0 2rem var(--neon-color-left),
+    inset 0 0 2rem var(--neon-color-left),
+    0 0 4rem var(--neon-color-left),
+    inset 0 0 4rem var(--neon-color-left);      
+}

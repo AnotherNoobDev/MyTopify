@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: Monoton;
+  src: url('assets/fonts/Monoton/Monoton-Regular.ttf')
+}
+
+
+:root {  
+  /* Set neon color */
+  --neon-color-left: #08f;
+  --neon-color-right: #f40;
+}
+
+body {
+  font-size: 40px;
+  color: yellow;
+  text-shadow: 
+  0 0 10px goldenrod,
+  0 0 20px orangered,
+  0 0 40px mediumblue,
+  0 0 80px purple;
+  font-family: Monoton;
+  background-color: black;
+  background-image: url('assets/images/background_0.jpg');
+  /*background-position: center; */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  background-repeat: no-repeat;
+}
