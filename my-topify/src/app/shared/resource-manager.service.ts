@@ -78,7 +78,7 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(track),
         audio: this.getAudio(track),
-        text: [track.name, 'by ' + track.artists.join(', '), 'from ' + track.album.name],
+        text: {track: track.name, artist: track.artists.join(', '), album: track.album.name},
         knowledgeId: track.id
       });
     }
@@ -140,6 +140,8 @@ export class ResourceManagerService {
 
   private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
     const img = new Image(desiredWidth, desiredHeight);
+    img.style.display = 'block';
+    img.style.margin = '10px';
 
     // TODO? wait for image to preload
     //img.onload
@@ -158,6 +160,7 @@ export class ResourceManagerService {
 
   private fetchAudio(url: string): HTMLAudioElement {
     const audio = new Audio(url);
+    audio.loop = true;
 
     // TODO? wait for audio to preload
     //audio.addEventListener('canplaythrough', event => {

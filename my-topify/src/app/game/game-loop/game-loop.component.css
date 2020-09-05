@@ -1,12 +1,29 @@
-.glowing-border-right  {
-  font-size: 13rem;
-  font-weight: 200;
-  font-style: italic;
-  color: #fff;
-  padding: 4rem 6rem 5.5rem;
+.option-container {
+  width: 100%;
+  text-align: center;
+}
+
+.glowing-border {
+  margin: 0 auto;
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   border: 0.4rem solid #fff;
-  border-radius: 2rem;
-  text-transform: uppercase;
+  border-radius: 2rem;  
+}
+
+.glowing-border-left {
+  box-shadow:
+  0 0 .5rem #fff,
+  inset 0 0 .5rem #fff,
+  0 0 2rem var(--neon-color-left),
+  inset 0 0 2rem var(--neon-color-left),
+  0 0 4rem var(--neon-color-left),
+  inset 0 0 4rem var(--neon-color-left);    
+}
+
+.glowing-border-right  {
   box-shadow:
     0 0 .5rem #fff,
     inset 0 0 .5rem #fff,
@@ -16,20 +33,248 @@
     inset 0 0 4rem var(--neon-color-right);      
 }
 
-.glowing-border-left  {
-  font-size: 13rem;
-  font-weight: 200;
-  font-style: italic;
-  color: #fff;
-  padding: 4rem 6rem 5.5rem;
-  border: 0.4rem solid #fff;
-  border-radius: 2rem;
-  text-transform: uppercase;
+.glowing-border-correct  {
+  animation: blink-correct 3s;
   box-shadow:
+  0 0 .5rem #fff,
+  inset 0 0 .5rem #fff,
+  0 0 2rem var(--neon-color-correct),
+  inset 0 0 2rem var(--neon-color-correct),
+  0 0 4rem var(--neon-color-correct),
+  inset 0 0 4rem var(--neon-color-correct);    
+}
+
+.glowing-border-wrong  {
+  animation: blink-wrong 3s;
+  box-shadow:
+  0 0 .5rem #fff,
+  inset 0 0 .5rem #fff,
+  0 0 2rem var(--neon-color-wrong),
+  inset 0 0 2rem var(--neon-color-wrong),
+  0 0 4rem var(--neon-color-wrong),
+  inset 0 0 4rem var(--neon-color-wrong);    
+}
+
+@keyframes blink-wrong {
+  0%, 25%, 50%, 75% {
+    box-shadow:
     0 0 .5rem #fff,
     inset 0 0 .5rem #fff,
-    0 0 2rem var(--neon-color-left),
-    inset 0 0 2rem var(--neon-color-left),
-    0 0 4rem var(--neon-color-left),
-    inset 0 0 4rem var(--neon-color-left);      
+    0 0 2rem var(--neon-color-wrong),
+    inset 0 0 2rem var(--neon-color-wrong),
+    0 0 4rem var(--neon-color-wrong),
+    inset 0 0 4rem var(--neon-color-wrong);    
+  }
+  15%, 40%, 65% {
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-correct {
+  0%, 25%, 50%, 75% {
+    box-shadow:
+    0 0 .5rem #fff,
+    inset 0 0 .5rem #fff,
+    0 0 2rem var(--neon-color-correct),
+    inset 0 0 2rem var(--neon-color-correct),
+    0 0 4rem var(--neon-color-correct),
+    inset 0 0 4rem var(--neon-color-correct);    
+  }
+  15%, 40%, 65% {
+    box-shadow: none;
+  }
+}
+
+.image-display {
+  float: left;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 10px black;
+  position: relative;
+  vertical-align: middle;
+}
+
+.image-display::before, .image-display::after {
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.text-display {
+  margin-left: 10px;
+  float: left;
+}
+
+.track-text {
+  margin: 0px;
+  color: yellow;
+  font-size: 40px;
+  font-family: BadScript;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 10px goldenrod,
+    0 0 20px orangered,
+    0 0 40px mediumblue,
+    0 0 80px purple;
+}
+
+.artist-text {
+  margin: 0px;
+  color: lightyellow;
+  font-size: 40px;
+  font-family: Monoton;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 10px yellow,
+    0 0 20px orange,
+    0 0 40px brown,
+    0 0 80px purple;
+}
+
+.album-text {
+  margin: 0px;
+  color: lightyellow;
+  font-size: 40px;
+  font-family: Yellowtail;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 10px gold,
+    0 0 20px firebrick,
+    0 0 40px pink,
+    0 0 80px red;
+}
+
+.filler-text {
+  margin: 5px 0px;
+  font-size: 40px;
+  text-transform: lowercase;
+  color: #c6e2ff;
+  font-family: Vibur;
+  text-shadow:
+    0 0 6px rgba(202,228,225,0.92),
+    0 0 30px rgba(202,228,225,0.34),
+    0 0 12px rgba(30,132,242,0.52),
+    0 0 21px rgba(30,132,242,0.92),
+    0 0 34px rgba(30,132,242,0.78),
+    0 0 54px rgba(30,132,242,0.92);
+}
+
+#blackboard {
+  font-size: 40px;
+  color: #E8E8E8;
+  font-family: WalterTurncoat;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  background-color: black;
+  background-image: url('/assets/images/blackboard_h.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+#blackboard-content {
+  width:95%;
+  height:85%;
+}
+
+#clives {
+  width: 10%;
+  float: left;
+}
+
+.life {
+  display: block;
+}
+
+#menu {
+  display: block;
+  float: right;
+}
+
+#cscore {
+  width: 15%;
+  float: right;
+  color: #ECCF8D;
+}
+
+#cquestion {
+  width: 70%;
+  float: left;
+}
+
+.blackboard-text-small {
+  margin: 0px;
+  font-size: 20px;
+}
+
+.blackboard-text-large {
+  font-size: 40px;
+  margin: 0px;
+}
+
+.ripple {
+  background-color: #fff;
+  /*border-radius: 50%;*/
+  animation: ripple 2s linear infinite;
+}
+@keyframes ripple {
+  0% {
+    box-shadow: 
+      0 0 0 .7rem rgba(255,255,255, 0.2),
+      0 0 0 1.5rem rgba(255,255,255, 0.2),
+      0 0 0 5rem rgba(255,255,255, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 1.5rem rgba(255,255,255, 0.2),
+      0 0 0 4rem rgba(255,255,255, 0.2),
+      0 0 0 8rem rgba(255,255,255, 0);
+  }
+}
+
+/*
+.selecting {
+  border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cstyle%3Epath%7Banimation:stroke 5s infinite linear%3B%7D%40keyframes stroke%7Bto%7Bstroke-dashoffset:776%3B%7D%7D%3C/style%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232d3561' /%3E%3Cstop offset='25%25' stop-color='%23c05c7e' /%3E%3Cstop offset='50%25' stop-color='%23f3826f' /%3E%3Cstop offset='100%25' stop-color='%23ffb961' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3' stroke-dasharray='388'/%3E %3C/svg%3E") 1;
+}
+*/
+
+.draw {
+  transition: color 625ms;
+}
+
+.draw::before, .draw::after {
+  border: 10px solid transparent;
+  width: 0;
+  height: 0;
+}
+.draw::before {
+  top: 0;
+  left: 0;
+}
+.draw::after {
+  bottom: 0;
+  right: 0;
+}
+
+.draw.selecting::before, .draw.selecting::after {
+  width: 100%;
+  height: 100%;
+}
+
+.draw.selecting::before {
+  border-top-color: var(--selecting-color);
+  border-right-color: var(--selecting-color);
+  transition: width 625ms ease-out, height 625ms ease-out 625ms;
+}
+
+.draw.selecting::after {
+  border-bottom-color: var(--selecting-color);
+  border-left-color: var(--selecting-color);
+  transition: border-color 0s ease-out 1250ms, width 625ms ease-out 1250ms, height 625ms ease-out 1875ms;
 }

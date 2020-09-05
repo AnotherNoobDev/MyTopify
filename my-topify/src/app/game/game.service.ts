@@ -22,7 +22,7 @@ export class GameService {
   getTrackNameArtistsAlbum(period: Period, index: number): string[] {
     const t = this.knowledgeBase.getTrack(period, index);
 
-    return [t.name, 'by ' + t.artists.join(', '), 'from ' + t.album.name];
+    return [t.name, t.artists.join(', '), t.album.name];
   }
 
   getArtistName(period: Period, index: number) {
@@ -48,18 +48,26 @@ export class GameService {
   }
 
   private getDisplayableQuestion(q: Question): DisplayableQuestion {
-    let lText = [];
-    let rText = [];
+    let lText = {track: '', artist: '', album: ''};
+    let rText = {track: '', artist: '', album: ''};
     
     switch (q.category.type) {
       case Item.Artist:
-        lText.push(this.getArtistName(q.category.period, q.iLeft));
-        rText.push(this.getArtistName(q.category.period, q.iRight));
+        lText.artist = this.getArtistName(q.category.period, q.iLeft);
+        rText.artist = this.getArtistName(q.category.period, q.iRight);
         break;
 
       case Item.Track:
-        lText = this.getTrackNameArtistsAlbum(q.category.period, q.iLeft);
-        rText = this.getTrackNameArtistsAlbum(q.category.period, q.iRight);
+        let info = this.getTrackNameArtistsAlbum(q.category.period, q.iLeft);
+        lText.track = info[0];
+        lText.artist = info[1];
+        lText.album = info[2];
+
+        info = this.getTrackNameArtistsAlbum(q.category.period, q.iRight);
+        rText.track = info[0];
+        rText.artist = info[1];
+        rText.album = info[2];
+
         break;
     }
 
