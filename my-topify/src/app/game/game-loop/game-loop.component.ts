@@ -3,6 +3,7 @@ import { GameService } from '../game.service';
 import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
+import { Subscription } from 'rxjs';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
@@ -52,13 +53,14 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private selectingChoice: Choice;
   private answered = Answer.None;
 
-
   private mousedownOnLeftHandler: any;
   private mousedownOnRightHandler: any;
   private mouseupOnLeftHandler: any;
   private mouseupOnRightHandler: any;
   private clickOnLeftHandler: any;
   private clickOnRightHandler: any;
+
+  private resourceReloadSub: Subscription;
 
   constructor(private game: GameService,
               private resourceManager: ResourceManagerService,
@@ -74,11 +76,18 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.resourceReloadSub = this.resourceManager.resourceReload().subscribe(() => {
+      this.updateResources();
+    });
+
     this.updateQuestion();
   }
 
   ngOnDestroy() {
     this.disableUserInteraction();
+
+    this.resourceReloadSub.unsubscribe();
+    this.resourceReloadSub = undefined;
   }
 
   ngAfterViewInit() {

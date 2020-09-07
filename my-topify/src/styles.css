@@ -43,21 +43,29 @@
   --selecting-color: #1DB954;
 
   --spotify-green: #1DB954;
+
+  --image-border-size: 0.5rem;
 }
 
 body {
-  /*
-  font-size: 40px;
-  color: yellow;
-  text-shadow: 
-  0 0 10px goldenrod,
-  0 0 20px orangered,
-  0 0 40px mediumblue,
-  0 0 80px purple;
-  font-family: Monoton;
-  */
   background-color: black;
-  background-image: url('assets/images/background_0.jpg');
-  background-size: 100% 100%; /*cover*/
+  background-image: url('assets/images/background.jpg');
+  background-position: center center;
   background-repeat: no-repeat;
+
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+
+  /* This is what makes the background image rescale based
+    on the container's size */
+    background-size: cover;
 }
+
+/*
+@media only screen and (max-width: 767px) {
+  body {
+    background-image: url('assets/images/background_mobile.jpg');
+  }
+}
+*/

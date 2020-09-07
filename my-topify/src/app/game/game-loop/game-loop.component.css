@@ -1,3 +1,15 @@
+#game-view {
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0px;
+  left:0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
 .option-container {
   width: 100%;
   text-align: center;
@@ -6,11 +18,10 @@
 .glowing-border {
   margin: 0 auto;
   display: inline-block;
-  justify-content: center;
-  align-items: center;
   padding: 2rem;
   border: 0.4rem solid #fff;
   border-radius: 2rem;  
+  overflow: auto;
 }
 
 .glowing-border-left {
@@ -88,7 +99,7 @@
 .image-display {
   float: left;
   box-sizing: border-box;
-  box-shadow: inset 0 0 0 10px black;
+  box-shadow: inset 0 0 0 var(--image-border-size) black;
   position: relative;
   vertical-align: middle;
 }
@@ -103,13 +114,12 @@
 
 .text-display {
   margin-left: 10px;
-  float: left;
 }
 
 .track-text {
-  margin: 0px;
+  margin: 0;
   color: yellow;
-  font-size: 40px;
+  font-size: min(6vw, 40px);
   font-family: BadScript;
   text-transform: uppercase;
   text-shadow: 
@@ -120,9 +130,9 @@
 }
 
 .artist-text {
-  margin: 0px;
+  margin: 0;
   color: lightyellow;
-  font-size: 40px;
+  font-size: min(8vw, 40px);
   font-family: Monoton;
   text-transform: uppercase;
   text-shadow: 
@@ -132,22 +142,9 @@
     0 0 80px purple;
 }
 
-.album-text {
-  margin: 0px;
-  color: lightyellow;
-  font-size: 40px;
-  font-family: Yellowtail;
-  text-transform: uppercase;
-  text-shadow: 
-    0 0 10px gold,
-    0 0 20px firebrick,
-    0 0 40px pink,
-    0 0 80px red;
-}
-
 .filler-text {
-  margin: 5px 0px;
-  font-size: 40px;
+  margin: 0;
+  font-size: min(6vw, 40px);
   text-transform: lowercase;
   color: #c6e2ff;
   font-family: Vibur;
@@ -161,7 +158,7 @@
 }
 
 #blackboard {
-  font-size: 40px;
+  font-size: min(5vw, 40px);
   color: #E8E8E8;
   font-family: WalterTurncoat;
   text-align: center;
@@ -169,13 +166,15 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 200px;
+  max-width: 1100px;
+  height: min(6em, 200px);
+  min-height: min(6em, 200px);
   background-color: black;
   background-image: url('/assets/images/blackboard_h.jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin-top: min(1vw, 20px);
+  margin-bottom: min(1vw, 20px);
 }
 
 #blackboard-content {
@@ -183,24 +182,15 @@
   height:85%;
 }
 
+#blackboard-content:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 #clives {
   width: 10%;
   float: left;
-}
-
-.life {
-  display: block;
-}
-
-#menu {
-  display: block;
-  float: right;
-}
-
-#cscore {
-  width: 15%;
-  float: right;
-  color: #ECCF8D;
 }
 
 #cquestion {
@@ -208,19 +198,42 @@
   float: left;
 }
 
+#cscore {
+  /*width: 15%;*/
+  float: right;
+  color: #ECCF8D;
+}
+
+.life {
+  height: auto;
+  width: 1.5em;
+  display: block;
+}
+
+#menu {
+  height: auto;
+  width: 1.5em;
+  display: block;
+  float: right;
+}
+
+#score {
+  display: block;
+  float: right;
+}
+
 .blackboard-text-small {
   margin: 0px;
-  font-size: 20px;
+  font-size: min(3vw, 20px);
 }
 
 .blackboard-text-large {
-  font-size: 40px;
+  font-size: min(5vw, 40px);
   margin: 0px;
 }
 
 .ripple {
   background-color: #fff;
-  /*border-radius: 50%;*/
   animation: ripple 2s linear infinite;
 }
 @keyframes ripple {
@@ -238,18 +251,12 @@
   }
 }
 
-/*
-.selecting {
-  border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cstyle%3Epath%7Banimation:stroke 5s infinite linear%3B%7D%40keyframes stroke%7Bto%7Bstroke-dashoffset:776%3B%7D%7D%3C/style%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232d3561' /%3E%3Cstop offset='25%25' stop-color='%23c05c7e' /%3E%3Cstop offset='50%25' stop-color='%23f3826f' /%3E%3Cstop offset='100%25' stop-color='%23ffb961' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3' stroke-dasharray='388'/%3E %3C/svg%3E") 1;
-}
-*/
-
 .draw {
   transition: color 625ms;
 }
 
 .draw::before, .draw::after {
-  border: 10px solid transparent;
+  border: var(--image-border-size) solid transparent;
   width: 0;
   height: 0;
 }
@@ -278,3 +285,20 @@
   border-left-color: var(--selecting-color);
   transition: border-color 0s ease-out 1250ms, width 625ms ease-out 1250ms, height 625ms ease-out 1875ms;
 }
+
+
+
+/*
+.album-text {
+  margin: 0px;
+  color: lightyellow;
+  font-size: min(8vw, 40px);
+  font-family: Yellowtail;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 10px gold,
+    0 0 20px firebrick,
+    0 0 40px pink,
+    0 0 80px red;
+}
+*/

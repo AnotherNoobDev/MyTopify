@@ -1,41 +1,43 @@
-<div class="option-container">
-  <div [ngClass]="{'glowing-border': true, 
-                   'glowing-border-left': answered !== answerType.CorrectLeft && answered !== answerType.WrongLeft, 
-                   'glowing-border-correct': answered === answerType.CorrectLeft,
-                   'glowing-border-wrong': answered === answerType.WrongLeft}">
-    <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder></div>
-    <div class="text-display">
-      <p *ngIf="true" class="track-text">{{leftText.track}}</p>
-      <p *ngIf="leftText.track !== '' && leftText.artist !== ''" class="filler-text">by</p>
-      <p *ngIf="leftText.artist !== ''" class="artist-text">{{leftText.artist}}</p>
-    </div>
-  </div> 
-</div>
-<div id="blackboard">
-  <div id="blackboard-content">
-    <div id="clives">
-      <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png" width="50" heigh="50">
-    </div>
-    <div id="cquestion">
-      <p class="blackboard-text-small">- {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}} -</p>
-      <p class="blackboard-text-large" [innerHTML]="question.text"></p>
-    </div>
-    <div id="cscore">
-      <img id="menu" src="/assets/images/menu.png" width="60" height="60">
-      <p class="blackboard-text-large">Score: <br>{{game.getScore()}}</p>
+<div id="game-view">
+  <div class="option-container">
+    <div [ngClass]="{'glowing-border': true, 
+                     'glowing-border-left': answered !== answerType.CorrectLeft && answered !== answerType.WrongLeft, 
+                     'glowing-border-correct': answered === answerType.CorrectLeft,
+                     'glowing-border-wrong': answered === answerType.WrongLeft}">
+      <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder></div>
+      <!--div class="text-display"-->
+        <p *ngIf="true" class=" track-text">{{leftText.track}}</p>
+        <p *ngIf="leftText.track !== '' && leftText.artist !== ''" class=" filler-text">by</p>
+        <p *ngIf="leftText.artist !== ''" class="artist-text">{{leftText.artist}}</p>
+      <!--/div-->
+    </div> 
+  </div>
+  <div id="blackboard">
+    <div id="blackboard-content">
+      <div id="clives">
+        <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png">
+      </div>
+      <div id="cquestion">
+        <p class="blackboard-text-small">- {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}} -</p>
+        <p class="blackboard-text-large" [innerHTML]="question.text"></p>
+      </div>
+      <div id="cscore">
+        <img id="menu" src="/assets/images/menu.png">
+        <p class="score blackboard-text-large">Score: <br>{{game.getScore()}}</p>
+      </div>
     </div>
   </div>
-</div>
-<div class="option-container">
-  <div [ngClass]="{'glowing-border': true, 
-                   'glowing-border-right': answered !== answerType.CorrectRight && answered !== answerType.WrongRight, 
-                   'glowing-border-correct': answered === answerType.CorrectRight,
-                   'glowing-border-wrong': answered === answerType.WrongRight}">
-    <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder></div>
-    <div class="text-display">
-      <p *ngIf="rightText.track !== ''" class="track-text">{{rightText.track}}</p>
-      <p *ngIf="rightText.track !== '' && rightText.artist !== ''" class="filler-text">by</p>
-      <p *ngIf="rightText.artist !== ''" class="artist-text">{{rightText.artist}}</p>
+  <div class="option-container">
+    <div [ngClass]="{'glowing-border': true, 
+                     'glowing-border-right': answered !== answerType.CorrectRight && answered !== answerType.WrongRight, 
+                     'glowing-border-correct': answered === answerType.CorrectRight,
+                     'glowing-border-wrong': answered === answerType.WrongRight}">
+      <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder></div>
+      <div class="text-display">
+        <p *ngIf="rightText.track !== ''" class="track-text">{{rightText.track}}</p>
+        <p *ngIf="rightText.track !== '' && rightText.artist !== ''" class="filler-text">by</p>
+        <p *ngIf="rightText.artist !== ''" class="artist-text">{{rightText.artist}}</p>
+      </div>
     </div>
-  </div>
+  </div>  
 </div>
