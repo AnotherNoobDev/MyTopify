@@ -20,7 +20,7 @@ export class ResourceManagerService {
   private resourceReloadSubject = new Subject<void>();
 
   constructor(private screen: ScreenService) {
-    this.screen.screenResize().subscribe(() => {
+    this.screen.recommendedImgSizeChanged().subscribe(() => {
       // invalidate images
       this.imageStorage.clear();
 

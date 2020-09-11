@@ -59,12 +59,12 @@ export class GameService {
 
       case Item.Track:
         let info = this.getTrackNameArtistsAlbum(q.category.period, q.iLeft);
-        lText.track = info[0];
+        lText.track = this.getTrackShortName(info[0]);
         lText.artist = info[1];
         lText.album = info[2];
 
         info = this.getTrackNameArtistsAlbum(q.category.period, q.iRight);
-        rText.track = info[0];
+        rText.track = this.getTrackShortName(info[0]);
         rText.artist = info[1];
         rText.album = info[2];
 
@@ -78,6 +78,20 @@ export class GameService {
     };
 
     return dq;
+  }
+
+  getTrackShortName(trackName: string): string {
+    let end = trackName.indexOf('(');
+
+    if (end === -1) {
+      end = trackName.indexOf(' -');
+    }
+
+    if (end !== -1) {
+      return trackName.substring(0, end);
+    } else {
+      return trackName;
+    }
   }
 
   answerQuestion(answer: number): boolean {

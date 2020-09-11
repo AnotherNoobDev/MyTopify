@@ -8,9 +8,11 @@ export class ScreenService {
   album icons: 64, 300, 640
   */
 
-  private screenResizeSubject = new Subject<void>();
-
+  private recImgSizeSubject = new Subject<void>();
   private recommendedImageSize: number;
+
+  private narrowScreenSubject = new Subject<boolean>();
+  private narrowScreen: boolean;
 
   constructor() {
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -19,13 +21,47 @@ export class ScreenService {
     this.onWindowResize();
   }
 
-  screenResize() {
-    return this.screenResizeSubject.asObservable();
+  recommendedImgSizeChanged() {
+    return this.recImgSizeSubject.asObservable();
+  }
+
+  screenIsNarrowChanged() {
+    return this.narrowScreenSubject.asObservable();
   }
 
   private onWindowResize() {
     //console.log('window: ' + window.innerWidth + 'x' + window.innerHeight);
 
+    this.checkIfScreenIsNarrow();
+
+    this.checkImageSize();
+  }
+
+  
+  private checkIfScreenIsNarrow() {
+    let narrow =  false;
+
+    if (window.innerWidth < 400) {
+      narrow = true;
+    }
+
+    if (this.narrowScreen !== narrow) {
+
+      let changed = false;
+
+      if (this.narrowScreen !== undefined) {
+        changed = true;
+      }
+
+      this.narrowScreen = narrow;
+      
+      if (changed) {
+        this.narrowScreenSubject.next(this.narrowScreen);
+      }
+    }
+  }
+
+  private checkImageSize() {
     let newRecImgSize: number;
 
     if (window.innerWidth > 1024 && window.innerHeight > 900) {
@@ -39,14 +75,14 @@ export class ScreenService {
     if (this.recommendedImageSize !== newRecImgSize) {
 
       let changed = false;
-      if (this.recommendedImageSize) {
+      if (this.recommendedImageSize !== undefined) {
         changed = true;
       }
 
       this.recommendedImageSize = newRecImgSize;
       
       if (changed) {
-        this.screenResizeSubject.next();
+        this.recImgSizeSubject.next();
       }
     }
   }
@@ -55,5 +91,9 @@ export class ScreenService {
   // when this changes we need to update resource manager icons
   getImageSizeForGameView() {
     return this.recommendedImageSize;
+  }
+
+  isNarrowScreen() {
+    return this.narrowScreen;
   }
 }

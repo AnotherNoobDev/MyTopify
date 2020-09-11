@@ -4,6 +4,7 @@ import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
+import { ScreenService } from 'src/app/shared/screen.service';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
@@ -33,10 +34,14 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   public choiceType = Choice;
   public answerType = Answer;
 
+  private narrowScreen = false;
+
   private question: DisplayableQuestion;
   private leftText: DisplayableText;
   private rightText: DisplayableText;
 
+  //TODO determine if this neeeds changing (currently there are 2 places with the same name)
+  // do we switch between narrow and wide screen??
   @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef;
   @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef;
 
@@ -61,8 +66,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private clickOnRightHandler: any;
 
   private resourceReloadSub: Subscription;
+  
+  private screenSizeSub: Subscription;
 
-  constructor(private game: GameService,
+  constructor(private screen: ScreenService,
+              private game: GameService,
               private resourceManager: ResourceManagerService,
               private router: Router,
               private renderer: Renderer2) {
@@ -76,6 +84,13 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.narrowScreen = this.screen.isNarrowScreen();
+    //console.log(this.narrowScreen);
+    this.screenSizeSub = this.screen.screenIsNarrowChanged().subscribe((value: boolean) => {
+      this.narrowScreen = value;
+      //console.log(this.narrowScreen);
+    });
+    
     this.resourceReloadSub = this.resourceManager.resourceReload().subscribe(() => {
       this.updateResources();
     });
@@ -85,6 +100,9 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.disableUserInteraction();
+
+    this.screenSizeSub.unsubscribe();
+    this.screenSizeSub = undefined;
 
     this.resourceReloadSub.unsubscribe();
     this.resourceReloadSub = undefined;
