@@ -1,1 +1,18 @@
-<button type="button" (click)="redirectToSpotify()">Login to Spotify</button>
+<div class="page-view-column page-view-column-top">
+  <div class="title">
+    <p class="title-item">My</p>
+    <p class="title-item">Topify</p>
+  </div>
+
+  <div id="blackboard" class="blackboard-text-only">
+    <div id="blackboard-content" class="blackboard-content-text-only">
+      <p>Guess your favorite tracks/artists in the Game View.</p>
+      <p>View your favorite tracks/artists and create playlists from them in the Chart View.</p>
+    </div>
+  </div>
+  <div class="spotify-auth" (click)="redirectToSpotify()">
+    <img id="spotify-icon" src="/assets/images/spotify.png">
+    <p class="spotify-text">Login with Spotify</p>
+  </div>
+</div>
+

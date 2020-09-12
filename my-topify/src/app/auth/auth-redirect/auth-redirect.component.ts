@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-auth-redirect',
   templateUrl: './auth-redirect.component.html',
-  styleUrls: ['./auth-redirect.component.css']
+  styleUrls: ['../../shared/style/common.css', './auth-redirect.component.css']
 })
 export class AuthRedirectComponent implements OnInit {
 

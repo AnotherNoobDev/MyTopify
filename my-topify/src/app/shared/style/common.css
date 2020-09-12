@@ -1,0 +1,104 @@
+.page-view-column {
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0px;
+  left:0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
+.page-view-column-top {
+  justify-content: start;
+}
+
+.title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  color: lightyellow;
+  font-size: 80px; /*min(10vw, 80px)*/;
+  font-family: Monoton;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 10px yellow,
+    0 0 20px orange,
+    0 0 40px brown,
+    0 0 80px purple;
+}
+
+.title-item {
+  margin: 0;
+}
+
+
+#blackboard {
+  font-size: min(5vw, 40px);
+  color: #E8E8E8;
+  font-family: WalterTurncoat;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  height: min(6em, 200px);
+  min-height: min(6em, 200px);
+  background-color: black;
+  background-image: url('/assets/images/blackboard_h.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin-top: min(1vw, 20px);
+  margin-bottom: min(1vw, 20px);
+}
+
+.blackboard-text-only {
+  font-size: min(5vw, 30px) !important;
+  height: min(10em, 320px) !important;
+  min-height: min(10em, 320px) !important;
+}
+
+#blackboard-content {
+  width:95%;
+  height:85%;
+}
+
+.blackboard-content-text-only {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#blackboard-content:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.spotify-auth {
+  display: flex;
+  background-color: var(--spotify-green);
+  border-radius: 30px;
+  cursor: pointer;
+  margin: auto;
+}
+
+#spotify-icon {
+  width: 30px;
+  height: 30px;
+  padding: 15px;
+}
+
+.spotify-text {
+  color: var(--spotify-white);
+  font-family: WalterTurncoat;
+  font-size: 18px;
+  display: inline-block;
+  padding-right: 15px;
+}
