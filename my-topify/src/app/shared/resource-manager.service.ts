@@ -1,29 +1,61 @@
 import { Injectable } from '@angular/core';
-import { Identifier, GameKnowledgeBase, Question, Item, Artist, Track, ImageURL, ArtistKnowledgeBase, TrackKnowledgeBase, DisplayableItem, DisplayableQuestion } from './types';
+import { Identifier, 
+  GameKnowledgeBase, 
+  Question, 
+  Item, Artist, Track, 
+  ImageURL, 
+  ArtistKnowledgeBase, TrackKnowledgeBase, 
+  DisplayableItem } from './types';
 import { ScreenService } from './screen.service';
+import { Subject } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class ResourceManagerService {
-  private knowledgeBase: GameKnowledgeBase;
+  private knowledgeBase: GameKnowledgeBase | TrackKnowledgeBase | ArtistKnowledgeBase;
+  private gameQuestions: Question[];
+
   private audioStorage: Map<Identifier, HTMLAudioElement> = new Map();
-  // TODO? do we want to store multiple images
   private imageStorage: Map<Identifier, HTMLImageElement> = new Map();
 
+  private resourceReloadSubject = new Subject<void>();
+
   constructor(private screen: ScreenService) {
+    this.screen.recommendedImgSizeChanged().subscribe(() => {
+      // invalidate images
+      this.imageStorage.clear();
+
+      // refetch using the knowledge base
+      if (this.knowledgeBase instanceof GameKnowledgeBase) {
+        this.fetchResourcesForGame(this.gameQuestions, this.knowledgeBase);
+      } else if ('tracks' in this.knowledgeBase) {
+        this.fetchResourcesForTracks(this.knowledgeBase);
+      } else {
+        this.fetchResourcesForArtists(this.knowledgeBase);
+      }
+
+      // notify
+      this.resourceReloadSubject.next();
+    });
+  }
+
+  resourceReload() {
+    return this.resourceReloadSubject.asObservable();
   }
 
   getImagesForQuestion(question: Question): HTMLImageElement[] {
     const images = [];
 
+    const kb = this.knowledgeBase as GameKnowledgeBase;
+
     switch (question.category.type) {
       case Item.Artist:
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iRight)));
+        images.push(this.getImage(kb.getArtist(question.category.period, question.iLeft)));
+        images.push(this.getImage(kb.getArtist(question.category.period, question.iRight)));
         break;
 
       case Item.Track:
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+        images.push(this.getImage(kb.getTrack(question.category.period, question.iLeft)));
+        images.push(this.getImage(kb.getTrack(question.category.period, question.iRight)));
         break;
     }
 
@@ -37,8 +69,10 @@ export class ResourceManagerService {
 
     const audio = [];
 
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+    const kb = this.knowledgeBase as GameKnowledgeBase;
+
+    audio.push(this.getAudio(kb.getTrack(question.category.period, question.iLeft)));
+    audio.push(this.getAudio(kb.getTrack(question.category.period, question.iRight)));
 
     return audio;
   }
@@ -78,7 +112,7 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(track),
         audio: this.getAudio(track),
-        text: [track.name, 'by ' + track.artists.join(', '), 'from ' + track.album.name],
+        text: {track: track.name, artist: track.artists.join(', '), album: track.album.name},
         knowledgeId: track.id
       });
     }
@@ -88,6 +122,7 @@ export class ResourceManagerService {
 
   fetchResourcesForGame(questions: Question[], knowledgeBase: GameKnowledgeBase) {
     this.knowledgeBase = knowledgeBase;
+    this.gameQuestions = questions;
 
     for (const question of questions) {
       switch (question.category.type) {
@@ -140,6 +175,8 @@ export class ResourceManagerService {
 
   private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
     const img = new Image(desiredWidth, desiredHeight);
+    img.style.display = 'block';
+    img.style.margin = '0.5rem';
 
     // TODO? wait for image to preload
     //img.onload
@@ -158,6 +195,7 @@ export class ResourceManagerService {
 
   private fetchAudio(url: string): HTMLAudioElement {
     const audio = new Audio(url);
+    audio.loop = true;
 
     // TODO? wait for audio to preload
     //audio.addEventListener('canplaythrough', event => {

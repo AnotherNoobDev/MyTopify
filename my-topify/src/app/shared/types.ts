@@ -197,14 +197,20 @@ export interface Question {
 export interface DisplayableItem {
   image: HTMLImageElement;
   audio: HTMLAudioElement;
-  text: string[];
+  text: DisplayableText;
 
   knowledgeId: Identifier;
 }
 
 export interface DisplayableQuestion extends Question {
-  leftText: string[];
-  rightText: string[];
+  leftText: DisplayableText;
+  rightText: DisplayableText;
+}
+
+export interface DisplayableText {
+  track: string;
+  artist: string;
+  album: string;
 }
 
 export enum Resource {

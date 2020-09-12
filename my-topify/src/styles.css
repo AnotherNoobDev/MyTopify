@@ -5,25 +5,67 @@
   src: url('assets/fonts/Monoton/Monoton-Regular.ttf')
 }
 
+@font-face {
+  font-family: WalterTurncoat;
+  src: url('assets/fonts/Walter_Turncoat/WalterTurncoat-Regular.ttf');
+}
+
+@font-face {
+  font-family: Dosis;
+  src: url('assets/fonts/Dosis/static/Dosis-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: BadScript;
+  src: url('assets/fonts/Bad_Script/BadScript-Regular.ttf');
+}
+
+@font-face {
+  font-family: Yellowtail;
+  src: url('assets/fonts/Yellowtail/Yellowtail-Regular.ttf');
+}
+
+@font-face {
+  font-family: Vibur;
+  src: url('assets/fonts/Vibur/Vibur-Regular.ttf');
+}
+
 
 :root {  
   /* Set neon color */
-  --neon-color-left: #08f;
-  --neon-color-right: #f40;
+  --neon-color-left: #04d9ff;
+  --neon-color-right: #bc13fe;
+  --neon-color-wrong: #ff073a;
+  --neon-color-correct: #39ff14;
+  
+  --ripple-color: white;
+
+  --selecting-color: #1DB954;
+
+  --spotify-green: #1DB954;
+
+  --image-border-size: 0.5rem;
 }
 
 body {
-  font-size: 40px;
-  color: yellow;
-  text-shadow: 
-  0 0 10px goldenrod,
-  0 0 20px orangered,
-  0 0 40px mediumblue,
-  0 0 80px purple;
-  font-family: Monoton;
   background-color: black;
-  background-image: url('assets/images/background_0.jpg');
-  /*background-position: center; */
-  background-size: cover; /* Resize the background image to cover the entire container */
+  background-image: url('assets/images/background.jpg');
+  background-position: center center;
   background-repeat: no-repeat;
+
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+
+  /* This is what makes the background image rescale based
+    on the container's size */
+    background-size: cover;
 }
+
+/*
+@media only screen and (max-width: 767px) {
+  body {
+    background-image: url('assets/images/background_mobile.jpg');
+  }
+}
+*/
