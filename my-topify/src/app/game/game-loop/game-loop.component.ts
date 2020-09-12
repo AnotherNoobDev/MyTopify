@@ -40,10 +40,27 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private leftText: DisplayableText;
   private rightText: DisplayableText;
 
-  //TODO determine if this neeeds changing (currently there are 2 places with the same name)
-  // do we switch between narrow and wide screen??
-  @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef;
-  @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef;
+  private newLeftImagePlaceholder: ElementRef;
+  private leftImagePlaceholder: ElementRef;
+  @ViewChild('leftImagePlaceholder', {static: false}) set contentLeft(content: ElementRef) {
+    if (this.leftImagePlaceholder) {
+      this.newLeftImagePlaceholder = content;
+      this.checkIfViewElementsNeedUpdate();
+    } else {
+      this.leftImagePlaceholder = content;
+    }
+  }
+
+  private newRightImagePlaceholder: ElementRef;
+  private rightImagePlaceholder: ElementRef;
+  @ViewChild('rightImagePlaceholder', {static: false}) set contentRight(content: ElementRef) {
+    if (this.rightImagePlaceholder) {
+      this.newRightImagePlaceholder = content;
+      this.checkIfViewElementsNeedUpdate();
+    } else {
+      this.rightImagePlaceholder = content;
+    }
+  }
 
   private images: HTMLImageElement[];
   private audio: HTMLAudioElement[];
@@ -242,22 +259,47 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateResources() {
+    this.removeResources();
+    this.addResources();
+  }
+
+  private removeResources() {
     // images
     if (this.images) {
       this.renderer.removeChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
       this.renderer.removeChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
     }
 
+    // audio
+    this.pauseAudioLeft();
+    this.pauseAudioRight();
+  }
+
+  private addResources() {
+    // images 
     this.images = this.resourceManager.getImagesForQuestion(this.question);
 
     this.renderer.appendChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
     this.renderer.appendChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
 
     // audio
-    this.pauseAudioLeft();
-    this.pauseAudioRight();
-
     this.audio = this.resourceManager.getAudioForQuestion(this.question);
+  }
+
+  private checkIfViewElementsNeedUpdate() {
+    if (this.newLeftImagePlaceholder && this.newRightImagePlaceholder) {
+      this.disableUserInteraction();
+      this.removeResources();
+
+      this.leftImagePlaceholder = this.newLeftImagePlaceholder;
+      this.rightImagePlaceholder = this.newRightImagePlaceholder;
+
+      this.newLeftImagePlaceholder = undefined;
+      this.newRightImagePlaceholder = undefined;
+
+      this.addResources();
+      this.enableUserInteraction();
+    }
   }
 
   private toggleAudioLeft() {

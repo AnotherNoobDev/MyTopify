@@ -15,12 +15,9 @@
   width: 85%;
   max-width: 800px;
   margin: 0 auto;
-  display: flex; /*inline-block;*/
-  align-items: center;
   padding: 1rem;
   border: 0.4rem solid #fff;
   border-radius: 2rem;  
-  overflow: auto;
 }
 
 .view-narrow {
@@ -29,7 +26,7 @@
 }
 
 .view-wide {
-  display: flex; /*inline-block;*/
+  display: flex;
   align-items: center;
   text-align: center;
   overflow: auto;
@@ -310,20 +307,3 @@
   border-left-color: var(--selecting-color);
   transition: border-color 0s ease-out 1250ms, width 625ms ease-out 1250ms, height 625ms ease-out 1875ms;
 }
-
-
-
-/*
-.album-text {
-  margin: 0px;
-  color: lightyellow;
-  font-size: min(8vw, 40px);
-  font-family: Yellowtail;
-  text-transform: uppercase;
-  text-shadow: 
-    0 0 10px gold,
-    0 0 20px firebrick,
-    0 0 40px pink,
-    0 0 80px red;
-}
-*/
