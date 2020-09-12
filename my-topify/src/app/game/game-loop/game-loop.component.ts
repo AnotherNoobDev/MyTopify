@@ -27,7 +27,7 @@ enum Answer {
 @Component({
   selector: 'app-game-loop',
   templateUrl: './game-loop.component.html',
-  styleUrls: ['./game-loop.component.css']
+  styleUrls: ['../../shared/style/common.css', './game-loop.component.css']
 })
 export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
