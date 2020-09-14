@@ -46,6 +46,9 @@
   --spotify-white: #FFFFFF;
 
   --image-border-size: 0.5rem;
+
+  /* blackboard colors */
+  --blackboard-emphasis: #ECCF8D;
 }
 
 body {
