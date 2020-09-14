@@ -10,7 +10,7 @@ import { ResourceManagerService } from 'src/app/shared/resource-manager.service'
 @Component({
   selector: 'app-game-selector',
   templateUrl: './game-selector.component.html',
-  styleUrls: ['./game-selector.component.css']
+  styleUrls: ['../../../shared/style/common.css', './game-selector.component.css']
 })
 export class GameSelectorComponent implements OnInit, OnDestroy {
 

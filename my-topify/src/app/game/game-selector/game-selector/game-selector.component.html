@@ -1,32 +1,58 @@
-<form (ngSubmit)="onStartGame(f)" #f="ngForm">
-  <p> Questions about: </p>
-  <div>
-    <input type="checkbox" id="type_tracks" name="type_tracks"
-        [ngModel]="useTypeTracks" name="type_tracks" (change)="onTypeSelected(f)">
-    <label for="type_tracks">Tracks</label>
-
-    <input type="checkbox" id="type_artists" name="type_artists"
-        [ngModel]="useTypeArtists" name="type_artists" (change)="onTypeSelected(f)">
-    <label for="type_artists">Artists</label>
+<div class="page-view-column page-view-column-top">
+  <div class="title title-small">
+    <p class="title-item">My</p>
+    <p class="title-item">Topify</p>
   </div>
+  <div id="blackboard" class="blackboard-game-config">
+    <div id="blackboard-content" class="blackboard-content-text-only">
+      <div class="menu-container">
+        <img id="menu-large" src="/assets/images/menu.png">
+      </div>
+      <form id="game-config-form" (ngSubmit)="onStartGame(f)" #f="ngForm">
+        <p class="game-config-option"> Questions about: </p>
+        <div>
+          <label for="type_tracks" class="container">Tracks
+            <input type="checkbox" id="type_tracks" name="type_tracks"
+              [ngModel]="useTypeTracks" name="type_tracks" (change)="onTypeSelected(f)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div>
+          
+          <label for="type_artists" class="container">Artists
+            <input type="checkbox" id="type_artists" name="type_artists"
+              [ngModel]="useTypeArtists" name="type_artists" (change)="onTypeSelected(f)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
 
-  <p> Period: </p>
-  <div>
-    <input type="checkbox" id="period_short_term" name="period_short_term"
-        [ngModel]="useShortTermPeriod" name="period_short_term" (change)="onPeriodSelected(f)">
-    <label for="period_short_term">Last 4 weeks</label>
+        <p class="game-config-option"> Period: </p>
+        <div>
+          <label for="period_short_term" class="container">Last 4 weeks
+            <input type="checkbox" id="period_short_term" name="period_short_term"
+              [ngModel]="useShortTermPeriod" name="period_short_term" (change)="onPeriodSelected(f)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div>
 
-    <input type="checkbox" id="period_medium_term" name="period_medium_term"
-        [ngModel]="useMediumTermPeriod" name="period_medium_term" (change)="onPeriodSelected(f)">
-    <label for="period_medium_term">Last 6 months</label>
-
-    <input type="checkbox" id="period_long_term" name="period_long_term"
-        [ngModel]="useLongTermPeriod" name="period_long_term" (change)="onPeriodSelected(f)">
-    <label for="period_long_term">All time</label>
-
+          <label for="period_medium_term" class="container">Last 6 months
+            <input type="checkbox" id="period_medium_term" name="period_medium_term"
+              [ngModel]="useMediumTermPeriod" name="period_medium_term" (change)="onPeriodSelected(f)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div>
+          <label for="period_long_term" class="container">All time
+            <input type="checkbox" id="period_long_term" name="period_long_term"
+              [ngModel]="useLongTermPeriod" name="period_long_term" (change)="onPeriodSelected(f)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </form>
+    </div>
   </div>
-  <hr>
-  <div>
-    <button type="submit">Start</button>
+  <div class="page-view-column-item-fill">
+    <button type="submit" class="btn" form="game-config-form">Start</button>
   </div>
-</form>
+</div>

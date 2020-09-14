@@ -14,6 +14,10 @@
   justify-content: start;
 }
 
+.page-view-column-item-fill {
+  margin: auto;
+}
+
 .title {
   margin-top: 40px;
   margin-bottom: 40px;
@@ -30,6 +34,10 @@
     0 0 20px orange,
     0 0 40px brown,
     0 0 80px purple;
+}
+
+.title-small {
+  font-size: 60px !important;
 }
 
 .title-item {
@@ -63,12 +71,19 @@
   min-height: min(10em, 320px) !important;
 }
 
+.blackboard-game-config {
+  font-size: min(5vw, 30px) !important;
+  height: min(13em, 420px) !important;
+  min-height: min(13em, 420px) !important;
+}
+
 #blackboard-content {
   width:95%;
   height:85%;
 }
 
 .blackboard-content-text-only {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,4 +116,28 @@
   font-size: 18px;
   display: inline-block;
   padding-right: 15px;
+}
+
+#menu {
+  height: auto;
+  width: 1.5em;
+  display: block;
+  float: right;
+}
+
+#menu-large {
+  width: 2.5em !important;
+}
+
+.btn {
+  background-color: var(--spotify-green);
+  border-radius: 30px;
+  cursor: pointer;
+  margin: auto;
+  color: var(--spotify-white);
+  font-family: WalterTurncoat;
+  font-size: 18px;
+  padding: 15px 40px;
+  border: 0;
+  box-shadow: none;
 }

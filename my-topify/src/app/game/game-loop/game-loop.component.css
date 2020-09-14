@@ -180,20 +180,13 @@
 #cscore {
   /*width: 15%;*/
   float: right;
-  color: #ECCF8D;
+  color: var(--blackboard-emphasis);
 }
 
 .life {
   height: auto;
   width: 1.5em;
   display: block;
-}
-
-#menu {
-  height: auto;
-  width: 1.5em;
-  display: block;
-  float: right;
 }
 
 #score {
