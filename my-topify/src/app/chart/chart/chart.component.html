@@ -1,33 +1,59 @@
-<form #f="ngForm" (change)="onUserSelection()">
-  <div>
-    <input type="radio" id="type_tracks" value="tracks" name="type" [(ngModel)]="uType">
-    <label for="type_tracks">Tracks</label>
-
-    <input type="radio" id="type_artists" value="artists" name="type" [(ngModel)]="uType">
-    <label for="type_artists">Artists</label>
+<div class="page-view-column page-view-column-top page-view-column-charts">
+  <div id="blackboard" class="blackboard-charts">
+    <div id="blackboard-content" class="blackboard-content-options">
+      <form #f="ngForm" (change)="onUserSelection()">
+        <div class="form-item">
+          <p class="chart-option"> Favorite: </p>
+          <div> 
+            <label for="type_tracks" class="container">Tracks
+              <input type="radio" id="type_tracks" value="tracks" name="type" [(ngModel)]="uType">
+              <span class="checkmark"></span>
+            </label>
+        
+  
+            <label for="type_artists" class="container">Artists
+              <input type="radio" id="type_artists" value="artists" name="type" [(ngModel)]="uType">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+       
+        <div class="form-item">
+          <p class="chart-option"> Period: </p>
+          <div>
+            <label for="period_short_term" class="container">Last 4 weeks
+              <input type="radio" id="period_short_term" value="short_term" name="period" [(ngModel)]="uPeriod">
+              <span class="checkmark"></span>
+            </label>
+        
+            <label for="period_medium_term" class="container">Last 6 months
+              <input type="radio" id="period_medium_term" value="medium_term" name="period" [(ngModel)]="uPeriod">
+              <span class="checkmark"></span>
+            </label>
+        
+            <label for="period_long_term" class="container">All time
+              <input type="radio" id="period_long_term" value="long_term" name="period" [(ngModel)]="uPeriod">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+      </form>
+      <div class="menu-container">
+        <img id="menu-large" src="/assets/images/menu.png">
+      </div>
   </div>
-
-  <p> Period: </p>
-  <div>
-    <input type="radio" id="period_short_term" value="short_term" name="period" [(ngModel)]="uPeriod">
-    <label for="period_short_term">Last 4 weeks</label>
-
-    <input type="radio" id="period_medium_term" value="medium_term" name="period" [(ngModel)]="uPeriod">
-    <label for="period_medium_term">Last 6 months</label>
-
-    <input type="radio" id="period_long_term" value="long_term" name="period" [(ngModel)]="uPeriod">
-    <label for="period_long_term">All time</label>
-
+  <div class="btn-container">
+    <button [disabled]="!createPlaylistEnabled" (click)="onCreatePlaylist()" class="btn btn-small">Create playlist</button>
   </div>
-</form>
-<hr>
-<div *ngIf="createPlaylistEnabled">
-  <button (click)="onCreatePlaylist()">Create playlist</button>
-  <hr>
 </div>
-<div *ngFor="let item of displayableItems; let i = index">
-  <img src="{{item.image.src}}" width="60" height="60" (mouseenter)="playAudio(i)" (mouseleave)="pauseAudio(i)">
-  <p *ngFor="let text of item.text">
-    {{text}}
-  </p>
+
+<div *ngFor="let item of displayableItems; let i = index" class="chart-item">
+  <div [ngClass] = "'image-container ' +  (this.currentlyPlayingAudio === i ? 'ripple ' : '')">
+    <img [ngClass]="('chart-item-image '  + (this.currentlyPlayingAudio === i ? 'chart-item-image-playing ' : ''))" src="{{item.image.src}}" (click)="toggleAudio(i)">
+  </div>
+  <div class="chart-item-text">
+    <p *ngIf="item.text.track" class="filler-text">{{(i + 1) + '. ' + item.text.track}}</p>
+    <p *ngIf="item.text.track" class="track-text track-text-small">{{item.text.artist}}</p>
+    <p *ngIf="!item.text.track" class="artist-text">{{(i + 1) + '. ' + item.text.artist}}</p>
+  </div>
 </div>

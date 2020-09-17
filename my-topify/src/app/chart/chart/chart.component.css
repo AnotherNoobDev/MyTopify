@@ -1,0 +1,129 @@
+.page-view-column-charts {
+  overflow: auto;
+}
+
+.blackboard-charts {
+  font-size: min(4.5vw, 25px) !important;
+  height: min(12em, 260px) !important;
+  min-height: min(12em, 260px) !important;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  margin-bottom: 30px !important;
+}
+
+.blackboard-content-options {
+  margin-top: 15px;
+  position: relative;
+  display: flex;
+}
+
+.chart-option {
+  margin: 5px 0px;
+  color: var(--blackboard-emphasis);
+}
+
+form {
+  display: flex;
+  width: 90%;
+}
+
+.form-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0.5em;
+  left: -1em;
+  height: 0.6em;
+  width: 0.6em;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #fea7d2;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 0.15em;
+  top: 0.15em;
+  width: 0.3em;
+  height: 0.3em;
+  background: white;
+  border-radius: 50%;
+}
+
+.chart-item {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+  justify-items: center;
+  align-items: center;
+}
+
+.chart-item-image {
+  width: min(20vw, 8em);
+  height: min(20vw, 8em);
+  display: block;
+  border: 0.3em solid black;
+}
+
+.chart-item-image-playing {
+  border-color: white !important;
+}
+
+.chart-item-text {
+  flex: 1;
+  text-align: center;
+}
+
+.btn-container {
+  margin-bottom: 15px;
+}
+
+.image-container {
+  display: inline-block;
+}
