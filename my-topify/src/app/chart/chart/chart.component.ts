@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
 import { Category, Item, Period, ArtistKnowledgeBase, TrackKnowledgeBase, DisplayableItem } from 'src/app/shared/types';
@@ -9,9 +9,9 @@ import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.ser
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.css']
+  styleUrls: ['../../shared/style/common.css', './chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnDestroy {
 
   private uType: 'tracks' | 'artists' = 'tracks';
   private uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
@@ -20,7 +20,8 @@ export class ChartComponent implements OnInit {
 
   private createPlaylistEnabled = false;
 
-  private displayableItems: DisplayableItem[];
+  private displayableItems: DisplayableItem[] = [];
+  private currentlyPlayingAudio = -1;
 
   constructor(private knowledgeManager: KnowledgeManagerService,
               private resourceManager: ResourceManagerService,
@@ -31,7 +32,12 @@ export class ChartComponent implements OnInit {
     this.onUserSelection();
   }
 
+  ngOnDestroy() {
+    this.resetAudio();
+  }
+
   onUserSelection() {
+    this.resetAudio();
     this.createPlaylistEnabled = false;
 
     // build category
@@ -70,16 +76,36 @@ export class ChartComponent implements OnInit {
     });
   }
 
-  playAudio(index: number) {
+  private resetAudio() {
+    if (this.currentlyPlayingAudio >= 0) {
+      this.displayableItems[this.currentlyPlayingAudio].audio.pause();
+    }
+
+    this.currentlyPlayingAudio = -1;
+  }
+
+  toggleAudio(index: number) {
     if (this.displayableItems[index].audio) {
-      this.displayableItems[index].audio.play();
+      if (this.currentlyPlayingAudio === index) {
+        this.pauseAudio(index);
+      } else {
+        if (this.currentlyPlayingAudio >= 0) {
+          this.pauseAudio(this.currentlyPlayingAudio);
+        }
+
+        this.playAudio(index);
+      }
     }
   }
 
+  playAudio(index: number) {
+    this.displayableItems[index].audio.play();
+    this.currentlyPlayingAudio = index;
+  }
+
   pauseAudio(index: number) {
-    if (this.displayableItems[index].audio) {
-      this.displayableItems[index].audio.pause();
-    }
+    this.displayableItems[index].audio.pause();
+    this.currentlyPlayingAudio = -1;
   }
 
   onCreatePlaylist() {

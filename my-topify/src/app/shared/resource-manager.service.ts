@@ -8,6 +8,7 @@ import { Identifier,
   DisplayableItem } from './types';
 import { ScreenService } from './screen.service';
 import { Subject } from 'rxjs';
+import { getTrackShortName } from './utility';
 
 @Injectable({providedIn: 'root'})
 export class ResourceManagerService {
@@ -96,7 +97,7 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(artist),
         audio: undefined,
-        text: [artist.name],
+        text: {track: '', artist: artist.name, album: ''},
         knowledgeId: artist.id
       });
     }
@@ -112,7 +113,7 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(track),
         audio: this.getAudio(track),
-        text: {track: track.name, artist: track.artists.join(', '), album: track.album.name},
+        text: {track: getTrackShortName(track.name), artist: track.artists.join(', '), album: track.album.name},
         knowledgeId: track.id
       });
     }

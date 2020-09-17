@@ -117,6 +117,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.disableUserInteraction();
+    this.removeResources();
 
     this.screenSizeSub.unsubscribe();
     this.screenSizeSub = undefined;
