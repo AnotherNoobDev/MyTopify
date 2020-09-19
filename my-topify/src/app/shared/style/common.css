@@ -118,17 +118,6 @@
   padding-right: 15px;
 }
 
-#menu {
-  height: auto;
-  width: 1.5em;
-  display: block;
-  float: right;
-}
-
-#menu-large {
-  width: 2.5em !important;
-}
-
 .btn {
   background-color: var(--spotify-green);
   border-radius: 30px;
@@ -150,12 +139,6 @@
 .btn:disabled {
   background-color: grey;
   cursor: not-allowed;
-}
-
-.menu-container {
-  position: absolute;
-  top: 0px;
-  right: 0px;
 }
 
 .game-config-option {
@@ -236,3 +219,55 @@
       0 0 0 8rem rgba(255,255,255, 0);
   }
 }
+
+.glowing-border {
+  text-align: center;
+  width: 85%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 0.4rem solid #fff;
+  border-radius: 2rem;  
+}
+
+.glowing-border-left {
+  box-shadow:
+  0 0 .5rem #fff,
+  inset 0 0 .5rem #fff,
+  0 0 2rem var(--neon-color-left),
+  inset 0 0 2rem var(--neon-color-left),
+  0 0 4rem var(--neon-color-left),
+  inset 0 0 4rem var(--neon-color-left);    
+}
+
+.glowing-border-right  {
+  box-shadow:
+    0 0 .5rem #fff,
+    inset 0 0 .5rem #fff,
+    0 0 2rem var(--neon-color-right),
+    inset 0 0 2rem var(--neon-color-right),
+    0 0 4rem var(--neon-color-right),
+    inset 0 0 4rem var(--neon-color-right);      
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.98);
+  z-index: 2;
+  cursor: pointer;
+}
+
+.on {
+  display: block;
+}
+
+.off {
+  display: none;
+}
+

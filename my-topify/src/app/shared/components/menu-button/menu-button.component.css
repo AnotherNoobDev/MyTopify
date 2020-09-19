@@ -1,0 +1,14 @@
+.menu-container {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  display: block;
+}
+
+#menu {
+  height: auto;
+  display: block;
+  float: right;
+  width: clamp(50px, 5.5vw, 70px) !important;
+}

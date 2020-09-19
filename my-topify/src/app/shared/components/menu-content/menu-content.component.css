@@ -1,0 +1,19 @@
+.menu-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  cursor: pointer;
+}
+
+.menu-item-img {
+  width: clamp(100px, 10vw, 150px);
+  height: clamp(100px, 10vw, 150px);
+  margin-left: clamp(50px, 5vw, 75px);
+  margin-right: clamp(50px, 5vw, 75px);
+}
+
+.track-text-menu {
+  font-size: min(5vw, 25px) !important;
+  text-transform: none !important;
+}
