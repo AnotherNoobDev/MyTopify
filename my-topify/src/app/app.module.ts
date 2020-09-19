@@ -14,6 +14,7 @@ import { GameOverComponent } from './game/game-over/game-over.component';
 import { ChartComponent } from './chart/chart/chart.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
+import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
@@ -35,6 +36,7 @@ const appRoutes: Routes = [
     ChartComponent,
     MenuComponent,
     MenuButtonComponent,
+    MenuContentComponent,
   ],
   imports: [
     BrowserModule,

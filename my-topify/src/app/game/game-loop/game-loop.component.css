@@ -1,12 +1,4 @@
-.glowing-border {
-  text-align: center;
-  width: 85%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-  border: 0.4rem solid #fff;
-  border-radius: 2rem;  
-}
+
 
 .view-narrow {
   display: flex;
@@ -30,26 +22,6 @@
 
 .item-narrow {
   flex-grow: 1;
-}
-
-.glowing-border-left {
-  box-shadow:
-  0 0 .5rem #fff,
-  inset 0 0 .5rem #fff,
-  0 0 2rem var(--neon-color-left),
-  inset 0 0 2rem var(--neon-color-left),
-  0 0 4rem var(--neon-color-left),
-  inset 0 0 4rem var(--neon-color-left);    
-}
-
-.glowing-border-right  {
-  box-shadow:
-    0 0 .5rem #fff,
-    inset 0 0 .5rem #fff,
-    0 0 2rem var(--neon-color-right),
-    inset 0 0 2rem var(--neon-color-right),
-    0 0 4rem var(--neon-color-right),
-    inset 0 0 4rem var(--neon-color-right);      
 }
 
 .glowing-border-correct  {

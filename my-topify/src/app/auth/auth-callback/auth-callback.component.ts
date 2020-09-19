@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
 
 @Component({
   selector: 'app-auth-callback',
   templateUrl: './auth-callback.component.html',
-  styleUrls: ['./auth-callback.component.css']
+  styleUrls: ['../../shared/style/common.css', './auth-callback.component.css']
 })
 export class AuthCallbackComponent implements OnInit { 
   constructor(private route: ActivatedRoute,
               private spotifyHttpClient: SpotifyHttpClientService,
-              private router: Router,
               private authService: AuthService) { 
               }
 
@@ -36,13 +35,5 @@ export class AuthCallbackComponent implements OnInit {
         .subscribe(responseData => {
           this.authService.authenticate(responseData);
         });
-  }
-
-  onProceedToGame() {
-    this.router.navigate(['game/select']);
-  }
-
-  onProceedToChart() {
-    this.router.navigate(['chart/view']);
   }
 }

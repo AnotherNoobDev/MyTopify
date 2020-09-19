@@ -1,5 +1,3 @@
-<div id="overlay" [ngClass]="(showMenu? 'on' : 'off')">
-  <div class="page-view-column page-view-column-top" (click)="onCloseMenu()">
-    <p>It works!</p>
-  </div>  
+<div [ngClass]="('overlay ' + (showMenu? 'on' : 'off'))" (click)="onCloseMenu()">
+  <app-menu-content></app-menu-content>
 </div>
