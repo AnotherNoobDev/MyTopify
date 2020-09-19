@@ -118,17 +118,6 @@
   padding-right: 15px;
 }
 
-#menu {
-  height: auto;
-  width: 1.5em;
-  display: block;
-  float: right;
-}
-
-#menu-large {
-  width: 2.5em !important;
-}
-
 .btn {
   background-color: var(--spotify-green);
   border-radius: 30px;
@@ -150,12 +139,6 @@
 .btn:disabled {
   background-color: grey;
   cursor: not-allowed;
-}
-
-.menu-container {
-  position: absolute;
-  top: 0px;
-  right: 0px;
 }
 
 .game-config-option {
@@ -236,3 +219,4 @@
       0 0 0 8rem rgba(255,255,255, 0);
   }
 }
+

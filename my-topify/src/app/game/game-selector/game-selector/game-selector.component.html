@@ -5,9 +5,7 @@
   </div>
   <div id="blackboard" class="blackboard-game-config">
     <div id="blackboard-content" class="blackboard-content-text-only">
-      <div class="menu-container">
-        <img id="menu-large" src="/assets/images/menu.png">
-      </div>
+      <app-menu-button></app-menu-button>
       <form id="game-config-form" (ngSubmit)="onStartGame(f)" #f="ngForm">
         <p class="game-config-option"> Questions about: </p>
         <div>

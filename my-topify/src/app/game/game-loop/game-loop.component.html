@@ -33,8 +33,8 @@
         <p class="blackboard-text-large" [innerHTML]="question.text"></p>
       </div>
       <div id="cscore">
-        <img id="menu" src="/assets/images/menu.png">
-        <p class="score blackboard-text-large">Score: <br>{{game.getScore()}}</p>
+        <app-menu-button></app-menu-button>
+        <p id="score" class="blackboard-text-large">Score: <br>{{game.getScore()}}</p>
       </div>
     </div>
   </div>

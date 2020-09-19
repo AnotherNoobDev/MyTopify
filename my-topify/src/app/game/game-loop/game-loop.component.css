@@ -137,9 +137,10 @@
 }
 
 #cscore {
-  /*width: 15%;*/
+  position: relative;
   float: right;
   color: var(--blackboard-emphasis);
+  height: 100%;
 }
 
 .life {
@@ -149,8 +150,9 @@
 }
 
 #score {
-  display: block;
-  float: right;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }
 
 .blackboard-text-small {

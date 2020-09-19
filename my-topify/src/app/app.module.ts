@@ -12,6 +12,8 @@ import { GameSelectorComponent } from './game/game-selector/game-selector/game-s
 import { GameLoopComponent } from './game/game-loop/game-loop.component';
 import { GameOverComponent } from './game/game-over/game-over.component';
 import { ChartComponent } from './chart/chart/chart.component';
+import { MenuComponent } from './shared/components/menu/menu.component';
+import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
@@ -31,6 +33,8 @@ const appRoutes: Routes = [
     GameLoopComponent,
     GameOverComponent,
     ChartComponent,
+    MenuComponent,
+    MenuButtonComponent,
   ],
   imports: [
     BrowserModule,
