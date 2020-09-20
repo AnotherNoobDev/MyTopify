@@ -49,6 +49,7 @@
 
   /* blackboard colors */
   --blackboard-emphasis: #ECCF8D;
+  --blackboard-emphasis-secondary: #fea7d2;
 }
 
 body {

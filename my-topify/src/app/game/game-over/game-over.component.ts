@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-game-over',
   templateUrl: './game-over.component.html',
-  styleUrls: ['./game-over.component.css']
+  styleUrls: ['../../shared/style/common.css', './game-over.component.css']
 })
 export class GameOverComponent implements OnInit {
 
@@ -15,7 +15,7 @@ export class GameOverComponent implements OnInit {
   ngOnInit() {
   }
 
-  onPlayAgain() {
+  toSelectionScreen() {
     this.router.navigate(['game/select']);
   }
 }

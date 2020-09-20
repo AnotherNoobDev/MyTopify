@@ -1,0 +1,49 @@
+.rating-overview {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  height: 80%;
+}
+
+.rating-overview-item {
+  flex: 1;
+  text-align: center;
+  margin: 30px;
+}
+
+.rating-image {
+  width: clamp(300px, 30vw, 400px);
+  height: auto;
+  max-height: clamp(300px, 30vw, 400px);
+}
+
+.stats-text {
+  font-size: min(5vw, 40px);
+  font-family: WalterTurncoat;
+}
+
+.quote-container {
+  max-width: 800px;
+  text-align: center;
+}
+
+.quote-text {
+  margin-top: 20px !important;
+  font-size: min(6vw, 40px) !important;
+  text-transform: none !important;
+}
+
+.stat-score {
+  color: var(--blackboard-emphasis);
+  margin-bottom: 5px;
+}
+
+.stat-lives {
+  color: var(--blackboard-emphasis-secondary);
+  margin-top: 0;
+}
+
+.btn-app {
+  background-color: #bc13fe;
+}

@@ -12,8 +12,29 @@ export class GameService {
   private atQuestion = -1;
   private nQuestions: number;
 
-  private lives = 3;
+  private maxLives = 3;
+  private lives = this.maxLives;
   private score = 0;
+
+  private rating: number;
+
+  private ratingQuotes = [
+    'The only true wisdom is in knowing you know nothing.',
+    'Any fool can know. The point is to understand.',
+    'The hardest thing of all is to find a black cat in a dark room, especially if there is no cat.',
+    'Knowledge is a weapon. I intend to be formidably armed.',
+    'Great minds are always feared by lesser minds.',
+    'When you reach the end of what you should know, you will be at the beginning of what you should sense.'
+  ];
+
+  private ratingImages = [
+    '/assets/images/ratings/r1.jpg',
+    '/assets/images/ratings/r2.jpg',
+    '/assets/images/ratings/r3.png',
+    '/assets/images/ratings/r4.png',
+    '/assets/images/ratings/r5.jpg',
+    '/assets/images/ratings/r6.jpg'
+  ];
 
   // knowledge base
   setKnowledgeBase(kb: GameKnowledgeBase) {
@@ -100,6 +121,8 @@ export class GameService {
     this.atQuestion = -1;
     this.lives = 3;
     this.score = 0;
+
+    this.rating = undefined;
   }
 
   isGameOver() {
@@ -121,5 +144,37 @@ export class GameService {
 
   getNumberOfQuestions() {
     return this.nQuestions;
+  }
+
+  getRatingQuote() {
+    if (!this.rating) {
+      this.determineRating();
+    }
+
+    return this.ratingQuotes[this.rating];
+  }
+
+  getRatingImage() {
+    if (!this.rating) {
+      this.determineRating();
+    }
+
+    return this.ratingImages[this.rating];
+  }
+
+  private determineRating() {
+    if (this.score <= 4) {
+      this.rating = 0;
+    } else if (this.score <= 9) {
+      this.rating = 1;
+    } else if (this.score <= 14) {
+      this.rating = 2;
+    } else if (this.rating <= 19) {
+      this.rating = 3;
+    } else if (this.rating <= 25 && this.lives < this.maxLives) {
+      this.rating = 4;
+    } else {
+      this.rating = 5;
+    }
   }
 }

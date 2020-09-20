@@ -21,7 +21,6 @@ const appRoutes: Routes = [
   { path: 'auth-callback', component: AuthCallbackComponent },
   { path: 'game/select', component: GameSelectorComponent },
   { path: 'game/main', component: GameLoopComponent},
-  { path: 'game/end-screen', component: GameOverComponent},
   { path: 'chart/view', component: ChartComponent}
 ];
 
