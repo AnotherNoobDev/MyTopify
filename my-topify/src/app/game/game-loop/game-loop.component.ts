@@ -83,8 +83,9 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private clickOnRightHandler: any;
 
   private resourceReloadSub: Subscription;
-  
   private screenSizeSub: Subscription;
+
+  private gameIsOver = false;
 
   constructor(private screen: ScreenService,
               private game: GameService,
@@ -245,7 +246,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateQuestion() {
     if (this.game.isGameOver()) {
-      this.router.navigate(['game/end-screen']);
+      this.gameIsOver = true;
       return false;
     }
 

@@ -1,5 +1,20 @@
-<p>Game Over!</p>
-<p>Your rating: TODO (STYLE) get rating based on score and lives left</p>
-<p>Lives left: {{game.getLives()}} Score: {{game.getScore()}} Question reached: {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}}</p>
-<hr>
-<button (click)="onPlayAgain()">Play Again</button>
+<div class="overlay on no-interaction">
+  <div class="page-view-column">
+    <div class="rating-overview">
+      <div>
+        <p class="stats-text stat-score">Score: {{game.getScore()}}</p>
+        <p class="stats-text stat-lives">Lives left: {{game.getLives()}}</p>
+      </div>
+      <div class="rating-overview-item">
+        <img class="rating-image" src="{{game.getRatingImage()}}">
+        <div class="quote-container">
+          <p class="track-text quote-text">{{game.getRatingQuote()}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-view-column-item-fill">
+      <button class="btn btn-app" (click)="toSelectionScreen()">To Selection Screen</button>
+    </div>
+  </div>
+</div>
+
