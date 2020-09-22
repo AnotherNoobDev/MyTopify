@@ -15,7 +15,6 @@ export class AuthCallbackComponent implements OnInit {
               }
 
   ngOnInit() {
-
     if (this.authService.isAuthenticated()) {
       console.log('Already authenticated');
       return;

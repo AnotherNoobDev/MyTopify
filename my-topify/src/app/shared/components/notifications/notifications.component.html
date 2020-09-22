@@ -1,0 +1,7 @@
+<div [ngClass]="('overlay overlay-notification ' + displayAs + ' ' + (display? '' : 'close'))" (click)="onDismissNotification()">
+  <div class='notification-container'>
+    <div [ngClass]="'notification ' + (display? '' : 'close')">
+      <p>{{displayMessage}}</p>
+    </div>
+  </div>
+</div>
