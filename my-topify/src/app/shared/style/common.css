@@ -264,11 +264,11 @@
   cursor: pointer;
 }
 
-.on {
+.overlay.on {
   display: block;
 }
 
-.off {
+.overlay.off {
   display: none;
 }
 

@@ -15,6 +15,7 @@ import { ChartComponent } from './chart/chart/chart.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
 import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
+import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
@@ -36,6 +37,7 @@ const appRoutes: Routes = [
     MenuComponent,
     MenuButtonComponent,
     MenuContentComponent,
+    NotificationsComponent,
   ],
   imports: [
     BrowserModule,
