@@ -138,6 +138,9 @@ export class AuthService {
     // is this safe?
     localStorage.setItem(this.LS_KEY_AUTH_TOKEN, JSON.stringify(this.authToken));
     localStorage.setItem(this.LS_KEY_AUTH_TOKEN_VALID_UNTIL, this.authTokenValidUntil.toString());
+
+    // remove code verifier (no longer needed)
+    localStorage.removeItem(this.LS_KEY_CODE_VERIFIER);
   }
 
   private onRefreshTokenTimeout() {
@@ -181,5 +184,19 @@ export class AuthService {
 
       return this.currentUserId;
     }
+  }
+
+  logout() {
+    if (this.refreshTokenTimeout) {
+      window.clearTimeout(this.refreshTokenTimeout);
+    }
+    
+    this.refreshTokenTimeout = undefined;
+
+    this.authToken = undefined;
+    this.authTokenValidUntil = undefined;
+
+    localStorage.removeItem(this.LS_KEY_AUTH_TOKEN);
+    localStorage.removeItem(this.LS_KEY_AUTH_TOKEN_VALID_UNTIL);
   }
 }
