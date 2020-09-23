@@ -16,6 +16,7 @@ export interface SpotifyAuthToken {
 export class AuthService {
 
   private clientId = 'a244c732df724f7595a7c9c4604d1179';
+
   private codeVerifier: string;
   private codeChallenge: string;
 
@@ -30,9 +31,10 @@ export class AuthService {
   private refreshTokenTimeout: number;
 
   // local storage keys
-  private LS_KEY_CODE_VERIFIER = 'HOFM_codeVerifier';
-  private LS_KEY_AUTH_TOKEN = 'HOFM_authToken';
-  private LS_KEY_AUTH_TOKEN_VALID_UNTIL = 'HOFM_authTokenValidUntil';
+  private LS_KEY_CODE_VERIFIER = 'MYT_codeVerifier';
+  private LS_KEY_AUTH_TOKEN = 'MYT_authToken';
+  private LS_KEY_AUTH_TOKEN_VALID_UNTIL = 'MYT_authTokenValidUntil';
+  private LS_KEY_STATE = 'MYT_state';
 
   // current user id
   private currentUserId: string;
@@ -48,6 +50,21 @@ export class AuthService {
 
   getRedirectURI(): string {
     return this.redirectURI;
+  }
+
+  getState(): string {
+   const state = localStorage.getItem(this.LS_KEY_STATE);
+   localStorage.removeItem(this.LS_KEY_STATE);
+
+   return state;
+  }
+
+  generateState() {
+    const state = this.generateRandomString(40);
+
+    localStorage.setItem(this.LS_KEY_STATE, state);
+
+    return state;
   }
 
   getCodeVerifier(): string {

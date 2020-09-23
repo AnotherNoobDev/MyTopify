@@ -41,6 +41,20 @@ export class GameService {
     this.knowledgeBase = kb;
   }
 
+  // questions
+  setQuestions(questions: Question[]) {
+    this.questions = questions;
+    this.nQuestions = this.questions.length;
+  }
+
+  isReady() {
+    if (this.knowledgeBase && this.questions) {
+      return true;
+    }
+
+    return false;
+  }
+
   getTrackNameArtistsAlbum(period: Period, index: number): string[] {
     const t = this.knowledgeBase.getTrack(period, index);
 
@@ -49,12 +63,6 @@ export class GameService {
 
   getArtistName(period: Period, index: number) {
     return this.knowledgeBase.getArtist(period, index).name;
-  }
-
-  // questions
-  setQuestions(questions: Question[]) {
-    this.questions = questions;
-    this.nQuestions = this.questions.length;
   }
 
   nextQuestion(): DisplayableQuestion {
