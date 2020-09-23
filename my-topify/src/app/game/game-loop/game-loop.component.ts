@@ -93,6 +93,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
               private router: Router,
               private renderer: Renderer2) {
 
+                if (!this.game.isReady()) {
+                  this.router.navigate(['game/select']);
+                }
+
                 this.mousedownOnLeftHandler = this.startLeftSelection.bind(this);
                 this.mousedownOnRightHandler = this.startRightSelection.bind(this);
                 this.mouseupOnLeftHandler = this.startCancellingSelection.bind(this);
@@ -103,10 +107,9 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.narrowScreen = this.screen.isNarrowScreen();
-    //console.log(this.narrowScreen);
+
     this.screenSizeSub = this.screen.screenIsNarrowChanged().subscribe((value: boolean) => {
       this.narrowScreen = value;
-      //console.log(this.narrowScreen);
     });
     
     this.resourceReloadSub = this.resourceManager.resourceReload().subscribe(() => {
@@ -120,11 +123,15 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.disableUserInteraction();
     this.removeResources();
 
-    this.screenSizeSub.unsubscribe();
-    this.screenSizeSub = undefined;
+    if (this.screenSizeSub) {
+      this.screenSizeSub.unsubscribe();
+      this.screenSizeSub = undefined;
+    }
 
-    this.resourceReloadSub.unsubscribe();
-    this.resourceReloadSub = undefined;
+    if (this.resourceReloadSub) {
+      this.resourceReloadSub.unsubscribe();
+      this.resourceReloadSub = undefined;
+    }
   }
 
   ngAfterViewInit() {
@@ -144,6 +151,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private disableUserInteraction() {
+    if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
+      return;
+    }
+
     this.leftImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnLeftHandler);
     this.rightImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnRightHandler);
 

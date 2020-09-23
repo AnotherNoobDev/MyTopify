@@ -16,13 +16,15 @@ import { MenuComponent } from './shared/components/menu/menu.component';
 import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
 import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
 import { NotificationsComponent } from './shared/components/notifications/notifications.component';
+import { AuthGuardService } from './auth/auth-guard.service';
 
 const appRoutes: Routes = [
   { path: '', component: AuthRedirectComponent },
   { path: 'auth-callback', component: AuthCallbackComponent },
-  { path: 'game/select', component: GameSelectorComponent },
-  { path: 'game/main', component: GameLoopComponent},
-  { path: 'chart/view', component: ChartComponent}
+  { path: 'game/select', component: GameSelectorComponent, canActivate: [AuthGuardService] },
+  { path: 'game/main', component: GameLoopComponent, canActivate: [AuthGuardService]},
+  { path: 'chart/view', component: ChartComponent, canActivate: [AuthGuardService]},
+  { path: '**', redirectTo: ''}
 ];
 
 @NgModule({

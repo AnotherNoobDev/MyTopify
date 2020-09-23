@@ -94,14 +94,10 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       const kb = this.gameConfigurator.getKnowledgeBase();
       this.game.setKnowledgeBase(kb);
       
-      //console.log(kb);
-      
       const questions = this.questionGenerator.generateQuestions(kb);
       this.game.setQuestions(questions);
 
       this.game.restart();
-
-      //console.log(questions);
 
       // start resource fetching
       // TODO? wait until some data is ready (show loading)
