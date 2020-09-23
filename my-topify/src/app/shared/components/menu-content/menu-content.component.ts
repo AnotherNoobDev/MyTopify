@@ -24,6 +24,7 @@ export class MenuContentComponent implements OnInit {
   }
 
   onLogout() {
-    // TODO
+    this.authService.logout();
+    this.router.navigate(['']);
   }
 }
