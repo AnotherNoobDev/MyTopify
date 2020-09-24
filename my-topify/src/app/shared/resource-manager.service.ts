@@ -26,14 +26,15 @@ export class ResourceManagerService {
       this.imageStorage.clear();
 
       // refetch using the knowledge base
-      if (this.knowledgeBase instanceof GameKnowledgeBase) {
-        this.fetchResourcesForGame(this.gameQuestions, this.knowledgeBase);
-      } else if ('tracks' in this.knowledgeBase) {
-        this.fetchResourcesForTracks(this.knowledgeBase);
-      } else {
-        this.fetchResourcesForArtists(this.knowledgeBase);
+      if (this.knowledgeBase) {
+        if (this.knowledgeBase instanceof GameKnowledgeBase) {
+          this.fetchResourcesForGame(this.gameQuestions, this.knowledgeBase);
+        } else if ('tracks' in this.knowledgeBase) {
+          this.fetchResourcesForTracks(this.knowledgeBase);
+        } else {
+          this.fetchResourcesForArtists(this.knowledgeBase);
+        }
       }
-
       // notify
       this.resourceReloadSubject.next();
     });
@@ -179,30 +180,39 @@ export class ResourceManagerService {
     img.style.display = 'block';
     img.style.margin = '0.5rem';
 
-    // TODO? wait for image to preload
-    //img.onload
-    
-    for (const image of availableImages) {
-      img.src = image.url;
-    
-      // select image that is "closest" to desired size
-      if (image.width && image.width >= desiredWidth) {
-        break;
+    if (availableImages && availableImages.length > 0) {
+      // TODO? wait for image to preload
+      //img.onload
+      
+      for (const image of availableImages) {
+        img.src = image.url;
+      
+        // select image that is "closest" to desired size
+        if (image.width && image.width >= desiredWidth) {
+          break;
+        }
       }
+    } else {
+      // filler img
+      img.src = 'assets/images/no_img_available.jpg';
     }
+
 
     return img;
   }
 
   private fetchAudio(url: string): HTMLAudioElement {
-    const audio = new Audio(url);
-    audio.loop = true;
+    if (url) {
+      const audio = new Audio(url);
+      audio.loop = true;
+      return audio;
+    }
+
+    return null;
 
     // TODO? wait for audio to preload
     //audio.addEventListener('canplaythrough', event => {
     //  console.log('can play!');
     //});
-
-    return audio;
   }
 }

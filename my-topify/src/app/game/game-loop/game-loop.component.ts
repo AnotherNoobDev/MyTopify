@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../game.service';
 import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types';
 import { Router } from '@angular/router';
@@ -91,7 +91,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
               private game: GameService,
               private resourceManager: ResourceManagerService,
               private router: Router,
-              private renderer: Renderer2) {
+              private renderer: Renderer2,
+              private cdRef: ChangeDetectorRef) {
 
                 if (!this.game.isReady()) {
                   this.router.navigate(['game/select']);
@@ -312,6 +313,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.addResources();
       this.enableUserInteraction();
+
+      this.cdRef.detectChanges();
     }
   }
 

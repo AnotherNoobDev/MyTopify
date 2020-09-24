@@ -5,6 +5,7 @@ import { Category, Item, Period, ArtistKnowledgeBase, TrackKnowledgeBase, Displa
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
+import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
 
 @Component({
   selector: 'app-chart',
@@ -26,7 +27,8 @@ export class ChartComponent implements OnInit, OnDestroy {
   constructor(private knowledgeManager: KnowledgeManagerService,
               private resourceManager: ResourceManagerService,
               private auth: AuthService,
-              private spotifyHttpClient: SpotifyHttpClientService) { }
+              private spotifyHttpClient: SpotifyHttpClientService,
+              private notificationService: NotificationsService) { }
 
   ngOnInit() {
     this.onUserSelection();
@@ -95,6 +97,8 @@ export class ChartComponent implements OnInit, OnDestroy {
 
         this.playAudio(index);
       }
+    } else {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
     }
   }
 
@@ -109,11 +113,13 @@ export class ChartComponent implements OnInit, OnDestroy {
   }
 
   onCreatePlaylist() {
+    const playlist = 'MyTopify Top Tracks ' + this.knowledgeManager.getDisplayablePeriod(this.period);
+    
     this.auth.getCurrentUserId().then(user => {
       this.spotifyHttpClient.createPlaylist({
         accessToken: this.auth.getAccessToken(), 
         userId: user,
-        playlistName: 'MyTopify Top Tracks ' + this.knowledgeManager.getDisplayablePeriod(this.period)
+        playlistName: playlist
       }).subscribe(responseData => {
 
         const ids = [];
@@ -126,7 +132,7 @@ export class ChartComponent implements OnInit, OnDestroy {
           playlistId: responseData.id,
           trackIds: ids
         }).subscribe(() => {
-          console.log('Created playlist!');
+          this.notificationService.notify({type: NotificationType.INFO, msg: 'Created playlist: ' + playlist});
         });
       });
     });

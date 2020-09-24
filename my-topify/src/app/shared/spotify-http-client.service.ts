@@ -176,7 +176,7 @@ export class SpotifyHttpClientService {
   }
   
   private getUserTopHelper(accessToken: string, what: string, period: Period) {
-    const getTopTracksURL = this.personalizationEndpoint + '/' + what;
+    const chartURL = this.personalizationEndpoint + '/' + what;
     
     let periodStr = '';
     switch (period) {
@@ -203,7 +203,7 @@ export class SpotifyHttpClientService {
         params: httpParams
       };
 
-    return this.http.get<SpotifyPagingObject>(getTopTracksURL, httpOptions);
+    return this.http.get<SpotifyPagingObject>(chartURL, httpOptions);
   }
 
   // User profile
