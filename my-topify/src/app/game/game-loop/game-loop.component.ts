@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
 import { ScreenService } from 'src/app/shared/screen.service';
+import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
@@ -92,7 +93,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
               private resourceManager: ResourceManagerService,
               private router: Router,
               private renderer: Renderer2,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private notificationService: NotificationsService) {
 
                 if (!this.game.isReady()) {
                   this.router.navigate(['game/select']);
@@ -358,28 +360,32 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private playAudioLeft() {
-    if (this.audio) {
+    if (this.audio && this.audio[0]) {
       this.audio[0].play();
       this.leftAudioPlaying = true;
+    } else {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
     }
   }
 
   private pauseAudioLeft() {
-    if (this.audio) {
+    if (this.audio && this.audio[0]) {
       this.audio[0].pause();
       this.leftAudioPlaying = false;
     }
   }
 
   private playAudioRight() {
-    if (this.audio) {
+    if (this.audio && this.audio[1]) {
       this.audio[1].play();
       this.rightAudioPlaying = true;
+    } else {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
     }
   }
 
   private pauseAudioRight() {
-    if (this.audio) {
+    if (this.audio && this.audio[1]) {
       this.audio[1].pause();
       this.rightAudioPlaying = false;
     }
