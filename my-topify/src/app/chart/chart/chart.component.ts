@@ -60,7 +60,14 @@ export class ChartComponent implements OnInit, OnDestroy {
 
     const categories: Category[] = [{type: t, period: this.period}];
 
-    this.knowledgeManager.fetchKnowledge(categories).subscribe(value => {
+    this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
+
+      if (!success) {
+        this.displayableItems = [];
+        this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to retrieve data from Spotify.'});
+        return;
+      }
+
       // get category
       if (this.uType === 'tracks') {
         const tracks = this.knowledgeManager.getTracksFromPeriod(this.period);
@@ -116,25 +123,37 @@ export class ChartComponent implements OnInit, OnDestroy {
     const playlist = 'MyTopify Top Tracks ' + this.knowledgeManager.getDisplayablePeriod(this.period);
     
     this.auth.getCurrentUserId().then(user => {
+      if (!user) {
+        this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to obtain Spotify UserId.'});
+        return;
+      }
+
       this.spotifyHttpClient.createPlaylist({
         accessToken: this.auth.getAccessToken(), 
         userId: user,
         playlistName: playlist
-      }).subscribe(responseData => {
+      }).subscribe(
+        responseData => {
+          const ids = [];
+          for (const item of this.displayableItems) {
+            ids.push(item.knowledgeId);
+          }
 
-        const ids = [];
-        for (const item of this.displayableItems) {
-          ids.push(item.knowledgeId);
-        }
-
-        this.spotifyHttpClient.addTracksToPlaylist({
-          accessToken: this.auth.getAccessToken(),
-          playlistId: responseData.id,
-          trackIds: ids
-        }).subscribe(() => {
-          this.notificationService.notify({type: NotificationType.INFO, msg: 'Created playlist: ' + playlist});
+          this.spotifyHttpClient.addTracksToPlaylist({
+            accessToken: this.auth.getAccessToken(),
+            playlistId: responseData.id,
+            trackIds: ids
+          }).subscribe(
+            () => {
+              this.notificationService.notify({type: NotificationType.INFO, msg: 'Created playlist: ' + playlist});
+            },
+            err => {
+              this.notificationService.notify({type: NotificationType.ERROR, msg: 'An error occured when adding tracks to the playlist.'});
+            });
+        },
+        err => {
+          this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to create playlist.'});
         });
-      });
     });
   }
 }

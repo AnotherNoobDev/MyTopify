@@ -109,7 +109,6 @@ export class ResourceManagerService {
   getTracksAsDisplayableItems(knowledgeBase: TrackKnowledgeBase): DisplayableItem[] {
     const items = [];
 
-    // TODO duplication with DisplayableQuestion (see text)
     for (const track of knowledgeBase.tracks) {
       items.push({
         image: this.getImage(track),

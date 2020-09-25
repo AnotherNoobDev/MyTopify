@@ -3,6 +3,7 @@ import * as base64js from 'base64-js';
 
 import { sha256 } from 'js-sha256';
 import { SpotifyHttpClientService } from '../shared/spotify-http-client.service';
+import { Router } from '@angular/router';
 
 export interface SpotifyAuthToken {
   access_token: string;
@@ -39,7 +40,8 @@ export class AuthService {
   // current user id
   private currentUserId: string;
 
-  constructor(private spotifyHttpClient: SpotifyHttpClientService) {
+  constructor(private spotifyHttpClient: SpotifyHttpClientService,
+              private router: Router) {
     this.authToken = this.retrieveAuthTokenFromStorage();
     this.authTokenValidUntil = this.retrieveAuthTokenValidUntilFromStorage();
   }
@@ -130,13 +132,13 @@ export class AuthService {
     return false;
   }
 
-  authenticate(authToken: SpotifyAuthToken) {
-    this.authToken = authToken;
+  authenticate(authToken: SpotifyAuthToken): boolean {
 
-    // check if token exists
-    if (!this.authToken) {
-      return;
+    if (!this.isTokenValid(authToken)) {
+      return false;
     }
+    
+    this.authToken = authToken;
 
     // update valid until
     this.authTokenValidUntil = new Date((new Date()).getTime() + this.authToken.expires_in * 1000);
@@ -158,14 +160,37 @@ export class AuthService {
 
     // remove code verifier (no longer needed)
     localStorage.removeItem(this.LS_KEY_CODE_VERIFIER);
+
+    return true;
+  }
+
+  private isTokenValid(authToken: SpotifyAuthToken) {
+    if (!authToken) {
+      return false;
+    }
+
+    if (!authToken.access_token || !authToken.expires_in || !authToken.refresh_token) {
+      return false;
+    }
+
+    return true;
   }
 
   private onRefreshTokenTimeout() {
       this.spotifyHttpClient.refreshAccessToken({ clientId: this.clientId, refreshToken: this.authToken.refresh_token })
-        .subscribe(responseData => {
-          console.log(responseData);
-          this.authenticate(responseData);
-        });
+        .subscribe(
+          responseData => {
+            const success = this.authenticate(responseData);
+
+            if (!success) {
+              this.logout();
+              this.router.navigate(['']);
+            }
+          },
+          err => {
+            this.logout();
+            this.router.navigate(['']);
+          });
   }
 
   private retrieveAuthTokenFromStorage(): SpotifyAuthToken {
@@ -196,10 +221,13 @@ export class AuthService {
     if (this.currentUserId) {
       return this.currentUserId;
     } else {
-      const response = await this.spotifyHttpClient.getUserId({accessToken: this.getAccessToken()}).toPromise();
-      this.currentUserId = response.id;
-
-      return this.currentUserId;
+      try {
+        const response = await this.spotifyHttpClient.getUserId({accessToken: this.getAccessToken()}).toPromise();
+        this.currentUserId = response.id;
+        return this.currentUserId;
+      } catch {
+        return '';
+      }
     }
   }
 

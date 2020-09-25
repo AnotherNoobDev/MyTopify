@@ -72,6 +72,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private preSelectTimerId: number;
   private holdSelectTimerId: number;
   private cancelSelectTimerId: number;
+  private showAnswerTimerId: number;
 
   private selectingChoice: Choice;
   private answered = Answer.None;
@@ -134,6 +135,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resourceReloadSub) {
       this.resourceReloadSub.unsubscribe();
       this.resourceReloadSub = undefined;
+    }
+
+    if (this.showAnswerTimerId) {
+      window.clearTimeout(this.showAnswerTimerId);
     }
   }
 
@@ -248,8 +253,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cancelSelection();
 
     // go to next question
-    // TODO when to clear timeout?
-    window.setTimeout(() => {
+    this.showAnswerTimerId = window.setTimeout(() => {
       if (this.updateQuestion()) {
         this.updateResources();
         this.enableUserInteraction();

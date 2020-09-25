@@ -52,9 +52,12 @@ export class GameConfiguratorService {
         }
       }
 
-      this.knowledgeManager.fetchKnowledge(categories).subscribe(value => {
-        this.gameKnowledgeBase.knowledgeBase = this.knowledgeManager.getKnowledgeBase();
-        observer.next(value);
+      this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
+        if (success) {
+          this.gameKnowledgeBase.knowledgeBase = this.knowledgeManager.getKnowledgeBase();
+        }
+
+        observer.next(success);
       });
     });
 
