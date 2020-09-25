@@ -62,21 +62,26 @@ export class KnowledgeManagerService {
         return;
       }
 
-      forkJoin(requests).subscribe(responseList => {
-        for (let i = 0; i < responseList.length; ++i) {
-          switch (requestTypes[i].type) {
-            case Item.Artist:
-              this.knowledgeBase.addArtistKnowledge(requestTypes[i].period, this.parseArtistRawData(responseList[i]));
-              break;
+      forkJoin(requests).subscribe(
+        responseList => {
+          for (let i = 0; i < responseList.length; ++i) {
+            switch (requestTypes[i].type) {
+              case Item.Artist:
+                this.knowledgeBase.addArtistKnowledge(requestTypes[i].period, this.parseArtistRawData(responseList[i]));
+                break;
 
-            case Item.Track:
-              this.knowledgeBase.addTrackKnowledge(requestTypes[i].period, this.parseTrackRawData(responseList[i]));
-              break;
+              case Item.Track:
+                this.knowledgeBase.addTrackKnowledge(requestTypes[i].period, this.parseTrackRawData(responseList[i]));
+                break;
+            }
           }
-        }
 
-        observer.next(true);
-      });
+          observer.next(true);
+        },
+        err => {
+          observer.next(false);
+        }
+      );
     });
 
     return this.fetchingKnowledge;

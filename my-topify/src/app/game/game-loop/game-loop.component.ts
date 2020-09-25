@@ -1,10 +1,11 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../game.service';
 import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
 import { ScreenService } from 'src/app/shared/screen.service';
+import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
@@ -71,6 +72,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private preSelectTimerId: number;
   private holdSelectTimerId: number;
   private cancelSelectTimerId: number;
+  private showAnswerTimerId: number;
 
   private selectingChoice: Choice;
   private answered = Answer.None;
@@ -91,7 +93,9 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
               private game: GameService,
               private resourceManager: ResourceManagerService,
               private router: Router,
-              private renderer: Renderer2) {
+              private renderer: Renderer2,
+              private cdRef: ChangeDetectorRef,
+              private notificationService: NotificationsService) {
 
                 if (!this.game.isReady()) {
                   this.router.navigate(['game/select']);
@@ -131,6 +135,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resourceReloadSub) {
       this.resourceReloadSub.unsubscribe();
       this.resourceReloadSub = undefined;
+    }
+
+    if (this.showAnswerTimerId) {
+      window.clearTimeout(this.showAnswerTimerId);
     }
   }
 
@@ -245,8 +253,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cancelSelection();
 
     // go to next question
-    // TODO when to clear timeout?
-    window.setTimeout(() => {
+    this.showAnswerTimerId = window.setTimeout(() => {
       if (this.updateQuestion()) {
         this.updateResources();
         this.enableUserInteraction();
@@ -292,6 +299,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     // images 
     this.images = this.resourceManager.getImagesForQuestion(this.question);
 
+    if (this.images[0] === this.images[1]) {
+      // a node cannot apear twice (TODO rly ugly stuff refactor images to be like in chart view)
+      this.images[1] = this.images[1].cloneNode(false) as HTMLImageElement;
+    }
+
     this.renderer.appendChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
     this.renderer.appendChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
 
@@ -312,6 +324,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.addResources();
       this.enableUserInteraction();
+
+      this.cdRef.detectChanges();
     }
   }
 
@@ -350,28 +364,32 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private playAudioLeft() {
-    if (this.audio) {
+    if (this.audio && this.audio[0]) {
       this.audio[0].play();
       this.leftAudioPlaying = true;
+    } else {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
     }
   }
 
   private pauseAudioLeft() {
-    if (this.audio) {
+    if (this.audio && this.audio[0]) {
       this.audio[0].pause();
       this.leftAudioPlaying = false;
     }
   }
 
   private playAudioRight() {
-    if (this.audio) {
+    if (this.audio && this.audio[1]) {
       this.audio[1].play();
       this.rightAudioPlaying = true;
+    } else {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
     }
   }
 
   private pauseAudioRight() {
-    if (this.audio) {
+    if (this.audio && this.audio[1]) {
       this.audio[1].pause();
       this.rightAudioPlaying = false;
     }

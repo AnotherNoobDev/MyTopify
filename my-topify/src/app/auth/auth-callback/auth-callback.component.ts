@@ -19,7 +19,6 @@ export class AuthCallbackComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
-      console.log('Already authenticated');
       return;
     }
 
@@ -47,7 +46,16 @@ export class AuthCallbackComponent implements OnInit {
       code: callbackCode, 
       redirectURI: this.authService.getRedirectURI()})
         .subscribe(responseData => {
-          this.authService.authenticate(responseData);
+          const success = this.authService.authenticate(responseData);
+
+          if (!success) {
+            this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed.'});
+            this.router.navigate(['']);
+          }
+        }, 
+        err => {
+          this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to obtain authentication token.'});
+          this.router.navigate(['']);
         });
   }
 

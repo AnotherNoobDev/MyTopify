@@ -87,8 +87,6 @@ export class ScreenService {
     }
   }
 
-  // TODO (STYLE) figure image size based on canvas size
-  // when this changes we need to update resource manager icons
   getImageSizeForGameView() {
     return this.recommendedImageSize;
   }

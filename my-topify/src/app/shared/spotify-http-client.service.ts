@@ -137,27 +137,6 @@ export class SpotifyHttpClientService {
     return this.http.post<SpotifyAuthToken>(this.tokenEndpoint, undefined, httpOptions);
   }
 
-  // Player
-
-  requestTrack(request: TrackRequest) {
-    const playSongUrl = this.playEndpoint + '?';
-
-    const httpOptions = {
-        headers: new HttpHeaders()
-          .set('Authorization', 'Bearer ' + request.accessToken),
-
-        params: new HttpParams()
-          .set('device_id', request.deviceId)
-      };
-
-    const requestBody = {
-      uris: [request.trackURI]
-    };
-
-    return this.http.put(playSongUrl, requestBody, httpOptions);
-  }
-
-
   // Personalization
   getUserTop(request: TopChartRequest) {
     let requestWhat: string;
@@ -176,7 +155,7 @@ export class SpotifyHttpClientService {
   }
   
   private getUserTopHelper(accessToken: string, what: string, period: Period) {
-    const getTopTracksURL = this.personalizationEndpoint + '/' + what;
+    const chartURL = this.personalizationEndpoint + '/' + what;
     
     let periodStr = '';
     switch (period) {
@@ -203,7 +182,7 @@ export class SpotifyHttpClientService {
         params: httpParams
       };
 
-    return this.http.get<SpotifyPagingObject>(getTopTracksURL, httpOptions);
+    return this.http.get<SpotifyPagingObject>(chartURL, httpOptions);
   }
 
   // User profile

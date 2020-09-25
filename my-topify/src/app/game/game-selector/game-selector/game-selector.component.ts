@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { GameService } from '../../game.service';
 import { Subscription } from 'rxjs';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
+import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
 
 @Component({
   selector: 'app-game-selector',
@@ -27,7 +28,8 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
               private questionGenerator: QuestionGeneratorService,
               private game: GameService,
               private resourceManager: ResourceManagerService,
-              private router: Router) { }
+              private router: Router,
+              private notificationManager: NotificationsService) { }
 
   ngOnInit() {
   }
@@ -90,7 +92,13 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       useShortTermPeriod: form.value.period_short_term,
       useMediumTermPeriod: form.value.period_medium_term,
       useLongTermPeriod: form.value.period_long_term
-    }).subscribe(value => {
+    }).subscribe(success => {
+
+      if (!success) {
+        this.notificationManager.notify({type: NotificationType.ERROR, msg: 'Failed to retrieve data from Spotify.'});
+        return;
+      }
+
       const kb = this.gameConfigurator.getKnowledgeBase();
       this.game.setKnowledgeBase(kb);
       
