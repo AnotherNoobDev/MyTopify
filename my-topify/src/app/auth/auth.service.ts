@@ -44,6 +44,18 @@ export class AuthService {
               private router: Router) {
     this.authToken = this.retrieveAuthTokenFromStorage();
     this.authTokenValidUntil = this.retrieveAuthTokenValidUntilFromStorage();
+
+    if (this.isAuthenticated()) {
+      let refreshAfter = this.authTokenValidUntil.getTime() - (new Date()).getTime() - this.refreshTokenBeforeMs;
+
+      if (refreshAfter < 0) {
+        refreshAfter = 0;
+      }
+
+      this.refreshTokenTimeout = window.setTimeout(
+        this.onRefreshTokenTimeout.bind(this), 
+        refreshAfter);
+    }
   }
 
   getClientId(): string {
