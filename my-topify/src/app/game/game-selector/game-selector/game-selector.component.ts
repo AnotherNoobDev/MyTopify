@@ -103,6 +103,12 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       this.game.setKnowledgeBase(kb);
       
       const questions = this.questionGenerator.generateQuestions(kb);
+
+      if (!questions) {
+        this.notificationManager.notify({type: NotificationType.ERROR, msg: 'Not enough Spotify History to play :('});
+        return;
+      }
+
       this.game.setQuestions(questions);
 
       this.game.restart();

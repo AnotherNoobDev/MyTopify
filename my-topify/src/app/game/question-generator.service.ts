@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Category, GameKnowledgeBase, Question, Difficulty, Item, Period } from '../shared/types';
 
+const MINIMUM_CATEGORY_SIZE = 20;
+
 @Injectable({providedIn: 'root'})
 export class QuestionGeneratorService {
 
@@ -15,6 +17,13 @@ export class QuestionGeneratorService {
     this.questions = [];
 
     const categories = gameKnowledgeBase.getCategories();
+
+    for (const cat of categories) {
+      if (gameKnowledgeBase.getCategorySize(cat) < MINIMUM_CATEGORY_SIZE) {
+        return null;
+      }
+    }
+
     const nQuestionsPerCat = this.nQuestions / categories.length;
     
     const questionsLeftPerCategory = [];
