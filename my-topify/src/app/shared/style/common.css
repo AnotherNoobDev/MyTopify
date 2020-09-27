@@ -105,6 +105,10 @@
   margin: auto;
 }
 
+.spotify-auth:active {
+  background-color: var(--spotify-green-active)
+}
+
 #spotify-icon {
   width: 30px;
   height: 30px;
@@ -130,6 +134,10 @@
   padding: 15px 40px;
   border: 0;
   box-shadow: none;
+}
+
+.btn:active {
+  background-color: var(--spotify-green-active);
 }
 
 .btn-small {

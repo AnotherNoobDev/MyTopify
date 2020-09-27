@@ -47,3 +47,7 @@
 .btn-app {
   background-color: #bc13fe;
 }
+
+.btn-app:active {
+  background-color: rgb(148,0,211)
+}
