@@ -69,7 +69,7 @@ export class ScreenService {
     } else if (window.innerWidth > 768 && window.innerHeight > 700) {
       newRecImgSize = 180;
     } else {
-      newRecImgSize = 120;
+      newRecImgSize = 100;
     }
 
     if (this.recommendedImageSize !== newRecImgSize) {

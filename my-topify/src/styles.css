@@ -51,7 +51,7 @@
   --spotify-green-active: rgb(26, 163, 74);
   --spotify-white: #FFFFFF;
 
-  --image-border-size: 0.5rem;
+  --image-border-size: 5px;
 
   /* blackboard colors */
   --blackboard-emphasis: #ECCF8D;
