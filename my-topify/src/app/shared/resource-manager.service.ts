@@ -177,7 +177,7 @@ export class ResourceManagerService {
   private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
     const img = new Image(desiredWidth, desiredHeight);
     img.style.display = 'block';
-    img.style.margin = '0.5rem';
+    img.style.margin = '5px';
 
     if (availableImages && availableImages.length > 0) {
       // TODO? wait for image to preload

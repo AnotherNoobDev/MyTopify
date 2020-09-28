@@ -105,6 +105,10 @@
   margin: auto;
 }
 
+.spotify-auth:active {
+  background-color: var(--spotify-green-active)
+}
+
 #spotify-icon {
   width: 30px;
   height: 30px;
@@ -130,6 +134,10 @@
   padding: 15px 40px;
   border: 0;
   box-shadow: none;
+}
+
+.btn:active {
+  background-color: var(--spotify-green-active);
 }
 
 .btn-small {
@@ -161,11 +169,8 @@
 }
 
 .track-text-small {
-  /*color: white;*/
   font-size: min(5vw, 30px) !important;
-  font-family: Arial, Helvetica, sans-serif !important;
- /*text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de;
-  */
+  font-family: TextMeOne !important;
   margin-top: 10px;
 }
 
@@ -225,7 +230,6 @@
   text-align: center;
   width: 85%;
   max-width: 800px;
-  margin: 0 auto;
   padding: 1rem;
   border: 0.4rem solid #fff;
   border-radius: 2rem;  
