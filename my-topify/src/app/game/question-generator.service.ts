@@ -169,7 +169,7 @@ export class QuestionGeneratorService {
   }
 
   private generateTextForQuestion(question: Question) {
-    let questionText = 'To which ';
+    let questionText = 'Which ';
 
     questionText += '<b>';
     switch (question.category.type) {
@@ -183,7 +183,7 @@ export class QuestionGeneratorService {
     }
     questionText += '</b>';
 
-    questionText += ' have you listened more ';
+    questionText += ' have you listened more to ';
 
     switch (question.category.period) {
       case Period.ShortTerm:
