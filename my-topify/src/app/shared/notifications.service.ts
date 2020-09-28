@@ -11,21 +11,6 @@ export interface AppNotification {
   msg: string;
 }
 
-/*
-
-    window.setTimeout(() => {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed!'});
-    }, 100);
-
-    window.setTimeout(() => {
-      this.notificationService.notify({type: NotificationType.INFO, msg: 'Just a prank bro!'});
-    }, 4500);
-
-    window.setTimeout(() => {
-      this.notificationService.notify({type: NotificationType.INFO, msg: 'Dont be like that!'});
-    }, 9000);
-*/
-
 @Injectable({providedIn: 'root'})
 export class NotificationsService {
 
@@ -57,17 +42,43 @@ export class NotificationsService {
    * dismiss active notification
    */
   dismiss() {
-    if (this.notifications.length > 0) {
-      // pop next notification
-      this.activeNotification = this.notifications.shift();
-      
-      if (this.displayCallback) {
-        this.displayCallback(this.activeNotification);
+    if (this.notifications.length === 0) {
+      this.activeNotification = undefined;
+      return;
+    }
+
+    // get next notification that is different from active one
+    let nextNotification = this.notifications.shift();
+    let display = false;
+
+    while (this.notifications.length > 0) {
+      if (!this.isNextNotificationTheSame(nextNotification)) {
+        display = true;
+        break;
       }
 
-    } else {
-      this.activeNotification = undefined;
+      nextNotification = this.notifications.shift();
     }
+
+    if (!display) {
+      this.activeNotification = undefined;
+      return;
+    }
+
+    this.activeNotification = nextNotification;
+    
+    if (this.displayCallback) {
+      this.displayCallback(this.activeNotification);
+    }
+  }
+
+  private isNextNotificationTheSame(nextNotification: AppNotification) {
+    if (this.activeNotification.type === nextNotification.type &&
+        this.activeNotification.msg === nextNotification.msg) {
+          return true;
+        }
+
+    return false;
   }
 
 }
