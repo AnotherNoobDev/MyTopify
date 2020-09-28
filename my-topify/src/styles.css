@@ -30,6 +30,11 @@
   src: url('assets/fonts/Vibur/Vibur-Regular.ttf');
 }
 
+@font-face {
+  font-family: TextMeOne;
+  src: url('assets/fonts/TextMeOne/TextMeOne-Regular.ttf');
+}
+
 
 :root {  
   /* Set neon color */
