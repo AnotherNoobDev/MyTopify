@@ -1,5 +1,5 @@
 <div class="page-view-column">
-  <div [ngClass]="{'glowing-border': true,
+  <div [ngClass]="{'page-view-column-item-fill glowing-border': true,
                     'glowing-border-left': answered !== answerType.CorrectLeft && answered !== answerType.WrongLeft, 
                     'glowing-border-correct': answered === answerType.CorrectLeft,
                     'glowing-border-wrong': answered === answerType.WrongLeft}">
@@ -23,7 +23,7 @@
       </div>
     </div>
   </div> 
-  <div id="blackboard">
+  <div id="blackboard" class="page-view-column-item-fill">
     <div id="blackboard-content">
       <div id="clives">
         <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png">
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-  <div [ngClass]="{'glowing-border': true, 
+  <div [ngClass]="{'page-view-column-item-fill glowing-border': true, 
                     'glowing-border-right': answered !== answerType.CorrectRight && answered !== answerType.WrongRight, 
                     'glowing-border-correct': answered === answerType.CorrectRight,
                     'glowing-border-wrong': answered === answerType.WrongRight}">
