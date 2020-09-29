@@ -121,6 +121,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.updateQuestion();
+    this.updateResources();
   }
 
   ngOnDestroy() {
@@ -284,12 +285,6 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private removeResources() {
-    // images
-    if (this.images) {
-      this.renderer.removeChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
-      this.renderer.removeChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
-    }
-
     // audio
     this.pauseAudioLeft();
     this.pauseAudioRight();
@@ -298,15 +293,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private addResources() {
     // images 
     this.images = this.resourceManager.getImagesForQuestion(this.question);
-
-    if (this.images[0] === this.images[1]) {
-      // a node cannot apear twice (TODO rly ugly stuff refactor images to be like in chart view)
-      this.images[1] = this.images[1].cloneNode(false) as HTMLImageElement;
-    }
-
-    this.renderer.appendChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
-    this.renderer.appendChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
-
+    
     // audio
     this.audio = this.resourceManager.getAudioForQuestion(this.question);
   }

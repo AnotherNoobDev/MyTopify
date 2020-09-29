@@ -90,6 +90,13 @@
   height: 100%;
 }
 
+.spotify-image {
+  width: min(20vw, 8em);
+  height: min(20vw, 8em);
+  display: block;
+  margin: 5px;
+}
+
 .text-display {
   margin-left: 5px;
   text-align: center;
