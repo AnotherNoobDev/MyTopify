@@ -158,7 +158,7 @@
 .track-text {
   margin: 0;
   color: yellow;
-  font-size: min(5vw, 40px);
+  font-size: min(4.5vw, 40px);
   font-family: BadScript;
   text-transform: uppercase;
   text-shadow: 
@@ -177,8 +177,8 @@
 .artist-text {
   margin: 0;
   color: lightyellow;
-  font-size: min(7vw, 40px);
-  font-family: Monoton;
+  font-size: min(7vw, 50px);
+  font-family: Budmo;
   text-transform: uppercase;
   text-shadow: 
     0 0 10px yellow,
@@ -187,10 +187,6 @@
     0 0 80px purple;
 }
 
-.artist-text-small {
-  font-size: 25px;
-  word-spacing: 4px;
-}
 
 .filler-text {
   margin: 0;

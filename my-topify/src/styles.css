@@ -35,6 +35,11 @@
   src: url('assets/fonts/TextMeOne/TextMeOne-Regular.ttf');
 }
 
+@font-face {
+  font-family: Budmo;
+  src: url('assets/fonts/budmo/tt/budmo jiggler.ttf');
+}
+
 
 :root {  
   /* Set neon color */
