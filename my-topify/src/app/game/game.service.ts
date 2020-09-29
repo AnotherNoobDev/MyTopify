@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Question, GameKnowledgeBase, Period, DisplayableQuestion, Item } from '../shared/types';
-import {getTrackShortName} from '../shared/utility';
+import {getTrackShortName, getFirstArtist} from '../shared/utility';
 
 @Injectable({providedIn: 'root'})
 export class GameService {
@@ -90,12 +90,12 @@ export class GameService {
       case Item.Track:
         let info = this.getTrackNameArtistsAlbum(q.category.period, q.iLeft);
         lText.track = getTrackShortName(info[0]);
-        lText.artist = info[1];
+        lText.artist = getFirstArtist(info[1]);
         lText.album = info[2];
 
         info = this.getTrackNameArtistsAlbum(q.category.period, q.iRight);
         rText.track = getTrackShortName(info[0]);
-        rText.artist = info[1];
+        rText.artist = getFirstArtist(info[1]);
         rText.album = info[2];
 
         break;
