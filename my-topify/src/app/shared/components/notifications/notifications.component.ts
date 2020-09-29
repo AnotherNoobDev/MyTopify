@@ -12,9 +12,9 @@ export class NotificationsComponent implements OnInit {
 
   private notification: AppNotification;
 
-  private display = false;
-  private displayMessage = '';
-  private displayAs: 'info' | 'error';
+  public display = false;
+  public displayMessage = '';
+  public displayAs: 'info' | 'error';
 
   private notificationTimeout: number;
   

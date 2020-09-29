@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class GameOverComponent implements OnInit {
 
-  constructor(private game: GameService,
+  constructor(public game: GameService,
               private router: Router) { }
 
   ngOnInit() {

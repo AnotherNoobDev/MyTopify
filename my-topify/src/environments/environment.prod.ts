@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  spotifyAuthRedirectURI: 'https://mytopify.firebaseapp.com/auth-callback'
+  spotifyAuthRedirectURI: 'https://mytopify.web.app/auth-callback'
 };

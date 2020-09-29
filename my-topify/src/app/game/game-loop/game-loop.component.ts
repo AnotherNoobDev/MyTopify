@@ -35,26 +35,26 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   public choiceType = Choice;
   public answerType = Answer;
 
-  private question: DisplayableQuestion;
-  private leftText: DisplayableText;
-  private rightText: DisplayableText;
+  public question: DisplayableQuestion;
+  public leftText: DisplayableText;
+  public rightText: DisplayableText;
 
   @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef;
   @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef;
 
-  private images: HTMLImageElement[];
+  public images: HTMLImageElement[];
   private audio: HTMLAudioElement[];
 
-  private leftAudioPlaying = false;
-  private rightAudioPlaying = false;
+  public leftAudioPlaying = false;
+  public rightAudioPlaying = false;
 
   private preSelectTimerId: number;
   private holdSelectTimerId: number;
   private cancelSelectTimerId: number;
   private showAnswerTimerId: number;
 
-  private selectingChoice: Choice;
-  private answered = Answer.None;
+  public selectingChoice: Choice;
+  public answered = Answer.None;
 
   private mousedownOnLeftHandler: any;
   private mousedownOnRightHandler: any;
@@ -65,10 +65,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private resourceReloadSub: Subscription;
 
-  private gameIsOver = false;
+  public gameIsOver = false;
 
   constructor(private screen: ScreenService,
-              private game: GameService,
+              public game: GameService,
               private resourceManager: ResourceManagerService,
               private router: Router,
               private renderer: Renderer2,

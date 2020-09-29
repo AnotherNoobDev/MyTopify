@@ -14,15 +14,15 @@ import { NotificationsService, NotificationType } from 'src/app/shared/notificat
 })
 export class ChartComponent implements OnInit, OnDestroy {
 
-  private uType: 'tracks' | 'artists' = 'tracks';
-  private uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
+  public uType: 'tracks' | 'artists' = 'tracks';
+  public uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
 
   private period: Period;
 
-  private createPlaylistEnabled = false;
+  public createPlaylistEnabled = false;
 
-  private displayableItems: DisplayableItem[] = [];
-  private currentlyPlayingAudio = -1;
+  public displayableItems: DisplayableItem[] = [];
+  public currentlyPlayingAudio = -1;
 
   constructor(private knowledgeManager: KnowledgeManagerService,
               private resourceManager: ResourceManagerService,
