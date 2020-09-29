@@ -98,7 +98,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.disableUserInteraction();
-    this.removeResources();
+    this.pauseAudio();
 
     if (this.resourceReloadSub) {
       this.resourceReloadSub.unsubscribe();
@@ -232,6 +232,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateQuestion() {
     if (this.game.isGameOver()) {
       this.gameIsOver = true;
+      this.pauseAudio();
       return false;
     }
 
@@ -246,11 +247,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateResources() {
-    this.removeResources();
+    this.pauseAudio();
     this.addResources();
   }
 
-  private removeResources() {
+  private pauseAudio() {
     // audio
     this.pauseAudioLeft();
     this.pauseAudioRight();
