@@ -90,6 +90,11 @@
   height: 100%;
 }
 
+.spotify-image {
+  display: block;
+  margin: var(--image-border-size);
+}
+
 .text-display {
   margin-left: 5px;
   text-align: center;

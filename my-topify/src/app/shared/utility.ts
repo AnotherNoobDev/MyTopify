@@ -11,3 +11,13 @@ export function getTrackShortName(trackName: string): string {
     return trackName;
   }
 }
+
+export function getFirstArtist(artists: string): string {
+  const end = artists.indexOf(',');
+
+  if (end === -1) {
+    return artists;
+  } else {
+    return artists.substring(0, end);
+  }
+}

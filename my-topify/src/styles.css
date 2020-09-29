@@ -35,6 +35,11 @@
   src: url('assets/fonts/TextMeOne/TextMeOne-Regular.ttf');
 }
 
+@font-face {
+  font-family: Budmo;
+  src: url('assets/fonts/budmo/tt/budmo jiggler.ttf');
+}
+
 
 :root {  
   /* Set neon color */
@@ -51,7 +56,7 @@
   --spotify-green-active: rgb(26, 163, 74);
   --spotify-white: #FFFFFF;
 
-  --image-border-size: 5px;
+  --image-border-size: min(1vw, 5px);
 
   /* blackboard colors */
   --blackboard-emphasis: #ECCF8D;

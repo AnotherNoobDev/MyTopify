@@ -35,33 +35,12 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   public choiceType = Choice;
   public answerType = Answer;
 
-  private narrowScreen = false;
-
   private question: DisplayableQuestion;
   private leftText: DisplayableText;
   private rightText: DisplayableText;
 
-  private newLeftImagePlaceholder: ElementRef;
-  private leftImagePlaceholder: ElementRef;
-  @ViewChild('leftImagePlaceholder', {static: false}) set contentLeft(content: ElementRef) {
-    if (this.leftImagePlaceholder) {
-      this.newLeftImagePlaceholder = content;
-      this.checkIfViewElementsNeedUpdate();
-    } else {
-      this.leftImagePlaceholder = content;
-    }
-  }
-
-  private newRightImagePlaceholder: ElementRef;
-  private rightImagePlaceholder: ElementRef;
-  @ViewChild('rightImagePlaceholder', {static: false}) set contentRight(content: ElementRef) {
-    if (this.rightImagePlaceholder) {
-      this.newRightImagePlaceholder = content;
-      this.checkIfViewElementsNeedUpdate();
-    } else {
-      this.rightImagePlaceholder = content;
-    }
-  }
+  @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef;
+  @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef;
 
   private images: HTMLImageElement[];
   private audio: HTMLAudioElement[];
@@ -85,7 +64,6 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private clickOnRightHandler: any;
 
   private resourceReloadSub: Subscription;
-  private screenSizeSub: Subscription;
 
   private gameIsOver = false;
 
@@ -109,28 +87,18 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.clickOnRightHandler = this.toggleAudioRight.bind(this);
   }
 
-  ngOnInit() {
-    this.narrowScreen = this.screen.isNarrowScreen();
-
-    this.screenSizeSub = this.screen.screenIsNarrowChanged().subscribe((value: boolean) => {
-      this.narrowScreen = value;
-    });
-    
+  ngOnInit() {    
     this.resourceReloadSub = this.resourceManager.resourceReload().subscribe(() => {
       this.updateResources();
     });
 
     this.updateQuestion();
+    this.updateResources();
   }
 
   ngOnDestroy() {
     this.disableUserInteraction();
-    this.removeResources();
-
-    if (this.screenSizeSub) {
-      this.screenSizeSub.unsubscribe();
-      this.screenSizeSub = undefined;
-    }
+    this.pauseAudio();
 
     if (this.resourceReloadSub) {
       this.resourceReloadSub.unsubscribe();
@@ -144,7 +112,6 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.enableUserInteraction();
-    this.updateResources();
   }
 
   private enableUserInteraction() {
@@ -265,6 +232,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateQuestion() {
     if (this.game.isGameOver()) {
       this.gameIsOver = true;
+      this.pauseAudio();
       return false;
     }
 
@@ -279,17 +247,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateResources() {
-    this.removeResources();
+    this.pauseAudio();
     this.addResources();
   }
 
-  private removeResources() {
-    // images
-    if (this.images) {
-      this.renderer.removeChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
-      this.renderer.removeChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
-    }
-
+  private pauseAudio() {
     // audio
     this.pauseAudioLeft();
     this.pauseAudioRight();
@@ -299,34 +261,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     // images 
     this.images = this.resourceManager.getImagesForQuestion(this.question);
 
-    if (this.images[0] === this.images[1]) {
-      // a node cannot apear twice (TODO rly ugly stuff refactor images to be like in chart view)
-      this.images[1] = this.images[1].cloneNode(false) as HTMLImageElement;
-    }
-
-    this.renderer.appendChild(this.leftImagePlaceholder.nativeElement, this.images[0]);
-    this.renderer.appendChild(this.rightImagePlaceholder.nativeElement, this.images[1]);
-
     // audio
     this.audio = this.resourceManager.getAudioForQuestion(this.question);
-  }
-
-  private checkIfViewElementsNeedUpdate() {
-    if (this.newLeftImagePlaceholder && this.newRightImagePlaceholder) {
-      this.disableUserInteraction();
-      this.removeResources();
-
-      this.leftImagePlaceholder = this.newLeftImagePlaceholder;
-      this.rightImagePlaceholder = this.newRightImagePlaceholder;
-
-      this.newLeftImagePlaceholder = undefined;
-      this.newRightImagePlaceholder = undefined;
-
-      this.addResources();
-      this.enableUserInteraction();
-
-      this.cdRef.detectChanges();
-    }
   }
 
   private toggleAudioLeft() {
