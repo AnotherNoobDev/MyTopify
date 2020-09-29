@@ -3,18 +3,7 @@
                     'glowing-border-left': answered !== answerType.CorrectLeft && answered !== answerType.WrongLeft, 
                     'glowing-border-correct': answered === answerType.CorrectLeft,
                     'glowing-border-wrong': answered === answerType.WrongLeft}">
-    <div *ngIf="narrowScreen && leftText.track !== ''" class="view-narrow">
-      <div class="item-narrow"><p class="track-text">{{leftText.track}}</p></div>
-      <div class="break"></div>
-      <div class='item-narrow'>
-        <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder></div>
-        <div class="text-display">
-          <p *ngIf="leftText.track !== '' && leftText.artist !== ''" class=" filler-text">by</p>
-          <p *ngIf="leftText.artist !== ''" class="artist-text">{{leftText.artist}}</p>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="!narrowScreen || leftText.track === ''" class="view-wide">
+    <div class="view-wide">
       <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder>
         <img class="spotify-image" src="{{images[0].src}}">
       </div>
@@ -44,18 +33,7 @@
                     'glowing-border-right': answered !== answerType.CorrectRight && answered !== answerType.WrongRight, 
                     'glowing-border-correct': answered === answerType.CorrectRight,
                     'glowing-border-wrong': answered === answerType.WrongRight}">
-    <div *ngIf="narrowScreen && rightText.track !== ''" class="view-narrow">
-      <div class="item-narrow"><p class="track-text">{{rightText.track}}</p></div>
-      <div class="break"></div>
-      <div class='item-narrow'>
-        <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder></div>
-        <div class="text-display">
-          <p *ngIf="rightText.track !== '' && rightText.artist !== ''" class="filler-text">by</p>
-          <p *ngIf="rightText.artist !== ''" class="artist-text">{{rightText.artist}}</p>
-        </div>
-      </div>
-    </div>    
-    <div *ngIf="!narrowScreen || rightText.track === ''" class="view-wide">
+    <div class="view-wide">
       <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder>
         <img class="spotify-image" src="{{images[1].src}}">
       </div>

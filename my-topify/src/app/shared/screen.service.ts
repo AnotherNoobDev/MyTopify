@@ -11,9 +11,6 @@ export class ScreenService {
   private recImgSizeSubject = new Subject<void>();
   private recommendedImageSize: number;
 
-  private narrowScreenSubject = new Subject<boolean>();
-  private narrowScreen: boolean;
-
   constructor() {
     window.addEventListener('resize', this.onWindowResize.bind(this));
 
@@ -25,41 +22,11 @@ export class ScreenService {
     return this.recImgSizeSubject.asObservable();
   }
 
-  screenIsNarrowChanged() {
-    return this.narrowScreenSubject.asObservable();
-  }
-
   private onWindowResize() {
     //console.log('window: ' + window.innerWidth + 'x' + window.innerHeight);
-
-    this.checkIfScreenIsNarrow();
-
     this.checkImageSize();
   }
 
-  
-  private checkIfScreenIsNarrow() {
-    let narrow =  false;
-
-    if (window.innerWidth < 400) {
-      narrow = true;
-    }
-
-    if (this.narrowScreen !== narrow) {
-
-      let changed = false;
-
-      if (this.narrowScreen !== undefined) {
-        changed = true;
-      }
-
-      this.narrowScreen = narrow;
-      
-      if (changed) {
-        this.narrowScreenSubject.next(this.narrowScreen);
-      }
-    }
-  }
 
   private checkImageSize() {
     let newRecImgSize: number;
@@ -89,9 +56,5 @@ export class ScreenService {
 
   getImageSizeForGameView() {
     return this.recommendedImageSize;
-  }
-
-  isNarrowScreen() {
-    return this.narrowScreen;
   }
 }
