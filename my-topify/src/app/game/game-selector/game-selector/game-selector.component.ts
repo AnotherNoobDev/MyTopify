@@ -15,12 +15,12 @@ import { NotificationsService, NotificationType } from 'src/app/shared/notificat
 })
 export class GameSelectorComponent implements OnInit, OnDestroy {
 
-  private useTypeArtists = true;
-  private useTypeTracks = true;
+  public useTypeArtists = true;
+  public useTypeTracks = true;
 
-  private useShortTermPeriod = true;
-  private useMediumTermPeriod = true;
-  private useLongTermPeriod = true;
+  public useShortTermPeriod = true;
+  public useMediumTermPeriod = true;
+  public useLongTermPeriod = true;
 
   private configuringGameSub: Subscription;
 
