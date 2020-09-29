@@ -5,7 +5,7 @@
                     'glowing-border-wrong': answered === answerType.WrongLeft}">
     <div class="view-wide">
       <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder>
-        <img class="spotify-image" src="{{images[0].src}}">
+        <img class="spotify-image" src="{{images[0].src}}" width="{{images[0].width}}" height="{{images[0].height}}">
       </div>
       <div class="text-display">
         <p *ngIf="leftText.track !== ''" class=" track-text">{{leftText.track}}</p>
@@ -35,7 +35,7 @@
                     'glowing-border-wrong': answered === answerType.WrongRight}">
     <div class="view-wide">
       <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder>
-        <img class="spotify-image" src="{{images[1].src}}">
+        <img class="spotify-image" src="{{images[1].src}}" width="{{images[1].width}}" height="{{images[1].height}}">
       </div>
       <div class="text-display">
         <p *ngIf="rightText.track !== ''" class="track-text">{{rightText.track}}</p>

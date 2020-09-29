@@ -31,9 +31,9 @@ export class ScreenService {
   private checkImageSize() {
     let newRecImgSize: number;
 
-    if (window.innerWidth > 1024 && window.innerHeight > 900) {
+    if (window.innerWidth > 1024 || window.innerWidth > 1024) {
       newRecImgSize = 240;
-    } else if (window.innerWidth > 768 && window.innerHeight > 700) {
+    } else if (window.innerWidth > 768 || window.innerHeight > 768) {
       newRecImgSize = 180;
     } else {
       newRecImgSize = 100;

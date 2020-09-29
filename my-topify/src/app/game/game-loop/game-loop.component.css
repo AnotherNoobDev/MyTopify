@@ -91,10 +91,8 @@
 }
 
 .spotify-image {
-  width: min(20vw, 8em);
-  height: min(20vw, 8em);
   display: block;
-  margin: 5px;
+  margin: var(--image-border-size);
 }
 
 .text-display {
