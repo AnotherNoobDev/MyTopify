@@ -4,6 +4,7 @@ import * as base64js from 'base64-js';
 import { sha256 } from 'js-sha256';
 import { SpotifyHttpClientService } from '../shared/spotify-http-client.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 export interface SpotifyAuthToken {
   access_token: string;
@@ -22,8 +23,6 @@ export class AuthService {
   private codeChallenge: string;
 
   private codeVerifierPossibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-
-  private redirectURI = 'http://localhost:4200/auth-callback';
 
   private authToken: SpotifyAuthToken = undefined;
   private authTokenValidUntil: Date;
@@ -63,7 +62,7 @@ export class AuthService {
   }
 
   getRedirectURI(): string {
-    return this.redirectURI;
+    return environment.spotifyAuthRedirectURI;
   }
 
   getState(): string {
