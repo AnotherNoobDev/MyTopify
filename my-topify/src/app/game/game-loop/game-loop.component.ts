@@ -11,6 +11,7 @@ const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
 const CANCEL_SELECT_TIMEOUT = 50; // ms
 const SHOW_ANSWER_TIMEOUT = 5000; 
+const TAP_TIMEOUT = 120;
 
 enum Choice {
   Left,
@@ -62,6 +63,13 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private mouseupOnRightHandler: any;
   private clickOnLeftHandler: any;
   private clickOnRightHandler: any;
+  private touchstartOnLeftHandler: any;
+  private touchstartOnRightHandler: any;
+  private touchendOnLeftHandler: any;
+  private touchendOnRightHandler: any;
+
+  private leftTapTime: number; 
+  private rightTapTime: number;
 
   private resourceReloadSub: Subscription;
 
@@ -85,6 +93,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.mouseupOnRightHandler = this.startCancellingSelection.bind(this);
                 this.clickOnLeftHandler = this.toggleAudioLeft.bind(this);
                 this.clickOnRightHandler = this.toggleAudioRight.bind(this);
+                this.touchstartOnLeftHandler = this.handleTouchStartOnLeft.bind(this);
+                this.touchstartOnRightHandler = this.handleTouchStartOnRight.bind(this);
+                this.touchendOnLeftHandler = this.handleTouchEndOnLeft.bind(this);
+                this.touchendOnRightHandler = this.handleTouchEndOnRight.bind(this);
   }
 
   ngOnInit() {    
@@ -123,6 +135,12 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.leftImagePlaceholder.nativeElement.addEventListener('click', this.clickOnLeftHandler);
     this.rightImagePlaceholder.nativeElement.addEventListener('click', this.clickOnRightHandler);
+
+    this.leftImagePlaceholder.nativeElement.addEventListener('touchstart', this.touchstartOnLeftHandler, false);
+    this.rightImagePlaceholder.nativeElement.addEventListener('touchstart', this.touchstartOnRightHandler, false);
+
+    this.leftImagePlaceholder.nativeElement.addEventListener('touchend', this.touchendOnLeftHandler, false);
+    this.rightImagePlaceholder.nativeElement.addEventListener('touchend', this.touchendOnRightHandler, false);
   }
 
   private disableUserInteraction() {
@@ -133,20 +151,64 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.leftImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnLeftHandler);
     this.rightImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnRightHandler);
 
-    this.leftImagePlaceholder.nativeElement.addEventListener('mouseup', this.mouseupOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.addEventListener('mouseup', this.mouseupOnRightHandler);
+    this.leftImagePlaceholder.nativeElement.removeEventListener('mouseup', this.mouseupOnLeftHandler);
+    this.rightImagePlaceholder.nativeElement.removeEventListener('mouseup', this.mouseupOnRightHandler);
 
     this.leftImagePlaceholder.nativeElement.removeEventListener('click', this.clickOnLeftHandler);
     this.rightImagePlaceholder.nativeElement.removeEventListener('click', this.clickOnRightHandler);
+
+    this.leftImagePlaceholder.nativeElement.removeEventListener('touchstart', this.touchstartOnLeftHandler, false);
+    this.rightImagePlaceholder.nativeElement.removeEventListener('touchstart', this.touchstartOnRightHandler, false);
+
+    this.leftImagePlaceholder.nativeElement.removeEventListener('touchend', this.touchendOnLeftHandler, false);
+    this.rightImagePlaceholder.nativeElement.removeEventListener('touchend', this.touchendOnRightHandler, false);
   }
 
   private startLeftSelection() {
-    // cancelSelection at start?
-
     // start small timeout to enter selecting mode
     this.preSelectTimerId = window.setTimeout((which: Choice) => {
       this.startSelectionTimer(which);
     }, PRE_SELECT_TIMEOUT, Choice.Left);
+  }
+
+  private handleTouchStartOnLeft(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.startLeftSelection();
+    this.leftTapTime = Date.now();
+  }
+
+  private handleTouchEndOnLeft(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.startCancellingSelection();
+
+    const tapTime = Date.now() - this.leftTapTime;
+    if (tapTime <= TAP_TIMEOUT) {
+      this.toggleAudioLeft();
+    }
+  }
+
+  private handleTouchStartOnRight(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.startRightSelection();
+    this.rightTapTime = Date.now();
+  }
+
+  private handleTouchEndOnRight(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.startCancellingSelection();
+
+    const tapTime = Date.now() - this.rightTapTime;
+    if (tapTime <= TAP_TIMEOUT) {
+      this.toggleAudioRight();
+    }
   }
 
   private startRightSelection() {
