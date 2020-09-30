@@ -9,7 +9,7 @@
       <form id="game-config-form" (ngSubmit)="onStartGame(f)" #f="ngForm">
         <p class="game-config-option"> Questions about: </p>
         <div>
-          <label for="type_tracks" class="container">Tracks
+          <label for="type_tracks" class="container no-select">Tracks
             <input type="checkbox" id="type_tracks" name="type_tracks"
               [ngModel]="useTypeTracks" name="type_tracks" (change)="onTypeSelected(f)">
             <span class="checkmark"></span>
@@ -17,7 +17,7 @@
         </div>
         <div>
           
-          <label for="type_artists" class="container">Artists
+          <label for="type_artists" class="container no-select">Artists
             <input type="checkbox" id="type_artists" name="type_artists"
               [ngModel]="useTypeArtists" name="type_artists" (change)="onTypeSelected(f)">
             <span class="checkmark"></span>
@@ -26,7 +26,7 @@
 
         <p class="game-config-option"> Period: </p>
         <div>
-          <label for="period_short_term" class="container">Last 4 weeks
+          <label for="period_short_term" class="container no-select">Last 4 weeks
             <input type="checkbox" id="period_short_term" name="period_short_term"
               [ngModel]="useShortTermPeriod" name="period_short_term" (change)="onPeriodSelected(f)">
             <span class="checkmark"></span>
@@ -34,14 +34,14 @@
         </div>
         <div>
 
-          <label for="period_medium_term" class="container">Last 6 months
+          <label for="period_medium_term" class="container no-select">Last 6 months
             <input type="checkbox" id="period_medium_term" name="period_medium_term"
               [ngModel]="useMediumTermPeriod" name="period_medium_term" (change)="onPeriodSelected(f)">
             <span class="checkmark"></span>
           </label>
         </div>
         <div>
-          <label for="period_long_term" class="container">All time
+          <label for="period_long_term" class="container no-select">All time
             <input type="checkbox" id="period_long_term" name="period_long_term"
               [ngModel]="useLongTermPeriod" name="period_long_term" (change)="onPeriodSelected(f)">
             <span class="checkmark"></span>
@@ -51,6 +51,6 @@
     </div>
   </div>
   <div class="page-view-column-item-fill">
-    <button type="submit" class="btn" form="game-config-form">Start</button>
+    <button type="submit" class="btn no-select" form="game-config-form">Start</button>
   </div>
 </div>
