@@ -101,21 +101,31 @@
   flex-grow: 1;
 }
 
-#clives {
+#cleft {
   width: 10%;
   float: left;
 }
 
-#cquestion {
-  width: 70%;
+#cmiddle {
+  width: 75%;
   float: left;
 }
 
-#cscore {
+#cright {
+  width: 10%;
   position: relative;
   float: right;
-  color: var(--blackboard-emphasis);
   height: 100%;
+}
+
+#info {
+  width: clamp(40px, 5.5vw, 70px);
+  height: auto; 
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  cursor: pointer;
 }
 
 .life {
@@ -125,9 +135,7 @@
 }
 
 #score {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
+  color: var(--blackboard-emphasis);
 }
 
 .blackboard-text-small {
@@ -136,7 +144,7 @@
 }
 
 .blackboard-text-large {
-  font-size: min(5vw, 40px);
+  font-size: min(4.5vw, 38px);
   margin: 0px;
 }
 

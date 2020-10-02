@@ -16,16 +16,17 @@
   </div> 
   <div id="blackboard" class="page-view-column-item-fill">
     <div id="blackboard-content">
-      <div id="clives">
+      <div id="cleft">
         <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png">
       </div>
-      <div id="cquestion">
+      <div id="cmiddle">
         <p class="blackboard-text-small">- {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}} -</p>
         <p class="blackboard-text-large" [innerHTML]="question.text"></p>
+        <p id="score" class="blackboard-text-large"> &gt; &gt; Score: {{game.getScore()}} &lt; &lt; </p>
       </div>
-      <div id="cscore">
+      <div id="cright">
         <app-menu-button></app-menu-button>
-        <p id="score" class="blackboard-text-large">Score: <br>{{game.getScore()}}</p>
+        <img id="info" src="/assets/images/info.png" (click)="onInfo()">
       </div>
     </div>
   </div>
