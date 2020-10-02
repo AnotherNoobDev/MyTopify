@@ -17,14 +17,33 @@ import { MenuButtonComponent } from './shared/components/menu-button/menu-button
 import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
 import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { environment } from 'src/environments/environment';
 
 const appRoutes: Routes = [
-  { path: '', component: AuthRedirectComponent },
-  { path: 'auth-callback', component: AuthCallbackComponent },
-  { path: 'game/select', component: GameSelectorComponent, canActivate: [AuthGuardService] },
-  { path: 'game/main', component: GameLoopComponent, canActivate: [AuthGuardService]},
-  { path: 'chart/view', component: ChartComponent, canActivate: [AuthGuardService]},
-  { path: '**', redirectTo: ''}
+  { 
+    path: '', 
+    component: AuthRedirectComponent 
+  },
+  { 
+    path: environment.spotifyAuthRedirectURI.substring(environment.spotifyAuthRedirectURI.lastIndexOf('/') + 1), 
+    component: AuthCallbackComponent 
+  },
+  { 
+    path: 'game/select', 
+    component: GameSelectorComponent, 
+    canActivate: [AuthGuardService] 
+  },
+  { 
+    path: 'game/main', 
+    component: GameLoopComponent, 
+    canActivate: [AuthGuardService]
+  },
+  { path: 'chart/view', 
+    component: ChartComponent, 
+    canActivate: [AuthGuardService]},
+  { path: '**', 
+    redirectTo: ''
+  }
 ];
 
 @NgModule({
