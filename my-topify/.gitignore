@@ -46,6 +46,9 @@ testem.log
 Thumbs.db
 
 
-#firebase
+# firebase
 .firebaserc
 .firebase/
+
+# angular dev. environment
+src/environments/environment.ts
