@@ -24,7 +24,7 @@ export class AuthRedirectComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {
     // we are authenticated; just navigate away
     if (authService.isAuthenticated()) {
-      this.router.navigate([environment.spotifyAuthRedirectURI.substring(environment.spotifyAuthRedirectURI.lastIndexOf('/') + 1)]);
+      this.router.navigate([environment.spotifyCallBackRoute]);
     }
    }
 

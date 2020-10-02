@@ -30,7 +30,7 @@ const appRoutes: Routes = [
     component: AuthRedirectComponent 
   },
   { 
-    path: environment.spotifyAuthRedirectURI.substring(environment.spotifyAuthRedirectURI.lastIndexOf('/') + 1), 
+    path: environment.spotifyCallBackRoute, 
     component: AuthCallbackComponent 
   },
   { 
@@ -43,10 +43,12 @@ const appRoutes: Routes = [
     component: GameLoopComponent, 
     canActivate: [AuthGuardService]
   },
-  { path: 'chart/view', 
+  { 
+    path: 'chart/view', 
     component: ChartComponent, 
     canActivate: [AuthGuardService]},
-  { path: '**', 
+  { 
+    path: '**', 
     redirectTo: ''
   }
 ];
