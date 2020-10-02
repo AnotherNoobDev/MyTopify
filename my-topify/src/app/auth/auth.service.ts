@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as base64js from 'base64-js';
 
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import { sha256 } from 'js-sha256';
 import { SpotifyHttpClientService } from '../shared/spotify-http-client.service';
 import { Router } from '@angular/router';

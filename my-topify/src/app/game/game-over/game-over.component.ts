@@ -1,3 +1,8 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { Router } from '@angular/router';

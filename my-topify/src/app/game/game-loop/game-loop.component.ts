@@ -1,3 +1,8 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../game.service';
 import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types';

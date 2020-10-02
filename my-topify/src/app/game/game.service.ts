@@ -1,3 +1,8 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import { Injectable } from '@angular/core';
 import { Question, GameKnowledgeBase, Period, DisplayableQuestion, Item } from '../shared/types';
 import {getTrackShortName, getFirstArtist} from '../shared/utility';
