@@ -393,4 +393,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onInfo() {
+    this.notificationService.notify({
+      type: NotificationType.INFO, 
+      msg: 'Press and hold cover image to choose. Click/tap cover image to toggle audio.'
+    });
+  }
+
 }
