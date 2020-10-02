@@ -1,11 +1,12 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 /* The container */
 .container {
   display: block;
   position: relative;
-  /*
-  padding-left: 5px;
-  margin-bottom: 12px;
-  */
   cursor: pointer;
   user-select: none;
 }

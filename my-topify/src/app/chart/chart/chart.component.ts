@@ -1,5 +1,9 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
 import { Category, Item, Period, ArtistKnowledgeBase, TrackKnowledgeBase, DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
