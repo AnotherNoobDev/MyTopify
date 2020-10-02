@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-auth-redirect',
@@ -18,7 +19,7 @@ export class AuthRedirectComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {
     // we are authenticated; just navigate away
     if (authService.isAuthenticated()) {
-      this.router.navigate(['auth-callback']);
+      this.router.navigate([environment.spotifyAuthRedirectURI.substring(environment.spotifyAuthRedirectURI.lastIndexOf('/') + 1)]);
     }
    }
 
