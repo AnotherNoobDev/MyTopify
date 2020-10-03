@@ -23,6 +23,7 @@ import { MenuContentComponent } from './shared/components/menu-content/menu-cont
 import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { environment } from 'src/environments/environment';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 const appRoutes: Routes = [
   { 
@@ -71,7 +72,8 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
-    HttpClientModule
+    HttpClientModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

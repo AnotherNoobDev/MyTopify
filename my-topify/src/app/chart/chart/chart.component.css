@@ -14,7 +14,6 @@
   position: sticky;
   top: 0;
   flex-direction: column;
-  margin-bottom: 30px !important;
 }
 
 .blackboard-content-options {
@@ -100,13 +99,27 @@ form {
   border-radius: 50%;
 }
 
+.chart-container {
+  flex: 1;
+  width: 100%;
+  scrollbar-width: none;
+  text-align: center;
+}
+
 .chart-item {
   display: flex;
   width: 90%;
   max-width: 1000px;
+  height: min(20vw, 8em);
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 20px;
   justify-items: center;
   align-items: center;
+}
+
+.chart-item-first {
+  margin-top: 20px;
 }
 
 .chart-item-image {
