@@ -21,12 +21,20 @@ export class QuestionGeneratorService {
   generateQuestions(gameKnowledgeBase: GameKnowledgeBase): Question[] {
     this.questions = [];
 
-    const categories = gameKnowledgeBase.getCategories();
+    let categories = gameKnowledgeBase.getCategories();
+
+    const validCategories = [];
 
     for (const cat of categories) {
-      if (gameKnowledgeBase.getCategorySize(cat) < MINIMUM_CATEGORY_SIZE) {
-        return null;
+      if (gameKnowledgeBase.getCategorySize(cat) >= MINIMUM_CATEGORY_SIZE) {
+        validCategories.push(cat);
       }
+    }
+
+    categories = validCategories;
+
+    if (categories.length === 0) {
+      return null;
     }
 
     const nQuestionsPerCat = this.nQuestions / categories.length;
