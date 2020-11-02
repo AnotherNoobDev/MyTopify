@@ -41,12 +41,14 @@
 
 .stat-score {
   color: var(--blackboard-emphasis);
+  margin-top: 1em;
   margin-bottom: 5px;
 }
 
 .stat-lives {
   color: var(--blackboard-emphasis-secondary);
   margin-top: 0;
+  margin-bottom: 1em;
 }
 
 .btn-app {
