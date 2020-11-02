@@ -66,6 +66,12 @@
   --blackboard-emphasis-secondary: #fea7d2;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   background-color: black;
   background-image: url('assets/images/background.jpg');
