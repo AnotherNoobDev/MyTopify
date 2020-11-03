@@ -5,7 +5,8 @@
 
 @font-face {
   font-family: Monoton;
-  src: url('assets/fonts/Monoton/Monoton-Regular.ttf')
+  src: url('assets/fonts/Monoton/Monoton-Regular.ttf');
+  unicode-range: U+004D, U+0059, U+0054, U+004F, U+0050, U+0049, U+0046;
 }
 
 @font-face {
