@@ -15,5 +15,5 @@
   height: auto;
   display: block;
   float: right;
-  width: clamp(50px, 5.5vw, 70px) !important;
+  width: 1.5em !important;
 }
