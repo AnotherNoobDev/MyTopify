@@ -20,7 +20,8 @@
     </div>
   </div> 
   <div id="blackboard" class="page-view-column-item-fill">
-    <div id="blackboard-content">
+    <div id="blackboard-content" class="blackboard-content-cols">
+      <app-menu-button></app-menu-button>
       <div id="cleft">
         <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png">
       </div>
@@ -30,7 +31,6 @@
         <p id="score" class="blackboard-text-large"> &gt; &gt; Score: {{game.getScore()}} &lt; &lt; </p>
       </div>
       <div id="cright">
-        <app-menu-button></app-menu-button>
         <img id="info" class="no-select" src="/assets/images/info.png" (click)="onInfo()">
       </div>
     </div>

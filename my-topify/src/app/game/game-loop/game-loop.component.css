@@ -104,31 +104,18 @@
   flex-grow: 1;
 }
 
+.blackboard-content-cols {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
 #cleft {
   width: 10%;
-  float: left;
-}
-
-#cmiddle {
-  width: 75%;
-  float: left;
-}
-
-#cright {
-  width: 10%;
-  position: relative;
-  float: right;
-  height: 100%;
-}
-
-#info {
-  width: clamp(40px, 5.5vw, 70px);
-  height: auto; 
-  display: block;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .life {
@@ -137,8 +124,12 @@
   display: block;
 }
 
-#score {
-  color: var(--blackboard-emphasis);
+#cmiddle {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .blackboard-text-small {
@@ -149,6 +140,29 @@
 .blackboard-text-large {
   font-size: min(4.5vw, 38px);
   margin: 0px;
+}
+
+#score {
+  color: var(--blackboard-emphasis);
+}
+
+#cright {
+  width: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: flex-end;
+}
+
+.menu-button-container {
+  position: relative;
+}
+
+#info {
+  width: 1.5em;
+  height: auto; 
+  display: block;
+  cursor: pointer;
 }
 
 .draw {
