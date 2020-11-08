@@ -216,7 +216,22 @@
 
 .ripple {
   background-color: #fff;
-  animation: ripple 2s linear infinite;
+  -webkit-animation: ripple 2s linear infinite;
+          animation: ripple 2s linear infinite;
+}
+@-webkit-keyframes ripple {
+  0% {
+    box-shadow: 
+      0 0 0 .7rem rgba(255,255,255, 0.2),
+      0 0 0 1.5rem rgba(255,255,255, 0.2),
+      0 0 0 5rem rgba(255,255,255, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 1.5rem rgba(255,255,255, 0.2),
+      0 0 0 4rem rgba(255,255,255, 0.2),
+      0 0 0 8rem rgba(255,255,255, 0);
+  }
 }
 @keyframes ripple {
   0% {
@@ -291,7 +306,6 @@
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
