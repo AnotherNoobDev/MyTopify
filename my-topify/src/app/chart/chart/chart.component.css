@@ -11,6 +11,7 @@
   font-size: min(4.5vw, 25px) !important;
   height: min(12em, 260px) !important;
   min-height: min(12em, 260px) !important;
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   flex-direction: column;
@@ -44,7 +45,10 @@ form {
   display: block;
   position: relative;
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 /* Hide the browser's default checkbox */
