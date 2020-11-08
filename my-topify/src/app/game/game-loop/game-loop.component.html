@@ -10,7 +10,7 @@
                     'glowing-border-wrong': answered === answerType.WrongLeft}">
     <div class="view-wide">
       <div [ngClass]="('image-display ' + (leftAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Left? 'draw selecting' : 'draw'))" #leftImagePlaceholder>
-        <img class="spotify-image" src="{{images[0].src}}" width="{{images[0].width}}" height="{{images[0].height}}">
+        <img class="spotify-image" src="{{images[0].src}}" alt="Album cover or artist profile pic" width="{{images[0].width}}" height="{{images[0].height}}">
       </div>
       <div class="text-display">
         <p *ngIf="leftText.track !== ''" class=" track-text">{{leftText.track}}</p>
@@ -23,7 +23,7 @@
     <div id="blackboard-content" class="blackboard-content-cols">
       <app-menu-button></app-menu-button>
       <div id="cleft">
-        <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png">
+        <img *ngFor="let i of [].constructor(game.getLives())" class="life" src="/assets/images/life.png" alt="life">
       </div>
       <div id="cmiddle">
         <p class="blackboard-text-small">- {{game.getQuestionNumber()}}/{{game.getNumberOfQuestions()}} -</p>
@@ -31,7 +31,7 @@
         <p id="score" class="blackboard-text-large"> &gt; &gt; Score: {{game.getScore()}} &lt; &lt; </p>
       </div>
       <div id="cright">
-        <img id="info" class="no-select" src="/assets/images/info.png" (click)="onInfo()">
+        <img id="info" class="no-select" src="/assets/images/info.png" alt="info" (click)="onInfo()">
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
                     'glowing-border-wrong': answered === answerType.WrongRight}">
     <div class="view-wide">
       <div [ngClass]="('image-display ' + (rightAudioPlaying? 'ripple ' : '') + (selectingChoice === choiceType.Right? 'draw selecting' : 'draw'))" #rightImagePlaceholder>
-        <img class="spotify-image" src="{{images[1].src}}" width="{{images[1].width}}" height="{{images[1].height}}">
+        <img class="spotify-image" src="{{images[1].src}}" alt="Album cover or artist profile pic" width="{{images[1].width}}" height="{{images[1].height}}">
       </div>
       <div class="text-display">
         <p *ngIf="rightText.track !== ''" class="track-text">{{rightText.track}}</p>
