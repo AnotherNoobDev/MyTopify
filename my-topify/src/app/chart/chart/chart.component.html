@@ -53,7 +53,7 @@
   <cdk-virtual-scroll-viewport class="chart-container" [itemSize]="100">
     <div *cdkVirtualFor="let item of displayableItems; let i = index; let first = first;" [ngClass]="('chart-item ' + (first? 'chart-item-first':''))">
       <div [ngClass] = "'image-container ' +  (this.currentlyPlayingAudio === i ? 'ripple ' : '')">
-        <img [ngClass]="('chart-item-image '  + (this.currentlyPlayingAudio === i ? 'chart-item-image-playing ' : ''))" src="{{item.image.src}}" (click)="toggleAudio(i)">
+        <img [ngClass]="('chart-item-image '  + (this.currentlyPlayingAudio === i ? 'chart-item-image-playing ' : ''))" src="{{item.image.src}}" alt="Album cover or artist profile pic" (click)="toggleAudio(i)">
       </div>
       <div class="chart-item-text">
         <p *ngIf="item.text.track" class="filler-text">{{(i + 1) + '. ' + item.text.track}}</p>
