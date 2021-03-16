@@ -106,8 +106,15 @@ form {
 .chart-container {
   flex: 1;
   width: 100%;
-  scrollbar-width: none;
   text-align: center;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.chart-container::-webkit-scrollbar {
+  display: none;
 }
 
 .chart-item {
