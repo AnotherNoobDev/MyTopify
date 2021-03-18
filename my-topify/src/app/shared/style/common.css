@@ -71,6 +71,12 @@
   margin-bottom: min(1vw, 20px);
 }
 
+@media only screen and (max-width: 480px) {
+  #blackboard {
+    background-image: url('/assets/images/blackboard_h_mobile.jpg');
+  }
+}
+
 .blackboard-text-only {
   font-size: min(5vw, 30px) !important;
   height: min(10em, 320px) !important;
