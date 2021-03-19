@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { GameService } from '../../game.service';
 import { Subscription } from 'rxjs';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
-import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
+import { NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
   selector: 'app-game-selector',

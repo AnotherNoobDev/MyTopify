@@ -9,7 +9,7 @@ import { Category, Item, Period, ArtistKnowledgeBase, TrackKnowledgeBase, Displa
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
-import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
+import { NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
   selector: 'app-chart',

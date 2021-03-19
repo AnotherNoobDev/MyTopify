@@ -20,10 +20,10 @@ import { ChartComponent } from './chart/chart/chart.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
 import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
-import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { environment } from 'src/environments/environment';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NotificationsLibModule, NotificationsService } from 'notifications-lib';
 
 const appRoutes: Routes = [
   { 
@@ -65,17 +65,19 @@ const appRoutes: Routes = [
     ChartComponent,
     MenuComponent,
     MenuButtonComponent,
-    MenuContentComponent,
-    NotificationsComponent,
+    MenuContentComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    ScrollingModule
+    ScrollingModule,
+    NotificationsLibModule
   ],
-  providers: [],
+  providers: [
+    NotificationsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
