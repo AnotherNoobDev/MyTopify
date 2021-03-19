@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
 import { ScreenService } from 'src/app/shared/screen.service';
-import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
+import { NotificationsService, NotificationType } from 'notifications-lib';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
-import { NotificationsService, NotificationType } from 'src/app/shared/notifications.service';
+import { NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
   selector: 'app-auth-callback',
