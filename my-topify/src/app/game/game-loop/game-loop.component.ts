@@ -5,7 +5,7 @@
 
 import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../game.service';
-import { DisplayableQuestion, Item, DisplayableText } from 'src/app/shared/types';
+import { DisplayableQuestion, DisplayableText } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';

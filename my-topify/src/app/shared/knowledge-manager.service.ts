@@ -4,10 +4,15 @@
  */
 
 import { Injectable } from '@angular/core';
-import { AppKnowledgeBase, Category, Item, ArtistKnowledgeBase, Artist, ImageURL, TrackKnowledgeBase, Track, Period } from './types';
+import { AppKnowledgeBase, ArtistKnowledgeBase, TrackKnowledgeBase } from './types';
 import { Observable, forkJoin } from 'rxjs';
-import { SpotifyPagingObject, SpotifyHttpClientService, SpotifyArtistObject, SpotifyTrackObject } from './spotify-http-client.service';
-import { AuthService } from '../auth/auth.service';
+import { 
+  Category, Item, Artist, ImageURL, Track, Period,
+  SpotifyPagingObject, 
+  SpotifyHttpClientService, 
+  SpotifyArtistObject, 
+  SpotifyTrackObject,
+  AuthService } from 'spotify-lib';
 
 @Injectable({providedIn: 'root'})
 export class KnowledgeManagerService {

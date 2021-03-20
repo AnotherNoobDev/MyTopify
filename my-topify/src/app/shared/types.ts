@@ -3,21 +3,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-export enum Item {
-  Artist,
-  Track
-}
-
-export enum Period {
-  ShortTerm,
-  MediumTerm,
-  LongTerm
-}
-
-export interface Category {
-  type: Item;
-  period: Period;  
-}
+import { Artist, Category, Identifier, ImageURL, Item, Period, Track } from "spotify-lib";
 
 export interface GameConfiguration {
   useTracks: boolean;
@@ -27,38 +13,10 @@ export interface GameConfiguration {
   useLongTermPeriod: boolean;
 }
 
-export interface ImageURL {
-  width: number;
-  height: number;
-  url: string;
-}
-
-export type Identifier = string;
-
-export interface Artist {
-  id: Identifier;
-  name: string;
-  images: ImageURL[];
-}
-
 export interface ArtistKnowledgeBase {
   period: Period;
   size: number;
   artists: Artist[];
-}
-
-export interface Album {
-  id: Identifier;
-  name: string;
-  images: ImageURL[];
-}
-
-export interface Track {
-  id: Identifier;
-  name: string;
-  artists: string[];
-  album: Album;
-  previewURL: string; // 30 seconds MP3
 }
 
 export interface TrackKnowledgeBase {

@@ -4,11 +4,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { 
-  Period, 
-  GameKnowledgeBase, 
-  GameConfiguration, 
-  Item} from 'src/app/shared/types';
+import { Item, Period } from 'spotify-lib';
+import { GameKnowledgeBase, GameConfiguration } from 'src/app/shared/types';
 import { Observable } from 'rxjs';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
 

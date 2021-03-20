@@ -4,11 +4,14 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Identifier, 
+import {
+  Identifier,
+  Item, Artist, Track, 
+  ImageURL
+} from 'spotify-lib'
+import { 
   GameKnowledgeBase, 
   Question, 
-  Item, Artist, Track, 
-  ImageURL, 
   ArtistKnowledgeBase, TrackKnowledgeBase, 
   DisplayableItem } from './types';
 import { ScreenService } from './screen.service';

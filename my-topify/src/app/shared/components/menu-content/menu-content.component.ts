@@ -4,8 +4,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'spotify-lib';
 
 @Component({
   selector: 'app-menu-content',
