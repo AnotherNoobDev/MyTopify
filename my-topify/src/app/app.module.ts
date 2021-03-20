@@ -20,10 +20,10 @@ import { ChartComponent } from './chart/chart/chart.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { MenuButtonComponent } from './shared/components/menu-button/menu-button.component';
 import { MenuContentComponent } from './shared/components/menu-content/menu-content.component';
-import { AuthGuardService } from './auth/auth-guard.service';
 import { environment } from 'src/environments/environment';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NotificationsLibModule, NotificationsService } from 'notifications-lib';
+import { AuthGuardService, AuthService, SpotifyHttpClientService, SpotifyLibModule } from 'spotify-lib';
 
 const appRoutes: Routes = [
   { 
@@ -73,10 +73,22 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     ScrollingModule,
-    NotificationsLibModule
+    NotificationsLibModule,
+    SpotifyLibModule.forRoot({
+      redirectURI: environment.spotifyAuthRedirectURI,
+      clientId: 'a244c732df724f7595a7c9c4604d1179',
+      clientScope: 'playlist-read-private streaming user-read-email user-read-private user-top-read playlist-modify-public',
+      storageKeyForCodeVerifier: 'MYT_codeVerifier',
+      storageKeyForAuthToken: 'MYT_authToken',
+      storageKeyForAuthTokenValidUntil: 'MYT_authTokenValidUntil',
+      storageKeyForAuthRequestState: 'MYT_state'
+    })
   ],
   providers: [
-    NotificationsService
+    NotificationsService,
+    AuthService,
+    AuthGuardService,
+    SpotifyHttpClientService
   ],
   bootstrap: [AppComponent]
 })

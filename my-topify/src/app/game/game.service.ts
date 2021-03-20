@@ -4,8 +4,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Question, GameKnowledgeBase, Period, DisplayableQuestion, Item } from '../shared/types';
-import {getTrackShortName, getFirstArtist} from '../shared/utility';
+import { Item, Period } from 'spotify-lib';
+import { Question, GameKnowledgeBase, DisplayableQuestion } from '../shared/types';
+import { getTrackShortName, getFirstArtist } from '../shared/utility';
 
 @Injectable({providedIn: 'root'})
 export class GameService {

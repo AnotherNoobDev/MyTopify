@@ -4,7 +4,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Category, GameKnowledgeBase, Question, Difficulty, Item, Period } from '../shared/types';
+import { Item, Period, Category } from 'spotify-lib';
+import { GameKnowledgeBase, Question, Difficulty } from '../shared/types';
 
 const MINIMUM_CATEGORY_SIZE = 20;
 

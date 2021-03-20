@@ -5,8 +5,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
+import { AuthService, SpotifyHttpClientService } from 'spotify-lib';
 import { NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({

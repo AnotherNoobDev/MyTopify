@@ -5,10 +5,9 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
-import { Category, Item, Period, ArtistKnowledgeBase, TrackKnowledgeBase, DisplayableItem } from 'src/app/shared/types';
+import { DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
-import { AuthService } from 'src/app/auth/auth.service';
-import { SpotifyHttpClientService } from 'src/app/shared/spotify-http-client.service';
+import { Category, Item, Period, AuthService, SpotifyHttpClientService } from 'spotify-lib';
 import { NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
