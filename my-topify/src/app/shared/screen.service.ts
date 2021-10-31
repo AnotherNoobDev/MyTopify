@@ -14,7 +14,7 @@ export class ScreenService {
   */
 
   private recImgSizeSubject = new Subject<void>();
-  private recommendedImageSize: number;
+  private recommendedImageSize: number = 0;
 
   constructor() {
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -45,8 +45,8 @@ export class ScreenService {
     }
 
     if (this.recommendedImageSize !== newRecImgSize) {
-
       let changed = false;
+
       if (this.recommendedImageSize !== undefined) {
         changed = true;
       }

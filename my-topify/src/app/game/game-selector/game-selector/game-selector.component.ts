@@ -27,7 +27,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
   public useMediumTermPeriod = true;
   public useLongTermPeriod = true;
 
-  private configuringGameSub: Subscription;
+  private configuringGameSub: Subscription | undefined = undefined;
 
   constructor(private gameConfigurator: GameConfiguratorService,
               private questionGenerator: QuestionGeneratorService,

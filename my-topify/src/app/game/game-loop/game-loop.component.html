@@ -13,9 +13,9 @@
         <img class="spotify-image" src="{{images[0].src}}" alt="Album cover or artist profile pic" width="{{images[0].width}}" height="{{images[0].height}}">
       </div>
       <div class="text-display">
-        <p *ngIf="leftText.track !== ''" class=" track-text">{{leftText.track}}</p>
-        <p *ngIf="leftText.track !== '' && leftText.artist !== ''" class=" filler-text">by</p>
-        <p *ngIf="leftText.artist !== ''" class="artist-text">{{leftText.artist}}</p>
+        <p *ngIf="question.leftText.track !== ''" class=" track-text">{{question.leftText.track}}</p>
+        <p *ngIf="question.leftText.track !== '' && question.leftText.artist !== ''" class=" filler-text">by</p>
+        <p *ngIf="question.leftText.artist !== ''" class="artist-text">{{question.leftText.artist}}</p>
       </div>
     </div>
   </div> 
@@ -44,9 +44,9 @@
         <img class="spotify-image" src="{{images[1].src}}" alt="Album cover or artist profile pic" width="{{images[1].width}}" height="{{images[1].height}}">
       </div>
       <div class="text-display">
-        <p *ngIf="rightText.track !== ''" class="track-text">{{rightText.track}}</p>
-        <p *ngIf="rightText.track !== '' && rightText.artist !== ''" class="filler-text">by</p>
-        <p *ngIf="rightText.artist !== ''" class="artist-text">{{rightText.artist}}</p>
+        <p *ngIf="question.rightText.track !== ''" class="track-text">{{question.rightText.track}}</p>
+        <p *ngIf="question.rightText.track !== '' && question.rightText.artist !== ''" class="filler-text">by</p>
+        <p *ngIf="question.rightText.artist !== ''" class="artist-text">{{question.rightText.artist}}</p>
       </div>
     </div>
   </div> 

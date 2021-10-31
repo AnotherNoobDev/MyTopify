@@ -13,13 +13,13 @@ const MINIMUM_CATEGORY_SIZE = 20;
 export class QuestionGeneratorService {
 
   private nQuestions = 24;
-  private questions: Question[];
+  private questions: Question[] | null = null;
 
-  getQuestions(): Question[] {
+  getQuestions(): Question[] | null {
     return this.questions;
   }
 
-  generateQuestions(gameKnowledgeBase: GameKnowledgeBase): Question[] {
+  generateQuestions(gameKnowledgeBase: GameKnowledgeBase): Question[] | null {
     this.questions = [];
 
     let categories = gameKnowledgeBase.getCategories();
@@ -153,13 +153,13 @@ export class QuestionGeneratorService {
 
     const question = {
       category: cat,
-      difficulty: null, // will be set later
+      difficulty: Difficulty.Unknown, // will be set later
     
       iLeft: left,
       iRight: right,
       answer: right > left ? left : right,
 
-      text: null, // will be set later
+      text: "", // will be set later
     };
 
     return question;

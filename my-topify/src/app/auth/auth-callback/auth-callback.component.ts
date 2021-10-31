@@ -39,14 +39,21 @@ export class AuthCallbackComponent implements OnInit {
 
     if (!this.isCallbackCodeValid(callbackCode) ||
         !this.isStateValid(state)) {
-
           this.router.navigate(['']);
           return;
     }
 
+    const codeVerifier = this.authService.getCodeVerifier();
+
+    if (!codeVerifier) {
+      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed.'});
+      this.router.navigate(['']);
+      return;
+    }
+
     this.spotifyHttpClient.getAccessToken({
       clientId: this.authService.getClientId(), 
-      codeVerifier: this.authService.getCodeVerifier(), 
+      codeVerifier,
       code: callbackCode, 
       redirectURI: this.authService.getRedirectURI()})
         .subscribe(responseData => {
@@ -58,7 +65,11 @@ export class AuthCallbackComponent implements OnInit {
           }
         }, 
         err => {
-          this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to obtain authentication token.'});
+          this.notificationService.notify({
+            type: NotificationType.ERROR, 
+            msg: 'Failed to obtain authentication token.'
+          });
+
           this.router.navigate(['']);
         });
   }
