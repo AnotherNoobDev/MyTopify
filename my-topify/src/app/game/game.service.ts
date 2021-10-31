@@ -11,18 +11,18 @@ import { getTrackShortName, getFirstArtist } from '../shared/utility';
 @Injectable({providedIn: 'root'})
 export class GameService {
 
-  private knowledgeBase: GameKnowledgeBase;
+  private knowledgeBase: GameKnowledgeBase | undefined = undefined;
 
-  private questions: Question[];
+  private questions: Question[] | undefined = undefined;
 
   private atQuestion = -1;
-  private nQuestions: number;
+  private nQuestions = -1;
 
   private maxLives = 3;
   private lives = this.maxLives;
   private score = 0;
 
-  private rating: number;
+  private rating: number | undefined = undefined;
 
   private ratingQuotes = [
     'The only true wisdom is in knowing you know nothing.',
@@ -62,16 +62,34 @@ export class GameService {
   }
 
   getTrackNameArtistsAlbum(period: Period, index: number): string[] {
+    if (!this.knowledgeBase) {
+      return [];
+    }
+
     const t = this.knowledgeBase.getTrack(period, index);
+
+    if (!t) {
+      return [];
+    }
 
     return [t.name, t.artists.join(', '), t.album.name];
   }
 
-  getArtistName(period: Period, index: number) {
-    return this.knowledgeBase.getArtist(period, index).name;
+  getArtistName(period: Period, index: number): string {
+    if (!this.knowledgeBase) {
+      return "";
+    }
+
+    const artist = this.knowledgeBase.getArtist(period, index);
+
+    if (!artist) {
+      return "";
+    }
+
+    return artist.name;
   }
 
-  nextQuestion(): DisplayableQuestion {
+  nextQuestion(): DisplayableQuestion | null {
     if (!this.questions || this.atQuestion >= this.nQuestions - 1) {
       return null;
     }
@@ -119,7 +137,7 @@ export class GameService {
 
 
   answerQuestion(answer: number): boolean {
-    const correct = answer === this.questions[this.atQuestion].answer;
+    const correct = answer === this.questions![this.atQuestion].answer;
 
     if (correct) {
       this.score++;
@@ -165,7 +183,7 @@ export class GameService {
       this.determineRating();
     }
 
-    return this.ratingQuotes[this.rating];
+    return this.ratingQuotes[this.rating!];
   }
 
   getRatingImage() {
@@ -173,7 +191,7 @@ export class GameService {
       this.determineRating();
     }
 
-    return this.ratingImages[this.rating];
+    return this.ratingImages[this.rating!];
   }
 
   private determineRating() {
@@ -183,9 +201,9 @@ export class GameService {
       this.rating = 1;
     } else if (this.score <= 14) {
       this.rating = 2;
-    } else if (this.rating <= 19) {
+    } else if (this.score <= 19) {
       this.rating = 3;
-    } else if (this.rating <= 25 && this.lives < this.maxLives) {
+    } else if (this.score <= 25 && this.lives < this.maxLives) {
       this.rating = 4;
     } else {
       this.rating = 5;

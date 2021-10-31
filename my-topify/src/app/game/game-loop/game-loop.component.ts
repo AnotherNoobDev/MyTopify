@@ -5,7 +5,7 @@
 
 import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../game.service';
-import { DisplayableQuestion, DisplayableText } from 'src/app/shared/types';
+import { DisplayableQuestion } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
@@ -41,25 +41,24 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   public choiceType = Choice;
   public answerType = Answer;
 
-  public question: DisplayableQuestion;
-  public leftText: DisplayableText;
-  public rightText: DisplayableText;
+  public question: DisplayableQuestion | null = null;
 
-  @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef;
-  @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef;
+  @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef | undefined = undefined;
+  @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef | undefined = undefined;
 
-  public images: HTMLImageElement[];
-  private audio: HTMLAudioElement[];
+  public images: HTMLImageElement[] = [];
+  private audio: (HTMLAudioElement | undefined)[] | null = null;
 
   public leftAudioPlaying = false;
   public rightAudioPlaying = false;
 
-  private preSelectTimerId: number;
-  private holdSelectTimerId: number;
-  private cancelSelectTimerId: number;
-  private showAnswerTimerId: number;
-
-  public selectingChoice: Choice;
+  public selectingChoice: Choice | undefined = undefined;
+  private preSelectTimerId: number | undefined = undefined;
+  private holdSelectTimerId: number | undefined = undefined;
+  private cancelSelectTimerId: number | undefined = undefined;
+  
+  private showAnswerTimerId: number | undefined = undefined;
+  
   public answered = Answer.None;
 
   private mousedownOnLeftHandler: any;
@@ -73,10 +72,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   private touchendOnLeftHandler: any;
   private touchendOnRightHandler: any;
 
-  private leftTapTime: number; 
-  private rightTapTime: number;
+  private leftTapTime: number = 0; 
+  private rightTapTime: number = 0;
 
-  private resourceReloadSub: Subscription;
+  private resourceReloadSub: Subscription | undefined = undefined;
 
   public gameIsOver = false;
 
@@ -119,7 +118,6 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.resourceReloadSub) {
       this.resourceReloadSub.unsubscribe();
-      this.resourceReloadSub = undefined;
     }
 
     if (this.showAnswerTimerId) {
@@ -132,6 +130,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private enableUserInteraction() {
+    if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
+      return;
+    }
+    
     this.leftImagePlaceholder.nativeElement.addEventListener('mousedown', this.mousedownOnLeftHandler);
     this.rightImagePlaceholder.nativeElement.addEventListener('mousedown', this.mousedownOnRightHandler);
 
@@ -266,7 +268,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
     switch (which) {
       case Choice.Left:
-        correct = this.game.answerQuestion(this.question.iLeft);
+        correct = this.game.answerQuestion(this.question!.iLeft);
         if (correct) {
           this.answered = Answer.CorrectLeft;
         } else {
@@ -275,7 +277,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       
       case Choice.Right:
-        correct = this.game.answerQuestion(this.question.iRight);
+        correct = this.game.answerQuestion(this.question!.iRight);
         if (correct) {
           this.answered = Answer.CorrectRight;
         } else {
@@ -287,13 +289,17 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cancelSelection();
 
     // go to next question
+
+    if (this.showAnswerTimerId) {
+      window.clearTimeout(this.showAnswerTimerId);
+    }
+
     this.showAnswerTimerId = window.setTimeout(() => {
       if (this.updateQuestion()) {
         this.updateResources();
         this.enableUserInteraction();
       }
     }, SHOW_ANSWER_TIMEOUT);
-
   }
 
   private updateQuestion() {
@@ -304,11 +310,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.answered = Answer.None;
-
     this.question = this.game.nextQuestion();
-
-    this.leftText = this.question.leftText;
-    this.rightText = this.question.rightText;
 
     return true;
   }
@@ -325,6 +327,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addResources() {
+    if (!this.question) {
+      return;
+    }
+
     // images 
     this.images = this.resourceManager.getImagesForQuestion(this.question);
 
@@ -367,8 +373,13 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private playAudioLeft() {
-    if (this.audio && this.audio[0]) {
-      this.audio[0].play();
+    if (this.audio) {
+      const audioTrack = this.audio[0];
+
+      if (audioTrack) {
+        audioTrack.play();
+      }
+
       this.leftAudioPlaying = true;
     } else {
       this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
@@ -376,15 +387,25 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private pauseAudioLeft() {
-    if (this.audio && this.audio[0]) {
-      this.audio[0].pause();
+    if (this.audio) {
+      const audioTrack = this.audio[0];
+
+      if (audioTrack) {
+        audioTrack.pause();
+      }
+
       this.leftAudioPlaying = false;
     }
   }
 
   private playAudioRight() {
-    if (this.audio && this.audio[1]) {
-      this.audio[1].play();
+    if (this.audio) {
+      const audioTrack = this.audio[1];
+
+      if (audioTrack) {
+        audioTrack.play();
+      }
+
       this.rightAudioPlaying = true;
     } else {
       this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
@@ -392,8 +413,13 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private pauseAudioRight() {
-    if (this.audio && this.audio[1]) {
-      this.audio[1].pause();
+    if (this.audio) {
+      const audioTrack = this.audio[1];
+
+      if (audioTrack) {
+        audioTrack.pause();
+      }
+
       this.rightAudioPlaying = false;
     }
   }

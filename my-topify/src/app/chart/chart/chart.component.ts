@@ -19,8 +19,7 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   public uType: 'tracks' | 'artists' = 'tracks';
   public uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
-
-  private period: Period;
+  private period: Period = Period.LongTerm;
 
   public createPlaylistEnabled = false;
 
@@ -64,33 +63,40 @@ export class ChartComponent implements OnInit, OnDestroy {
     const categories: Category[] = [{type: t, period: this.period}];
 
     this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
-
       if (!success) {
         this.displayableItems = [];
-        this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to retrieve data from Spotify.'});
+        
+        this.notificationService.notify({
+          type: NotificationType.ERROR, 
+          msg: 'Failed to retrieve data from Spotify.'
+        });
+
         return;
       }
 
       // get category
       if (this.uType === 'tracks') {
         const tracks = this.knowledgeManager.getTracksFromPeriod(this.period);
-        this.resourceManager.fetchResourcesForTracks(tracks);
-        this.displayableItems = this.resourceManager.getTracksAsDisplayableItems(tracks);
+        this.resourceManager.fetchResourcesForTracks(tracks!);
+        this.displayableItems = this.resourceManager.getTracksAsDisplayableItems(tracks!);
 
         if (this.displayableItems) {
           this.createPlaylistEnabled = true;
         }
       } else {
         const artists = this.knowledgeManager.getArtistsFromPeriod(this.period);
-        this.resourceManager.fetchResourcesForArtists(artists);
-        this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists);
+        this.resourceManager.fetchResourcesForArtists(artists!);
+        this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists!);
       }
     });
   }
 
   private resetAudio() {
     if (this.currentlyPlayingAudio >= 0) {
-      this.displayableItems[this.currentlyPlayingAudio].audio.pause();
+      const audio = this.displayableItems[this.currentlyPlayingAudio].audio;
+      if (audio) {
+        audio.pause();
+      }
     }
 
     this.currentlyPlayingAudio = -1;
@@ -113,12 +119,20 @@ export class ChartComponent implements OnInit, OnDestroy {
   }
 
   playAudio(index: number) {
-    this.displayableItems[index].audio.play();
+    const audio = this.displayableItems[index].audio;
+    if (audio) {
+      audio.play();
+    }
+    
     this.currentlyPlayingAudio = index;
   }
 
   pauseAudio(index: number) {
-    this.displayableItems[index].audio.pause();
+    const audio = this.displayableItems[index].audio;
+    if (audio) {
+      audio.pause();
+    }
+
     this.currentlyPlayingAudio = -1;
   }
 

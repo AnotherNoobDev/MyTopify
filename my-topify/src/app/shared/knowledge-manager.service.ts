@@ -14,12 +14,16 @@ import {
   SpotifyTrackObject,
   AuthService } from 'spotify-lib';
 
+
+const DEFAULT_IMAGE_W = 320;
+const DEFAULT_IMAGE_H = 320;
+
 @Injectable({providedIn: 'root'})
 export class KnowledgeManagerService {
 
   knowledgeBase: AppKnowledgeBase = new AppKnowledgeBase();
 
-  private fetchingKnowledge: Observable<boolean>;
+  private fetchingKnowledge: Observable<boolean> | undefined;
 
   constructor(private auth: AuthService,
               private spotifyHttpClient: SpotifyHttpClientService) {
@@ -49,7 +53,7 @@ export class KnowledgeManagerService {
   }
 
   fetchKnowledge(categories: Category[]): Observable<boolean> {
-    const requests = [];
+    const requests: Observable<SpotifyPagingObject>[] = [];
     const requestTypes: Category[] = [];
 
     for (const cat of categories) {
@@ -77,11 +81,19 @@ export class KnowledgeManagerService {
           for (let i = 0; i < responseList.length; ++i) {
             switch (requestTypes[i].type) {
               case Item.Artist:
-                this.knowledgeBase.addArtistKnowledge(requestTypes[i].period, this.parseArtistRawData(responseList[i]));
+                this.knowledgeBase.addArtistKnowledge(
+                  requestTypes[i].period, 
+                  this.parseArtistRawData(requestTypes[i].period, responseList[i])
+                );
+                
                 break;
 
               case Item.Track:
-                this.knowledgeBase.addTrackKnowledge(requestTypes[i].period, this.parseTrackRawData(responseList[i]));
+                this.knowledgeBase.addTrackKnowledge(
+                  requestTypes[i].period, 
+                  this.parseTrackRawData(requestTypes[i].period, responseList[i])
+                );
+
                 break;
             }
           }
@@ -97,7 +109,7 @@ export class KnowledgeManagerService {
     return this.fetchingKnowledge;
   }
 
-  private parseArtistRawData(data: SpotifyPagingObject): ArtistKnowledgeBase {
+  private parseArtistRawData(period: Period, data: SpotifyPagingObject): ArtistKnowledgeBase {
     const parsedArtists: Artist[] = [];
 
     for (const item of data.items) {
@@ -106,16 +118,20 @@ export class KnowledgeManagerService {
       const artistImages: ImageURL[] = [];
 
       for (const imageObj of artistItem.images) {
-        artistImages.push({width: imageObj.width, height: imageObj.height, url: imageObj.url});
+        artistImages.push({
+          width: imageObj.width? imageObj.width : DEFAULT_IMAGE_W, 
+          height: imageObj.height? imageObj.height : DEFAULT_IMAGE_H, 
+          url: imageObj.url
+        });
       }
 
       parsedArtists.push({id: artistItem.id, name: artistItem.name, images: artistImages});
     }
 
-    return { period: undefined, size: parsedArtists.length, artists: parsedArtists };
+    return { period, size: parsedArtists.length, artists: parsedArtists };
   }
 
-  private parseTrackRawData(data: SpotifyPagingObject): TrackKnowledgeBase {
+  private parseTrackRawData(period: Period, data: SpotifyPagingObject): TrackKnowledgeBase {
     const parsedTracks: Track[] = [];
 
     for (const item of data.items) {
@@ -130,7 +146,10 @@ export class KnowledgeManagerService {
       const albumImages: ImageURL[] = [];
 
       for (const imageObj of trackItem.album.images) {
-        albumImages.push({width: imageObj.width, height: imageObj.height, url: imageObj.url});
+        albumImages.push({
+          width: imageObj.width? imageObj.width : DEFAULT_IMAGE_W, 
+          height: imageObj.height? imageObj.height : DEFAULT_IMAGE_H, 
+          url: imageObj.url});
       }
 
       parsedTracks.push({
@@ -141,6 +160,6 @@ export class KnowledgeManagerService {
         previewURL: trackItem.preview_url});
     }
 
-    return { period: undefined, size: parsedTracks.length, tracks: parsedTracks };
+    return { period, size: parsedTracks.length, tracks: parsedTracks };
   }
 }

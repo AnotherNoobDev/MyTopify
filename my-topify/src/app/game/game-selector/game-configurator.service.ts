@@ -14,7 +14,7 @@ export class GameConfiguratorService {
 
   private gameKnowledgeBase: GameKnowledgeBase = new GameKnowledgeBase();
 
-  private configuringGame: Observable<boolean>;
+  private configuringGame: Observable<boolean> | undefined = undefined;
 
   constructor(private knowledgeManager: KnowledgeManagerService) {
   }
@@ -26,30 +26,30 @@ export class GameConfiguratorService {
       // build categories
       const categories = [];
 
-      if (this.gameKnowledgeBase.gameConfiguration.useArtists) {
-        if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+      if (config.useArtists) {
+        if (config.useShortTermPeriod) {
           categories.push({type: Item.Artist, period: Period.ShortTerm});
         }
 
-        if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+        if (config.useMediumTermPeriod) {
           categories.push({type: Item.Artist, period: Period.MediumTerm});
         }
 
-        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+        if (config.useLongTermPeriod) {
           categories.push({type: Item.Artist, period: Period.LongTerm});
         }
       }
 
-      if (this.gameKnowledgeBase.gameConfiguration.useTracks) {
-        if (this.gameKnowledgeBase.gameConfiguration.useShortTermPeriod) {
+      if (config.useTracks) {
+        if (config.useShortTermPeriod) {
           categories.push({type: Item.Track, period: Period.ShortTerm});
         }
 
-        if (this.gameKnowledgeBase.gameConfiguration.useMediumTermPeriod) {
+        if (config.useMediumTermPeriod) {
           categories.push({type: Item.Track, period: Period.MediumTerm});
         }
 
-        if (this.gameKnowledgeBase.gameConfiguration.useLongTermPeriod) {
+        if (config.useLongTermPeriod) {
           categories.push({type: Item.Track, period: Period.LongTerm});
         }
       }

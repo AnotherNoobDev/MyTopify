@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 @Injectable({providedIn: 'root'})
 export class MenuService {
   
-  private openMenuCallback: () => void;
+  private openMenuCallback: (() => void) | undefined = undefined;
   
   registerMenu(onOpenMenuCallback: () => void) {
     this.openMenuCallback = onOpenMenuCallback;

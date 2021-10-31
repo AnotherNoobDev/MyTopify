@@ -52,3 +52,6 @@ Thumbs.db
 
 # angular dev. environment
 src/environments/environment.ts
+
+#ts-coverage
+/coverage-ts
