@@ -26,3 +26,18 @@ export function getFirstArtist(artists: string): string {
     return artists.substring(0, end);
   }
 }
+
+/**
+ * Returns a debounced version of the given input function cb
+ * that will execute after waitFor ms from the last call 
+ */
+export const debounce = <F extends (...args: any[]) => any>( cb: F, waitFor: number) => {
+  let timeout: number = 0;
+
+  const debounced = (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = window.setTimeout(() => cb(...args), waitFor);
+  };
+
+  return debounced as unknown as (...args: Parameters<F>) => ReturnType<F>;
+}

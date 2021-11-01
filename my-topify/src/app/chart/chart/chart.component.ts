@@ -9,6 +9,7 @@ import { DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Category, Item, Period, AuthService, SpotifyHttpClientService } from 'spotify-lib';
 import { NotificationsService, NotificationType } from 'notifications-lib';
+import { debounce } from 'src/app/shared/utility';
 
 @Component({
   selector: 'app-chart',
@@ -137,6 +138,12 @@ export class ChartComponent implements OnInit, OnDestroy {
   }
 
   onCreatePlaylist() {
+    this.createPlaylist();
+  }
+
+  private debounceIntervalMs = 250;
+
+  private createPlaylist = debounce(() => {
     const playlist = 'MyTopify Top Tracks ' + this.knowledgeManager.getDisplayablePeriod(this.period);
     
     this.auth.getCurrentUserId().then(user => {
@@ -172,5 +179,5 @@ export class ChartComponent implements OnInit, OnDestroy {
           this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to create playlist.'});
         });
     });
-  }
+  }, this.debounceIntervalMs);
 }
