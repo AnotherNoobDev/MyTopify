@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { GameService } from '../../game.service';
 import { Subscription } from 'rxjs';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
-import { NotificationsService, NotificationType } from 'notifications-lib';
+import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
   selector: 'app-game-selector',
@@ -100,7 +100,11 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
     }).subscribe(success => {
 
       if (!success) {
-        this.notificationManager.notify({type: NotificationType.ERROR, msg: 'Failed to retrieve data from Spotify.'});
+        this.notificationManager.notify({
+          type: NotificationType.ERROR, 
+          msg: 'Failed to retrieve data from Spotify.',
+          priority: NotificationPriority.STANDARD
+        });
         return;
       }
 
@@ -110,7 +114,11 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       const questions = this.questionGenerator.generateQuestions(kb);
 
       if (!questions) {
-        this.notificationManager.notify({type: NotificationType.ERROR, msg: 'Not enough Spotify History to play :('});
+        this.notificationManager.notify({
+          type: NotificationType.ERROR, 
+          msg: 'Not enough Spotify History to play :(',
+          priority: NotificationPriority.STANDARD
+        });
         return;
       }
 

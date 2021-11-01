@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
 import { ScreenService } from 'src/app/shared/screen.service';
-import { NotificationsService, NotificationType } from 'notifications-lib';
+import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
 const HOLD_SELECT_TIMEOUT = 2500; // ms
@@ -382,7 +382,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.leftAudioPlaying = true;
     } else {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
+      this.notificationService.notify({
+        type: NotificationType.ERROR, 
+        msg: 'Audio not available.',
+        priority: NotificationPriority.IMMEDIATE
+      });
     }
   }
 
@@ -408,7 +412,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.rightAudioPlaying = true;
     } else {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
+      this.notificationService.notify({
+        type: NotificationType.ERROR, 
+        msg: 'Audio not available.',
+        priority: NotificationPriority.IMMEDIATE
+      });
     }
   }
 
@@ -427,7 +435,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   onInfo() {
     this.notificationService.notify({
       type: NotificationType.INFO, 
-      msg: 'Press and hold cover image to choose. Click/tap cover image to toggle audio.'
+      msg: 'Press and hold cover image to choose. Click/tap cover image to toggle audio.',
+      priority: NotificationPriority.IMMEDIATE
     });
   }
 

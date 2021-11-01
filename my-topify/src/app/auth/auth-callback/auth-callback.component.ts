@@ -6,7 +6,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, SpotifyHttpClientService } from 'spotify-lib';
-import { NotificationsService, NotificationType } from 'notifications-lib';
+import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 
 @Component({
   selector: 'app-auth-callback',
@@ -29,7 +29,11 @@ export class AuthCallbackComponent implements OnInit {
     const error: string = this.route.snapshot.queryParams.error;
 
     if (error) {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed. Reason: ' + error});
+      this.notificationService.notify({
+        type: NotificationType.ERROR, 
+        msg: 'Login failed. Reason: ' + error, 
+        priority: NotificationPriority.STANDARD
+      });
       this.router.navigate(['']);
       return;
     }
@@ -46,7 +50,11 @@ export class AuthCallbackComponent implements OnInit {
     const codeVerifier = this.authService.getCodeVerifier();
 
     if (!codeVerifier) {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed.'});
+      this.notificationService.notify({
+        type: NotificationType.ERROR, 
+        msg: 'Login failed.',
+        priority: NotificationPriority.STANDARD
+      });
       this.router.navigate(['']);
       return;
     }
@@ -60,14 +68,19 @@ export class AuthCallbackComponent implements OnInit {
           const success = this.authService.authenticate(responseData);
 
           if (!success) {
-            this.notificationService.notify({type: NotificationType.ERROR, msg: 'Login failed.'});
+            this.notificationService.notify({
+              type: NotificationType.ERROR, 
+              msg: 'Login failed.',
+              priority: NotificationPriority.STANDARD
+            });
             this.router.navigate(['']);
           }
         }, 
         err => {
           this.notificationService.notify({
             type: NotificationType.ERROR, 
-            msg: 'Failed to obtain authentication token.'
+            msg: 'Failed to obtain authentication token.',
+            priority: NotificationPriority.STANDARD
           });
 
           this.router.navigate(['']);

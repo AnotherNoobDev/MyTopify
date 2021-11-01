@@ -8,7 +8,7 @@ import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.servic
 import { DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Category, Item, Period, AuthService, SpotifyHttpClientService } from 'spotify-lib';
-import { NotificationsService, NotificationType } from 'notifications-lib';
+import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 import { debounce } from 'src/app/shared/utility';
 
 @Component({
@@ -69,7 +69,8 @@ export class ChartComponent implements OnInit, OnDestroy {
         
         this.notificationService.notify({
           type: NotificationType.ERROR, 
-          msg: 'Failed to retrieve data from Spotify.'
+          msg: 'Failed to retrieve data from Spotify.',
+          priority: NotificationPriority.STANDARD
         });
 
         return;
@@ -115,7 +116,11 @@ export class ChartComponent implements OnInit, OnDestroy {
         this.playAudio(index);
       }
     } else {
-      this.notificationService.notify({type: NotificationType.ERROR, msg: 'Audio not available.'});
+      this.notificationService.notify({
+        type: NotificationType.ERROR, 
+        msg: 'Audio not available.',
+        priority: NotificationPriority.IMMEDIATE
+      });
     }
   }
 
@@ -148,7 +153,11 @@ export class ChartComponent implements OnInit, OnDestroy {
     
     this.auth.getCurrentUserId().then(user => {
       if (!user) {
-        this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to obtain Spotify UserId.'});
+        this.notificationService.notify({
+          type: NotificationType.ERROR, 
+          msg: 'Failed to obtain Spotify UserId.',
+          priority: NotificationPriority.STANDARD
+        });
         return;
       }
 
@@ -169,14 +178,25 @@ export class ChartComponent implements OnInit, OnDestroy {
             trackIds: ids
           }).subscribe(
             () => {
-              this.notificationService.notify({type: NotificationType.INFO, msg: 'Created playlist: ' + playlist});
+              this.notificationService.notify({
+                type: NotificationType.INFO, 
+                msg: 'Created playlist: ' + playlist,
+                priority: NotificationPriority.STANDARD
+              });
             },
             err => {
-              this.notificationService.notify({type: NotificationType.ERROR, msg: 'An error occured when adding tracks to the playlist.'});
+              this.notificationService.notify({
+                type: NotificationType.ERROR, 
+                msg: 'An error occured when adding tracks to the playlist.',
+                priority: NotificationPriority.STANDARD});
             });
         },
         err => {
-          this.notificationService.notify({type: NotificationType.ERROR, msg: 'Failed to create playlist.'});
+          this.notificationService.notify({
+            type: NotificationType.ERROR, 
+            msg: 'Failed to create playlist.',
+            priority: NotificationPriority.STANDARD
+          });
         });
     });
   }, this.debounceIntervalMs);
