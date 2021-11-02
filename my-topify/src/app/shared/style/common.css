@@ -292,7 +292,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.97);
+  background: radial-gradient(
+    ellipse 50% 100%,
+   rgba(0,0,0,1.0) 50%,
+   rgba(0,0,0,0.9)
+  );
   z-index: 2;
   cursor: pointer;
 }
