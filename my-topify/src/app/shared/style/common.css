@@ -224,6 +224,9 @@
   background-color: #fff;
   -webkit-animation: ripple 2s linear infinite;
           animation: ripple 2s linear infinite;
+  /* hack to enable hardware acceleration */
+  transform: translateZ(0); 
+  -webkit-transform: translateZ(0);
 }
 @-webkit-keyframes ripple {
   0% {
