@@ -262,29 +262,29 @@
   text-align: center;
   width: 95%;
   max-width: 800px;
-  padding: 2vw;
-  border: 0.35vw solid #fff;
-  border-radius: 1.75vw;  
+  padding: 14px;
+  border: 2px solid #fff;
+  border-radius: 12px;  
 }
 
 .glowing-border-left {
   box-shadow:
-  0 0 0.4375vw #fff,
-  inset 0 0 0.4375vw #fff,
-  0 0 1.75vw var(--neon-color-left),
-  inset 0 0 1.75vw var(--neon-color-left),
-  0 0 3.5vw var(--neon-color-left),
-  inset 0 0 3.5vw var(--neon-color-left);    
+  0 0 1.5px #fff,
+  inset 0 0 1.5px #fff,
+  0 0 6px var(--neon-color-left),
+  inset 0 0 6px var(--neon-color-left),
+  0 0 12px var(--neon-color-left),
+  inset 0 0 12px var(--neon-color-left);    
 }
 
 .glowing-border-right  {
   box-shadow:
-    0 0 0.4375vw #fff,
-    inset 0 0 0.4375vw #fff,
-    0 0 1.75vw var(--neon-color-right),
-    inset 0 0 1.75vw var(--neon-color-right),
-    0 0 3.5vw var(--neon-color-right),
-    inset 0 0 3.5vw var(--neon-color-right);      
+  0 0 1.5px #fff,
+  inset 0 0 1.5px #fff,
+  0 0 6px var(--neon-color-right),
+  inset 0 0 6px var(--neon-color-right),
+  0 0 12px var(--neon-color-right),
+  inset 0 0 12px var(--neon-color-right);     
 }
 
 .overlay {
