@@ -191,6 +191,10 @@
   margin-top: 10px;
 }
 
+.chart-item-text .track-text {
+  text-shadow: none;
+}
+
 .artist-text {
   margin: 0;
   color: lightyellow;
@@ -204,6 +208,9 @@
     0 0 80px purple;
 }
 
+.chart-item-text .artist-text {
+  text-shadow: none;
+}
 
 .filler-text {
   margin: 0;
@@ -220,10 +227,17 @@
     0 0 54px rgba(30,132,242,0.92);
 }
 
+.chart-item-text .filler-text {
+  text-shadow: none;
+}
+
 .ripple {
   background-color: #fff;
   -webkit-animation: ripple 2s linear infinite;
           animation: ripple 2s linear infinite;
+  /* hack to enable hardware acceleration */
+  transform: translateZ(0); 
+  -webkit-transform: translateZ(0);
 }
 @-webkit-keyframes ripple {
   0% {
@@ -259,29 +273,29 @@
   text-align: center;
   width: 95%;
   max-width: 800px;
-  padding: 2vw;
-  border: 0.35vw solid #fff;
-  border-radius: 1.75vw;  
+  padding: 14px;
+  border: 2px solid #fff;
+  border-radius: 12px;  
 }
 
 .glowing-border-left {
   box-shadow:
-  0 0 0.4375vw #fff,
-  inset 0 0 0.4375vw #fff,
-  0 0 1.75vw var(--neon-color-left),
-  inset 0 0 1.75vw var(--neon-color-left),
-  0 0 3.5vw var(--neon-color-left),
-  inset 0 0 3.5vw var(--neon-color-left);    
+  0 0 1.5px #fff,
+  inset 0 0 1.5px #fff,
+  0 0 6px var(--neon-color-left),
+  inset 0 0 6px var(--neon-color-left),
+  0 0 12px var(--neon-color-left),
+  inset 0 0 12px var(--neon-color-left);    
 }
 
 .glowing-border-right  {
   box-shadow:
-    0 0 0.4375vw #fff,
-    inset 0 0 0.4375vw #fff,
-    0 0 1.75vw var(--neon-color-right),
-    inset 0 0 1.75vw var(--neon-color-right),
-    0 0 3.5vw var(--neon-color-right),
-    inset 0 0 3.5vw var(--neon-color-right);      
+  0 0 1.5px #fff,
+  inset 0 0 1.5px #fff,
+  0 0 6px var(--neon-color-right),
+  inset 0 0 6px var(--neon-color-right),
+  0 0 12px var(--neon-color-right),
+  inset 0 0 12px var(--neon-color-right);     
 }
 
 .overlay {
@@ -292,7 +306,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.98);
+  background: radial-gradient(
+    ellipse 50% 100%,
+   rgba(0,0,0,1.0) 50%,
+   rgba(0,0,0,0.9)
+  );
   z-index: 2;
   cursor: pointer;
 }
