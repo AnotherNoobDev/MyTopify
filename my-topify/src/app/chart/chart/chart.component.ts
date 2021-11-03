@@ -3,13 +3,14 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
 import { DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Category, Item, Period, AuthService, SpotifyHttpClientService } from 'spotify-lib';
 import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 import { debounce } from 'src/app/shared/utility';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-chart',
@@ -17,6 +18,8 @@ import { debounce } from 'src/app/shared/utility';
   styleUrls: ['../../shared/style/common.css', './chart.component.css']
 })
 export class ChartComponent implements OnInit, OnDestroy {
+
+  @ViewChild(CdkVirtualScrollViewport, {static: false}) virtualScroll: CdkVirtualScrollViewport | undefined = undefined;
 
   public uType: 'tracks' | 'artists' = 'tracks';
   public uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
@@ -89,6 +92,11 @@ export class ChartComponent implements OnInit, OnDestroy {
         const artists = this.knowledgeManager.getArtistsFromPeriod(this.period);
         this.resourceManager.fetchResourcesForArtists(artists!);
         this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists!);
+      }
+
+      // reset view to top
+      if (this.virtualScroll) {
+        this.virtualScroll.scrollToIndex(0);
       }
     });
   }
