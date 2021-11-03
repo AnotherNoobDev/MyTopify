@@ -191,6 +191,10 @@
   margin-top: 10px;
 }
 
+.chart-item-text .track-text {
+  text-shadow: none;
+}
+
 .artist-text {
   margin: 0;
   color: lightyellow;
@@ -204,6 +208,9 @@
     0 0 80px purple;
 }
 
+.chart-item-text .artist-text {
+  text-shadow: none;
+}
 
 .filler-text {
   margin: 0;
@@ -218,6 +225,10 @@
     0 0 21px rgba(30,132,242,0.92),
     0 0 34px rgba(30,132,242,0.78),
     0 0 54px rgba(30,132,242,0.92);
+}
+
+.chart-item-text .filler-text {
+  text-shadow: none;
 }
 
 .ripple {
