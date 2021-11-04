@@ -42,16 +42,19 @@ export class GameService {
     '/assets/images/ratings/r6.jpg'
   ];
 
-  // knowledge base
+  private wasPreloadingTriggered = false;
+
+
   setKnowledgeBase(kb: GameKnowledgeBase) {
     this.knowledgeBase = kb;
   }
 
-  // questions
+
   setQuestions(questions: Question[]) {
     this.questions = questions;
     this.nQuestions = this.questions.length;
   }
+
 
   isReady() {
     if (this.knowledgeBase && this.questions) {
@@ -60,6 +63,7 @@ export class GameService {
 
     return false;
   }
+
 
   getTrackNameArtistsAlbum(period: Period, index: number): string[] {
     if (!this.knowledgeBase) {
@@ -75,6 +79,7 @@ export class GameService {
     return [t.name, t.artists.join(', '), t.album.name];
   }
 
+
   getArtistName(period: Period, index: number): string {
     if (!this.knowledgeBase) {
       return "";
@@ -89,6 +94,7 @@ export class GameService {
     return artist.name;
   }
 
+
   nextQuestion(): DisplayableQuestion | null {
     if (!this.questions || this.atQuestion >= this.nQuestions - 1) {
       return null;
@@ -100,6 +106,7 @@ export class GameService {
 
     return this.getDisplayableQuestion(q);
   }
+
 
   private getDisplayableQuestion(q: Question): DisplayableQuestion {
     let lText = {track: '', artist: '', album: ''};
@@ -135,7 +142,6 @@ export class GameService {
   }
 
 
-
   answerQuestion(answer: number): boolean {
     const correct = answer === this.questions![this.atQuestion].answer;
 
@@ -145,10 +151,28 @@ export class GameService {
       this.lives--;
     }
 
+    // we start preloading result images while the user is playing
+    this.preloadImages();
+
     return correct;
   }
 
-  // game state
+
+  private preloadImages() {
+    if (this.wasPreloadingTriggered) {
+      return;
+    }
+
+    this.wasPreloadingTriggered = true;
+
+    for (const url of this.ratingImages) {
+      let img = new Image();
+      img.src = url;
+    }
+  }
+
+
+  /// game state ///
   restart() {
     this.atQuestion = -1;
     this.lives = 3;
@@ -161,7 +185,9 @@ export class GameService {
     return (this.lives <= 0 || this.atQuestion === this.nQuestions - 1);
   }
 
-  // statistics
+
+  /// statistics ///
+
   getLives() {
     return this.lives;
   }
