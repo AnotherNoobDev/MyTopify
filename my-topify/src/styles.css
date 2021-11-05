@@ -7,41 +7,37 @@
   font-family: Monoton;
   src: url('assets/fonts/Monoton/Monoton-Regular.ttf');
   unicode-range: U+004D, U+0059, U+0054, U+004F, U+0050, U+0049, U+0046;
+  font-display: swap;
 }
 
 @font-face {
   font-family: WalterTurncoat;
   src: url('assets/fonts/Walter_Turncoat/WalterTurncoat-Regular.ttf');
-}
-
-@font-face {
-  font-family: Dosis;
-  src: url('assets/fonts/Dosis/static/Dosis-SemiBold.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: BadScript;
   src: url('assets/fonts/Bad_Script/BadScript-Regular.ttf');
-}
-
-@font-face {
-  font-family: Yellowtail;
-  src: url('assets/fonts/Yellowtail/Yellowtail-Regular.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: Vibur;
   src: url('assets/fonts/Vibur/Vibur-Regular.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: TextMeOne;
   src: url('assets/fonts/TextMeOne/TextMeOne-Regular.ttf');
+  font-display: swap;
 }
 
 @font-face {
   font-family: Budmo;
   src: url('assets/fonts/budmo/tt/budmo jiggler.ttf');
+  font-display: swap;
 }
 
 
