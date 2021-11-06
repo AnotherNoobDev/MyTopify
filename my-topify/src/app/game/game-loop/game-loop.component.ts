@@ -61,16 +61,16 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
   
   public answered = Answer.None;
 
-  private mousedownOnLeftHandler: any;
-  private mousedownOnRightHandler: any;
-  private mouseupOnLeftHandler: any;
-  private mouseupOnRightHandler: any;
-  private clickOnLeftHandler: any;
-  private clickOnRightHandler: any;
-  private touchstartOnLeftHandler: any;
-  private touchstartOnRightHandler: any;
-  private touchendOnLeftHandler: any;
-  private touchendOnRightHandler: any;
+  private mousedownOnLeftHandler: () => void;
+  private mousedownOnRightHandler: () => void;
+  private mouseupOnLeftHandler: () => void;
+  private mouseupOnRightHandler: () => void;
+  private clickOnLeftHandler: () => void;
+  private clickOnRightHandler: () => void;
+  private touchstartOnLeftHandler: (e: Event) => void;
+  private touchstartOnRightHandler: (e: Event) => void;
+  private touchendOnLeftHandler: (e: Event) => void;
+  private touchendOnRightHandler: (e: Event) => void;
 
   private leftTapTime: number = 0; 
   private rightTapTime: number = 0;
@@ -133,42 +133,41 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
       return;
     }
-    
-    this.leftImagePlaceholder.nativeElement.addEventListener('mousedown', this.mousedownOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.addEventListener('mousedown', this.mousedownOnRightHandler);
 
-    this.leftImagePlaceholder.nativeElement.addEventListener('mouseup', this.mouseupOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.addEventListener('mouseup', this.mouseupOnRightHandler);
+    const leftElement = this.leftImagePlaceholder.nativeElement as HTMLElement;
+    leftElement.addEventListener('mousedown', this.mousedownOnLeftHandler);
+    leftElement.addEventListener('mouseup', this.mouseupOnLeftHandler);
+    leftElement.addEventListener('click', this.clickOnLeftHandler);
+    leftElement.addEventListener('touchstart', this.touchstartOnLeftHandler, false);
+    leftElement.addEventListener('touchend', this.touchendOnLeftHandler, false);
 
-    this.leftImagePlaceholder.nativeElement.addEventListener('click', this.clickOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.addEventListener('click', this.clickOnRightHandler);
-
-    this.leftImagePlaceholder.nativeElement.addEventListener('touchstart', this.touchstartOnLeftHandler, false);
-    this.rightImagePlaceholder.nativeElement.addEventListener('touchstart', this.touchstartOnRightHandler, false);
-
-    this.leftImagePlaceholder.nativeElement.addEventListener('touchend', this.touchendOnLeftHandler, false);
-    this.rightImagePlaceholder.nativeElement.addEventListener('touchend', this.touchendOnRightHandler, false);
+    const rightElement = this.rightImagePlaceholder.nativeElement as HTMLElement;
+    rightElement.addEventListener('mousedown', this.mousedownOnRightHandler);
+    rightElement.addEventListener('mouseup', this.mouseupOnRightHandler);
+    rightElement.addEventListener('click', this.clickOnRightHandler);
+    rightElement.addEventListener('touchstart', this.touchstartOnRightHandler, false);
+    rightElement.addEventListener('touchend', this.touchendOnRightHandler, false);
   }
 
   private disableUserInteraction() {
     if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
       return;
     }
+    
+    const leftElement = this.leftImagePlaceholder.nativeElement as HTMLElement;
+    leftElement.removeEventListener('mousedown', this.mousedownOnLeftHandler);
+    leftElement.removeEventListener('mouseup', this.mouseupOnLeftHandler);
+    leftElement.removeEventListener('click', this.clickOnLeftHandler);
+    leftElement.removeEventListener('touchstart', this.touchstartOnLeftHandler, false);
+    leftElement.removeEventListener('touchend', this.touchendOnLeftHandler, false);
 
-    this.leftImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.removeEventListener('mousedown', this.mousedownOnRightHandler);
 
-    this.leftImagePlaceholder.nativeElement.removeEventListener('mouseup', this.mouseupOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.removeEventListener('mouseup', this.mouseupOnRightHandler);
-
-    this.leftImagePlaceholder.nativeElement.removeEventListener('click', this.clickOnLeftHandler);
-    this.rightImagePlaceholder.nativeElement.removeEventListener('click', this.clickOnRightHandler);
-
-    this.leftImagePlaceholder.nativeElement.removeEventListener('touchstart', this.touchstartOnLeftHandler, false);
-    this.rightImagePlaceholder.nativeElement.removeEventListener('touchstart', this.touchstartOnRightHandler, false);
-
-    this.leftImagePlaceholder.nativeElement.removeEventListener('touchend', this.touchendOnLeftHandler, false);
-    this.rightImagePlaceholder.nativeElement.removeEventListener('touchend', this.touchendOnRightHandler, false);
+    const rightElement = this.rightImagePlaceholder.nativeElement as HTMLElement;
+    rightElement.removeEventListener('mousedown', this.mousedownOnRightHandler);
+    rightElement.removeEventListener('mouseup', this.mouseupOnRightHandler);
+    rightElement.removeEventListener('click', this.clickOnRightHandler);
+    rightElement.removeEventListener('touchstart', this.touchstartOnRightHandler, false);
+    rightElement.removeEventListener('touchend', this.touchendOnRightHandler, false);
   }
 
   private startLeftSelection() {
