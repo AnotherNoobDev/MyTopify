@@ -12,8 +12,8 @@
 }
 
 #menu {
-  height: auto;
+  width: 1.5em !important;
+  height: 1.5em;
   display: block;
   float: right;
-  width: 1.5em !important;
 }
