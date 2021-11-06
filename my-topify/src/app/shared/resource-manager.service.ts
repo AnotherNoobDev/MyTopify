@@ -99,7 +99,7 @@ export class ResourceManagerService {
       return this.NO_IMG_AVAILABLE;
     }
 
-    let img = undefined;
+    let img: HTMLImageElement | undefined = undefined;
     if ('album' in item) {
       img = this.imageStorage.get(item.album.id); 
     } else {

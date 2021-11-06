@@ -13,6 +13,16 @@ import { Subscription } from 'rxjs';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 
+
+interface GameSelectionFormValue {
+  type_tracks: boolean;
+  type_artists: boolean;
+
+  period_short_term: boolean;
+  period_medium_term: boolean;
+  period_long_term: boolean;
+}
+
 @Component({
   selector: 'app-game-selector',
   templateUrl: './game-selector.component.html',
@@ -46,8 +56,10 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
   }
 
   onTypeSelected(form: NgForm) {
+    const val = form.value as GameSelectionFormValue;
+
     // at least one checkbox must be selected
-    if (!form.value.type_tracks && !form.value.type_artists) {
+    if (!val.type_tracks && !val.type_artists) {
       if (!this.useTypeArtists) {
         this.useTypeArtists = true;
         this.useTypeTracks = false;
@@ -56,16 +68,18 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
         this.useTypeTracks = true;
       }
     } else {
-      this.useTypeArtists = form.value.type_artists;
-      this.useTypeTracks = form.value.type_tracks;
+      this.useTypeArtists = val.type_artists;
+      this.useTypeTracks = val.type_tracks;
     }
   }
 
   onPeriodSelected(form: NgForm) {
+    const val = form.value as GameSelectionFormValue;
+
     // at least one checkbox must be selected
-    if (!form.value.period_short_term &&
-        !form.value.period_medium_term &&
-        !form.value.period_long_term) {
+    if (!val.period_short_term &&
+        !val.period_medium_term &&
+        !val.period_long_term) {
           if (!this.useShortTermPeriod) {
             this.useShortTermPeriod = true;
             this.useMediumTermPeriod = false;
@@ -80,9 +94,9 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
             this.useLongTermPeriod = true;
           }
         } else {
-          this.useShortTermPeriod = form.value.period_short_term;
-          this.useMediumTermPeriod = form.value.period_medium_term;
-          this.useLongTermPeriod = form.value.period_long_term;
+          this.useShortTermPeriod = val.period_short_term;
+          this.useMediumTermPeriod = val.period_medium_term;
+          this.useLongTermPeriod = val.period_long_term;
         }
   }
 
@@ -91,14 +105,15 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       this.configuringGameSub.unsubscribe();
     }
 
-    this.configuringGameSub = this.gameConfigurator.configureGame({
-      useTracks: form.value.type_tracks,
-      useArtists: form.value.type_artists,
-      useShortTermPeriod: form.value.period_short_term,
-      useMediumTermPeriod: form.value.period_medium_term,
-      useLongTermPeriod: form.value.period_long_term
-    }).subscribe(success => {
+    const val = form.value as GameSelectionFormValue;
 
+    this.configuringGameSub = this.gameConfigurator.configureGame({
+      useTracks: val.type_tracks,
+      useArtists: val.type_artists,
+      useShortTermPeriod: val.period_short_term,
+      useMediumTermPeriod: val.period_medium_term,
+      useLongTermPeriod: val.period_long_term
+    }).subscribe(success => {
       if (!success) {
         this.notificationManager.notify({
           type: NotificationType.ERROR, 
