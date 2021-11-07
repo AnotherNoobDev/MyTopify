@@ -13,10 +13,8 @@ import {
   SpotifyArtistObject, 
   SpotifyTrackObject,
   AuthService } from 'spotify-lib';
+import { ScreenService } from './screen.service';
 
-
-const DEFAULT_IMAGE_W = 320;
-const DEFAULT_IMAGE_H = 320;
 
 @Injectable({providedIn: 'root'})
 export class KnowledgeManagerService {
@@ -25,39 +23,36 @@ export class KnowledgeManagerService {
 
   private fetchingKnowledge: Observable<boolean> | undefined;
 
+
   constructor(private auth: AuthService,
-              private spotifyHttpClient: SpotifyHttpClientService) {
+              private spotifyHttpClient: SpotifyHttpClientService,
+              private screen: ScreenService) {
   }
+
 
   getKnowledgeBase(): AppKnowledgeBase {
     return this.knowledgeBase;
   }
 
-  getArtistsFromPeriod(period: Period) {
+
+  getArtistsFromPeriod(period: Period): ArtistKnowledgeBase {
     return this.knowledgeBase.getArtistsFromPeriod(period);
   } 
 
-  getTracksFromPeriod(period: Period) {
+
+  getTracksFromPeriod(period: Period): TrackKnowledgeBase {
     return this.knowledgeBase.getTracksFromPeriod(period);
   }
 
-  getDisplayablePeriod(period: Period) {
-    switch (period) {
-      case Period.ShortTerm:
-        return 'last 4 weeks';
-      case Period.MediumTerm:
-        return 'last 6 months';
-      case Period.LongTerm:
-        return 'all time';
-    }
-  }
 
   fetchKnowledge(categories: Category[]): Observable<boolean> {
+    // setup the requests we will be making for user's top artists/tracks
     const requests: Observable<SpotifyPagingObject>[] = [];
     const requestTypes: Category[] = [];
 
     for (const cat of categories) {
       if (this.knowledgeBase.hasKnowledge(cat)) {
+        // don't make requests for data we already have
         continue;
       }
 
@@ -70,6 +65,7 @@ export class KnowledgeManagerService {
       requestTypes.push(cat);
     }
 
+    // make requests
     this.fetchingKnowledge = new Observable((observer) => {
       if (requests.length === 0) {
         observer.next(true);
@@ -109,8 +105,11 @@ export class KnowledgeManagerService {
     return this.fetchingKnowledge;
   }
 
+
   private parseArtistRawData(period: Period, data: SpotifyPagingObject): ArtistKnowledgeBase {
     const parsedArtists: Artist[] = [];
+
+    const defaultImageSize = this.screen.getImageSizeForGameView();
 
     for (const item of data.items) {
       const artistItem = item as SpotifyArtistObject;
@@ -119,8 +118,8 @@ export class KnowledgeManagerService {
 
       for (const imageObj of artistItem.images) {
         artistImages.push({
-          width: imageObj.width? imageObj.width : DEFAULT_IMAGE_W, 
-          height: imageObj.height? imageObj.height : DEFAULT_IMAGE_H, 
+          width: imageObj.width? imageObj.width : defaultImageSize, 
+          height: imageObj.height? imageObj.height : defaultImageSize, 
           url: imageObj.url
         });
       }
@@ -128,11 +127,14 @@ export class KnowledgeManagerService {
       parsedArtists.push({id: artistItem.id, name: artistItem.name, images: artistImages});
     }
 
-    return { period, size: parsedArtists.length, artists: parsedArtists };
+    return { period, artists: parsedArtists };
   }
+
 
   private parseTrackRawData(period: Period, data: SpotifyPagingObject): TrackKnowledgeBase {
     const parsedTracks: Track[] = [];
+
+    const defaultImageSize = this.screen.getImageSizeForGameView();
 
     for (const item of data.items) {
       const trackItem = item as SpotifyTrackObject;
@@ -147,9 +149,10 @@ export class KnowledgeManagerService {
 
       for (const imageObj of trackItem.album.images) {
         albumImages.push({
-          width: imageObj.width? imageObj.width : DEFAULT_IMAGE_W, 
-          height: imageObj.height? imageObj.height : DEFAULT_IMAGE_H, 
-          url: imageObj.url});
+          width: imageObj.width? imageObj.width : defaultImageSize, 
+          height: imageObj.height? imageObj.height : defaultImageSize, 
+          url: imageObj.url
+        });
       }
 
       parsedTracks.push({
@@ -157,9 +160,10 @@ export class KnowledgeManagerService {
         name: trackItem.name,
         artists: trackArtists,
         album: {id: trackItem.album.id, name: trackItem.album.name, images: albumImages},
-        previewURL: trackItem.preview_url});
+        previewURL: trackItem.preview_url
+      });
     }
 
-    return { period, size: parsedTracks.length, tracks: parsedTracks };
+    return { period, tracks: parsedTracks };
   }
 }

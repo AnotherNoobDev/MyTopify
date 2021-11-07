@@ -5,6 +5,9 @@
 
 import { Artist, Category, Identifier, ImageURL, Item, Period, Track } from "spotify-lib";
 
+
+/// Knowledge Base ///
+
 export interface GameConfiguration {
   useTracks: boolean;
   useArtists: boolean;
@@ -13,62 +16,108 @@ export interface GameConfiguration {
   useLongTermPeriod: boolean;
 }
 
+
 export interface ArtistKnowledgeBase {
   period: Period;
-  size: number;
   artists: Artist[];
 }
 
+
 export interface TrackKnowledgeBase {
   period: Period;
-  size: number;
   tracks: Track[];
 }
 
+/**
+ * Holds currently available information on user's top artists and tracks
+ */
 export class AppKnowledgeBase {
-  artists: Map<Period, ArtistKnowledgeBase> = new Map();
-  tracks: Map<Period, TrackKnowledgeBase> = new Map();
+  private artists: Map<Period, ArtistKnowledgeBase> = new Map();
+  private tracks: Map<Period, TrackKnowledgeBase> = new Map();
+
 
   addArtistKnowledge(period: Period, knowledgeBase: ArtistKnowledgeBase) {
     this.artists.set(period, knowledgeBase);
   }
 
+
   addTrackKnowledge(period: Period, knowledgeBase: TrackKnowledgeBase) {
     this.tracks.set(period, knowledgeBase);
   }
 
-  getArtistsFromPeriod(period: Period) {
-    return this.artists.get(period);
+
+  getArtistsFromPeriod(period: Period): ArtistKnowledgeBase {
+    const artists = this.artists.get(period);
+
+    if (!artists) {
+      return {period, artists: []};
+    }
+
+    return artists;
   } 
 
-  getTracksFromPeriod(period: Period) {
-    return this.tracks.get(period);
+
+  getTracksFromPeriod(period: Period): TrackKnowledgeBase {
+    const tracks = this.tracks.get(period);
+
+    if (!tracks) {
+      return {period, tracks: []};
+    }
+
+    return tracks;
   }
+
 
   hasKnowledge(category: Category): boolean {
     switch (category.type) {
       case Item.Artist:
-        return (this.artists && this.artists.has(category.period));
+        return this.artists.has(category.period);
 
       case Item.Track:
-        return (this.tracks && this.tracks.has(category.period));
+        return this.tracks.has(category.period);
+    }
+  }
+
+
+  getCategorySize(category: Category): number {
+    switch (category.type) {
+      case Item.Artist: {
+        const cat = this.artists.get(category.period);
+
+        if (!cat) {
+          return -1;
+        }
+
+        return cat.artists.length;
+      }
+        
+      case Item.Track: {
+        const cat = this.tracks.get(category.period);
+
+        if (!cat) {
+          return -1;
+        }
+
+        return cat.tracks.length;
+      }
     }
   }
 }
 
+
 export class GameKnowledgeBase {
-  gameConfiguration: GameConfiguration | undefined = undefined;
-  knowledgeBase: AppKnowledgeBase | undefined = undefined;
+
+  constructor(
+    private readonly gameConfiguration: GameConfiguration,
+    private readonly knowledgeBase: AppKnowledgeBase) {
+    }
+
 
   /** 
    * can be 1, 2, 3, 4 or 6 (0 in error case)
    */ 
   getCategories(): Category[] {
     const cat: Category[] = [];
-
-    if (!this.gameConfiguration) {
-      return cat;
-    }
 
     if (this.gameConfiguration.useArtists) {
       if (this.gameConfiguration.useShortTermPeriod) {
@@ -105,60 +154,25 @@ export class GameKnowledgeBase {
    * @returns -1 for error
    */
   getCategorySize(category: Category): number {
-    if (!this.knowledgeBase) {
-      return -1;
-    }
-
-    switch (category.type) {
-      case Item.Artist:
-        if (this.knowledgeBase.artists && this.knowledgeBase.artists.has(category.period)) {
-          const cat = this.knowledgeBase.artists.get(category.period);
-          
-          if (!cat) {
-            return -1;
-          }
-
-          return cat.size;
-        } else {
-          return -1;
-        }
-
-      case Item.Track:
-        if (this.knowledgeBase.tracks && this.knowledgeBase.tracks.has(category.period)) {
-          const cat = this.knowledgeBase.tracks.get(category.period);
-          
-          if (!cat) {
-            return -1;
-          }
-          return cat.size;
-        } else {
-          return -1;
-        }
-    }
+    return this.knowledgeBase.getCategorySize(category);
   }
 
+
   getTrack(period: Period, index: number): Track | undefined {
-    if (!this.knowledgeBase) {
-      return undefined;
-    }
+    const tracksKnowledge = this.knowledgeBase.getTracksFromPeriod(period);
 
-    const tracksKnowledge = this.knowledgeBase.tracks.get(period);
-
-    if (!tracksKnowledge) {
+    if (tracksKnowledge.tracks.length < index) {
       return undefined;
     }
 
     return tracksKnowledge.tracks[index];
   }
 
+
   getArtist(period: Period, index: number): Artist | undefined {
-    if (!this.knowledgeBase) {
-      return undefined;
-    }
+    const artistsKnowledge = this.knowledgeBase.getArtistsFromPeriod(period);
 
-    const artistsKnowledge = this.knowledgeBase.artists.get(period);
-
-    if (!artistsKnowledge) {
+    if (artistsKnowledge.artists.length < index) {
       return undefined;
     }
 
@@ -166,12 +180,16 @@ export class GameKnowledgeBase {
   }
 }
 
+
+/// Questions ///
+
 export enum Difficulty {
   Easy,
   Medium,
   Hard,
   Unknown
 }
+
 
 export interface Question {
   category: Category;
@@ -184,6 +202,9 @@ export interface Question {
   text: string;
 }
 
+
+/// Display ///
+
 export interface DisplayableItem {
   image: HTMLImageElement;
   audio: HTMLAudioElement | undefined;
@@ -192,10 +213,19 @@ export interface DisplayableItem {
   knowledgeId: Identifier;
 }
 
+
 export interface DisplayableQuestion extends Question {
   leftText: DisplayableText;
   rightText: DisplayableText;
 }
+
+
+interface DisplayableText {
+  track: string;
+  artist: string;
+  album: string;
+}
+
 
 export function createEmptyDisplayableQuestion(): DisplayableQuestion {
   return {
@@ -213,17 +243,7 @@ export function createEmptyDisplayableQuestion(): DisplayableQuestion {
   };
 }
 
-interface DisplayableText {
-  track: string;
-  artist: string;
-  album: string;
-}
 
 function createEmptyDisplayableText(): DisplayableText {
   return {track: "", artist: "", album: ""};
-}
-
-export enum Resource {
-  Audio,
-  Image
 }

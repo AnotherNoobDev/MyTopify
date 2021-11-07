@@ -3,6 +3,8 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
+import { Period } from "spotify-lib";
+
 export function getTrackShortName(trackName: string): string {
   let end = trackName.indexOf('(');
 
@@ -17,8 +19,11 @@ export function getTrackShortName(trackName: string): string {
   }
 }
 
+
 export function getFirstArtist(artists: string): string {
-  const end = artists.indexOf(',');
+  const artistSeparator = ',';
+
+  const end = artists.indexOf(artistSeparator);
 
   if (end === -1) {
     return artists;
@@ -26,6 +31,19 @@ export function getFirstArtist(artists: string): string {
     return artists.substring(0, end);
   }
 }
+
+
+export function getDisplayablePeriod(period: Period) {
+  switch (period) {
+    case Period.ShortTerm:
+      return 'last 4 weeks';
+    case Period.MediumTerm:
+      return 'last 6 months';
+    case Period.LongTerm:
+      return 'all time';
+  }
+}
+
 
 /**
  * Returns a debounced version of the given input function cb

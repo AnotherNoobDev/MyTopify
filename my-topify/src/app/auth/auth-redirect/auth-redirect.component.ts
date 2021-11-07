@@ -3,7 +3,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'spotify-lib';
 import { environment } from 'src/environments/environment';
@@ -13,21 +13,18 @@ import { environment } from 'src/environments/environment';
   templateUrl: './auth-redirect.component.html',
   styleUrls: ['../../shared/style/common.css', './auth-redirect.component.css']
 })
-export class AuthRedirectComponent implements OnInit {
+export class AuthRedirectComponent {
 
   constructor(private router: Router, private authService: AuthService) {
-    // we are authenticated; just navigate away
+    // we are authenticated: just navigate to auth callback ourselves
     if (authService.isAuthenticated()) {
       this.router.navigate([environment.spotifyCallBackRoute]);
     }
    }
 
-  ngOnInit() {
-  }
 
-  redirectToSpotify() {
-    // redirect
+  redirectToSpotify(): void {
+    // we need to authenticate: navigate to spotify auth page
     window.location.href = this.authService.getSpotifyAuthRedirectURI();
   }
-
 }

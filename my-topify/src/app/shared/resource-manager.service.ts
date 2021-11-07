@@ -30,9 +30,11 @@ export class ResourceManagerService {
 
   private readonly NO_IMG_AVAILABLE: HTMLImageElement;
 
+
   constructor(private screen: ScreenService) {
     // filler image to return in case of errors
-    this.NO_IMG_AVAILABLE = new Image(320, 320);
+    const defaultImageSize = screen.getImageSizeForGameView();
+    this.NO_IMG_AVAILABLE = new Image(defaultImageSize, defaultImageSize);
     this.NO_IMG_AVAILABLE.style.display = 'block';
     this.NO_IMG_AVAILABLE.style.margin = '5px';
     this.NO_IMG_AVAILABLE.src = 'assets/images/no_img_available.jpg';
@@ -45,14 +47,17 @@ export class ResourceManagerService {
       if (this.knowledgeBase && this.gameQuestions) {
         this.fetchResourcesForGame(this.gameQuestions, this.knowledgeBase);
       }
+
       // notify
       this.resourceReloadSubject.next();
     });
   }
 
+
   resourceReload() {
     return this.resourceReloadSubject.asObservable();
   }
+
 
   getImagesForQuestion(question: Question): HTMLImageElement[] {
     if (!this.knowledgeBase) {
@@ -63,20 +68,21 @@ export class ResourceManagerService {
 
     switch (question.category.type) {
       case Item.Artist: {}
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iRight)));
+        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iLeft)!));
+        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iRight)!));
         
         break;
 
       case Item.Track:
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iLeft)!));
+        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iRight)!));
         
         break;
     }
 
     return images;
   }
+
 
   getAudioForQuestion(question: Question): (HTMLAudioElement | undefined)[] | null {
     if (question.category.type === Item.Artist) {
@@ -88,18 +94,16 @@ export class ResourceManagerService {
     }
 
     const audio: (HTMLAudioElement | undefined)[] = [];
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iLeft)!));
+    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iRight)!));
 
     return audio;
   }
 
-  private getImage(item: Artist | Track | undefined | null): HTMLImageElement {
-    if (!item) {
-      return this.NO_IMG_AVAILABLE;
-    }
 
+  private getImage(item: Artist | Track): HTMLImageElement {
     let img: HTMLImageElement | undefined = undefined;
+
     if ('album' in item) {
       img = this.imageStorage.get(item.album.id); 
     } else {
@@ -113,7 +117,8 @@ export class ResourceManagerService {
     }
   }
 
-  private getAudio(track: Track | undefined | null): HTMLAudioElement | undefined {
+
+  private getAudio(track: Track): HTMLAudioElement | undefined {
     if (!track) {
       return;
     }
@@ -121,6 +126,10 @@ export class ResourceManagerService {
     return this.audioStorage.get(track.id);
   }
 
+
+  /**
+   * Resources must have already been retrieved using fetchResourcesForArtists
+   */
   getArtistsAsDisplayableItems(knowledgeBase: ArtistKnowledgeBase): DisplayableItem[] {
     const items: DisplayableItem[] = [];
 
@@ -136,6 +145,10 @@ export class ResourceManagerService {
     return items;
   }
 
+
+  /**
+   * Resources must have already been retrieved using fetchResourcesForTracks
+   */
   getTracksAsDisplayableItems(knowledgeBase: TrackKnowledgeBase): DisplayableItem[] {
     const items: DisplayableItem[] = [];
 
@@ -143,13 +156,18 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(track),
         audio: this.getAudio(track),
-        text: {track: getTrackShortName(track.name), artist: track.artists.join(', '), album: track.album.name},
+        text: {
+          track: getTrackShortName(track.name), 
+          artist: track.artists.slice(0, 3).join(', '), 
+          album: track.album.name
+        },
         knowledgeId: track.id
       });
     }
 
     return items;
   }
+
 
   fetchResourcesForGame(questions: Question[], knowledgeBase: GameKnowledgeBase) {
     this.knowledgeBase = knowledgeBase;
@@ -158,17 +176,18 @@ export class ResourceManagerService {
     for (const question of questions) {
       switch (question.category.type) {
         case Item.Artist:
-          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iLeft));
-          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iRight));
+          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iLeft)!);
+          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iRight)!);
           break;
 
         case Item.Track:
-          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iLeft));
-          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iRight));
+          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iLeft)!);
+          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iRight)!);
           break;
       }
     }
   }
+
 
   fetchResourcesForArtists(knowledgeBase: ArtistKnowledgeBase) {
     for (const artist of knowledgeBase.artists) {
@@ -176,45 +195,47 @@ export class ResourceManagerService {
     }
   }
 
+
   fetchResourcesForTracks(knowledgeBase: TrackKnowledgeBase) {
     for (const track of knowledgeBase.tracks) {
       this.fetchResourcesForTrack(track);
     }
   }
 
-  private fetchResourcesForArtist(artist: Artist | undefined | null) {
-    if (!artist) {
-      return;
-    }
 
-    if (this.imageStorage.has(artist.id)) {
-      return;
+  private fetchResourcesForArtist(artist: Artist) {
+    // image
+    if (!this.imageStorage.has(artist.id)) {
+      this.imageStorage.set(
+        artist.id, 
+        this.fetchImage(artist.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView())
+      );
     }
-
-    this.imageStorage.set(artist.id, 
-      this.fetchImage(artist.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
   }
 
-  private fetchResourcesForTrack(track: Track | undefined | null) {
-    if (!track) {
-      return;
-    }
 
+  private fetchResourcesForTrack(track: Track) {
     // image
     if (!this.imageStorage.has(track.album.id)) {
-      this.imageStorage.set(track.album.id, 
-        this.fetchImage(track.album.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
+      this.imageStorage.set(
+        track.album.id, 
+        this.fetchImage(track.album.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView())
+      );
     }
 
     // audio
     if (!this.audioStorage.has(track.id)) {
-      const audio = this.fetchAudio(track.previewURL);
-
-      if (audio) {
-        this.audioStorage.set(track.id, audio);
+      if (!track.previewURL) {
+        return;
       }
+
+      this.audioStorage.set(
+        track.id, 
+        this.fetchAudio(track.previewURL)
+      );
     }
   }
+
 
   private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
     const img = new Image(desiredWidth, desiredHeight);
@@ -229,27 +250,24 @@ export class ResourceManagerService {
         img.src = image.url;
       
         // select image that is "closest" to desired size
+        // sufficient to choose based on width (all images seem to be square)
         if (image.width && image.width >= desiredWidth) {
           break;
         }
       }
     } else {
-      // filler img
+      // we don't have an img, return filler img
       img.src = 'assets/images/no_img_available.jpg';
     }
-
 
     return img;
   }
 
-  private fetchAudio(url: string): HTMLAudioElement | null {
-    if (url) {
-      const audio = new Audio(url);
-      audio.loop = true;
-      return audio;
-    }
 
-    return null;
+  private fetchAudio(url: string): HTMLAudioElement {
+    const audio = new Audio(url);
+    audio.loop = true;
+    return audio;
 
     // TODO? wait for audio to preload
     //audio.addEventListener('canplaythrough', event => {

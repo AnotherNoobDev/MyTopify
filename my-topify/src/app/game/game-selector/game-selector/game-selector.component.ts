@@ -113,8 +113,8 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       useShortTermPeriod: val.period_short_term,
       useMediumTermPeriod: val.period_medium_term,
       useLongTermPeriod: val.period_long_term
-    }).subscribe(success => {
-      if (!success) {
+    }).subscribe(kbGame => {
+      if (!kbGame) {
         this.notificationManager.notify({
           type: NotificationType.ERROR, 
           msg: 'Failed to retrieve data from Spotify.',
@@ -123,10 +123,9 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const kb = this.gameConfigurator.getKnowledgeBase();
-      this.game.setKnowledgeBase(kb);
+      this.game.setKnowledgeBase(kbGame);
       
-      const questions = this.questionGenerator.generateQuestions(kb);
+      const questions = this.questionGenerator.generateQuestions(kbGame);
 
       if (!questions) {
         this.notificationManager.notify({
@@ -143,7 +142,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
 
       // start resource fetching
       // TODO? wait until some data is ready (show loading)
-      this.resourceManager.fetchResourcesForGame(questions, kb);
+      this.resourceManager.fetchResourcesForGame(questions, kbGame);
 
       // navigate to game-loop
       this.router.navigate(['game/main']);
