@@ -3,7 +3,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GameConfiguratorService } from '../game-configurator.service';
 import { QuestionGeneratorService } from '../../question-generator.service';
@@ -28,7 +28,7 @@ interface GameSelectionFormValue {
   templateUrl: './game-selector.component.html',
   styleUrls: ['../../../shared/style/common.css', './game-selector.component.css']
 })
-export class GameSelectorComponent implements OnInit, OnDestroy {
+export class GameSelectorComponent implements OnDestroy {
 
   public useTypeArtists = true;
   public useTypeTracks = true;
@@ -39,6 +39,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
 
   private configuringGameSub: Subscription | undefined = undefined;
 
+
   constructor(private gameConfigurator: GameConfiguratorService,
               private questionGenerator: QuestionGeneratorService,
               private game: GameService,
@@ -46,14 +47,13 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
               private router: Router,
               private notificationManager: NotificationsService) { }
 
-  ngOnInit() {
-  }
 
   ngOnDestroy() {
     if (this.configuringGameSub) {
       this.configuringGameSub.unsubscribe();
     }
   }
+
 
   onTypeSelected(form: NgForm) {
     const val = form.value as GameSelectionFormValue;
@@ -72,6 +72,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       this.useTypeTracks = val.type_tracks;
     }
   }
+
 
   onPeriodSelected(form: NgForm) {
     const val = form.value as GameSelectionFormValue;
@@ -99,6 +100,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
           this.useLongTermPeriod = val.period_long_term;
         }
   }
+
 
   onStartGame(form: NgForm) {
     if (this.configuringGameSub) {
@@ -148,5 +150,4 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       this.router.navigate(['game/main']);
     });
   }
-
 }

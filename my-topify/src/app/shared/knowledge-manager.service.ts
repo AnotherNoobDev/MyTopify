@@ -124,7 +124,7 @@ export class KnowledgeManagerService {
         });
       }
 
-      parsedArtists.push({id: artistItem.id, name: artistItem.name, images: artistImages});
+      parsedArtists.push({id: artistItem.id, name: artistItem.name, images: this.sortImageURL(artistImages)});
     }
 
     return { period, artists: parsedArtists };
@@ -159,11 +159,20 @@ export class KnowledgeManagerService {
         id: trackItem.id, 
         name: trackItem.name,
         artists: trackArtists,
-        album: {id: trackItem.album.id, name: trackItem.album.name, images: albumImages},
+        album: {id: trackItem.album.id, name: trackItem.album.name, images: this.sortImageURL(albumImages)},
         previewURL: trackItem.preview_url
       });
     }
 
     return { period, tracks: parsedTracks };
+  }
+
+  /**
+   * ascending, by width 
+   */
+  private sortImageURL(data: ImageURL[]) {
+    return data.sort((left: ImageURL, right: ImageURL) => {
+      return left.width - right.width;
+    });
   }
 }

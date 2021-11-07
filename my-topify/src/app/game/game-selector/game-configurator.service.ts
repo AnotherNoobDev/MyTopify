@@ -13,8 +13,10 @@ import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.servic
 export class GameConfiguratorService {
   private configuringGame: Observable<GameKnowledgeBase | null> | undefined = undefined;
 
+  
   constructor(private knowledgeManager: KnowledgeManagerService) {
   }
+
 
   configureGame(config: GameConfiguration): Observable<GameKnowledgeBase | null> {
     this.configuringGame = new Observable((observer) => {

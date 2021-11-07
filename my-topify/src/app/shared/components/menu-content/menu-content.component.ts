@@ -3,7 +3,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'spotify-lib';
 
@@ -12,21 +12,21 @@ import { AuthService } from 'spotify-lib';
   templateUrl: './menu-content.component.html',
   styleUrls: ['../../style/common.css', './menu-content.component.css']
 })
-export class MenuContentComponent implements OnInit {
+export class MenuContentComponent {
 
   constructor(private router: Router,
               private authService: AuthService) { }
 
-  ngOnInit() {
-  }
 
   onProceedToGame() {
     this.router.navigate(['game/select']);
   }
 
+
   onProceedToChart() {
     this.router.navigate(['chart/view']);
   }
+
 
   onLogout() {
     this.authService.logout();

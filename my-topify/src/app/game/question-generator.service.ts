@@ -15,13 +15,11 @@ export class QuestionGeneratorService {
   private nQuestions = 24;
   private questions: Question[] | null = null;
 
-  getQuestions(): Question[] | null {
-    return this.questions;
-  }
 
   generateQuestions(gameKnowledgeBase: GameKnowledgeBase): Question[] | null {
     this.questions = [];
 
+    // check which categories are valid from the selected categories
     let categories = gameKnowledgeBase.getCategories();
 
     const validCategories = [];
@@ -38,6 +36,7 @@ export class QuestionGeneratorService {
       return null;
     }
 
+    // distribute questions evenly by category
     const nQuestionsPerCat = this.nQuestions / categories.length;
     
     const questionsLeftPerCategory = [];
@@ -56,14 +55,18 @@ export class QuestionGeneratorService {
         break;
       }
 
-      // generate question
+      // generate question with appropriate difficulty
       this.questions.push(this.generateQuestion(categories[c], difficulty, gameKnowledgeBase));
     }
 
     return this.questions;
   }
 
+
   private getQuestionDistribution(): Difficulty[] {
+    // we think of the difficulty distribution as a series of pairs of 2 waves
+    // first wave in the pair is easier, second is harder
+    // and overall difficulty increases with each pair
     return [Difficulty.Easy,   Difficulty.Easy,   Difficulty.Easy,   Difficulty.Easy, 
             Difficulty.Medium, Difficulty.Medium, Difficulty.Medium, Difficulty.Hard,
             Difficulty.Easy,   Difficulty.Easy,   Difficulty.Easy,   Difficulty.Medium,
@@ -72,8 +75,11 @@ export class QuestionGeneratorService {
             Difficulty.Hard,   Difficulty.Hard,   Difficulty.Hard,   Difficulty.Hard];
   }
 
-  private getNextCategory(categoryQuestions: number[]): number {
 
+  /**
+   * Get a random category from the categories that still have questions left
+   */
+  private getNextCategory(categoryQuestions: number[]): number {
     if (categoryQuestions.length === 0 || categoryQuestions.every(item => item === 0)) {
       return -1;
     }
@@ -88,6 +94,7 @@ export class QuestionGeneratorService {
 
     return c;
   }
+
 
   private generateQuestion(category: Category, difficulty: Difficulty, gameKnowledgeBase: GameKnowledgeBase): Question {
     let question: Question;
@@ -116,6 +123,7 @@ export class QuestionGeneratorService {
   }
 
   private generateEasyQuestion(category: Category, gameKnowledgeBase: GameKnowledgeBase): Question {
+    // easy = items are far apart in the category
     const q = this.generateQuestionInRange(6, 9, category, gameKnowledgeBase);
 
     q.difficulty = Difficulty.Easy;
@@ -123,7 +131,9 @@ export class QuestionGeneratorService {
     return q;
   }
 
+
   private generateMediumQuestion(category: Category, gameKnowledgeBase: GameKnowledgeBase): Question {
+    // medium = items are somewhat close in the category
     const q = this.generateQuestionInRange(3, 5, category, gameKnowledgeBase);
 
     q.difficulty = Difficulty.Medium;
@@ -131,7 +141,9 @@ export class QuestionGeneratorService {
     return q;
   }
 
+
   private generateHardQuestion(category: Category, gameKnowledgeBase: GameKnowledgeBase): Question {
+    // hard = items are very close in the category
     const q = this.generateQuestionInRange(1, 2, category, gameKnowledgeBase);
 
     q.difficulty = Difficulty.Hard;
@@ -139,6 +151,11 @@ export class QuestionGeneratorService {
     return q;
   }
 
+
+  /**
+   * generate a question with items from given category
+   * the distance between the 2 items in the category is between min and max
+   */
   private generateQuestionInRange(min: number, max: number, cat: Category, gameKnowledgeBase: GameKnowledgeBase): Question {
     // pivot
     const catSize = gameKnowledgeBase.getCategorySize(cat);
@@ -165,12 +182,14 @@ export class QuestionGeneratorService {
     return question;
   }
 
+
   private generateRandomNumber(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
 
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
 
   private generateRandomSign(): number {
     const s = this.generateRandomNumber(0, 1);
@@ -181,6 +200,7 @@ export class QuestionGeneratorService {
       return 1;
     }
   }
+
 
   private generateTextForQuestion(question: Question) {
     let questionText = 'Which ';
