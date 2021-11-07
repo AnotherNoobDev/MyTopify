@@ -11,17 +11,14 @@ import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.servic
 
 @Injectable({providedIn: 'root'})
 export class GameConfiguratorService {
+  private configuringGame: Observable<GameKnowledgeBase | null> | undefined = undefined;
 
-  private gameKnowledgeBase: GameKnowledgeBase = new GameKnowledgeBase();
-
-  private configuringGame: Observable<boolean> | undefined = undefined;
-
+  
   constructor(private knowledgeManager: KnowledgeManagerService) {
   }
 
-  configureGame(config: GameConfiguration): Observable<boolean> {
-    this.gameKnowledgeBase.gameConfiguration = config;
 
+  configureGame(config: GameConfiguration): Observable<GameKnowledgeBase | null> {
     this.configuringGame = new Observable((observer) => {
       // build categories
       const categories = [];
@@ -56,17 +53,13 @@ export class GameConfiguratorService {
 
       this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
         if (success) {
-          this.gameKnowledgeBase.knowledgeBase = this.knowledgeManager.getKnowledgeBase();
+          observer.next(new GameKnowledgeBase(config, this.knowledgeManager.getKnowledgeBase()));
+        } else {
+          observer.next(null);
         }
-
-        observer.next(success);
       });
     });
 
     return this.configuringGame;
-  }
-
-  getKnowledgeBase(): GameKnowledgeBase {
-    return this.gameKnowledgeBase;
   }
 }

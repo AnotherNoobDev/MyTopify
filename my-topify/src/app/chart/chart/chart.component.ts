@@ -4,13 +4,14 @@
  */
 
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { KnowledgeManagerService } from 'src/app/shared/knowledge-manager.service';
 import { DisplayableItem } from 'src/app/shared/types';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Category, Item, Period, AuthService, SpotifyHttpClientService } from 'spotify-lib';
 import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
-import { debounce } from 'src/app/shared/utility';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { debounce, getDisplayablePeriod } from 'src/app/shared/utility';
+
 
 @Component({
   selector: 'app-chart',
@@ -25,10 +26,14 @@ export class ChartComponent implements OnInit, OnDestroy {
   public uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
   private period: Period = Period.LongTerm;
 
+  /** we can only create playlists for tracks at the moment */
   public createPlaylistEnabled = false;
 
   public displayableItems: DisplayableItem[] = [];
+
+  /** the index of the currently playing displayed item */
   public currentlyPlayingAudio = -1;
+
 
   constructor(private knowledgeManager: KnowledgeManagerService,
               private resourceManager: ResourceManagerService,
@@ -36,19 +41,56 @@ export class ChartComponent implements OnInit, OnDestroy {
               private spotifyHttpClient: SpotifyHttpClientService,
               private notificationService: NotificationsService) { }
 
+
   ngOnInit() {
     this.onUserSelection();
   }
+
 
   ngOnDestroy() {
     this.resetAudio();
   }
 
-  onUserSelection() {
+
+  private resetAudio(): void {
+    if (this.currentlyPlayingAudio >= 0) {
+      const audio = this.displayableItems[this.currentlyPlayingAudio].audio;
+      if (audio) {
+        audio.pause();
+      }
+    }
+
+    this.currentlyPlayingAudio = -1;
+  }
+
+
+  onUserSelection(): void {
+    // reset stuff
     this.resetAudio();
     this.createPlaylistEnabled = false;
 
-    // build category
+    // fetch items to display
+    const categories: Category[] = [this.buildCategory()];
+
+    this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
+      if (!success) {
+        this.displayableItems = [];
+        
+        this.notificationService.notify({
+          type: NotificationType.ERROR, 
+          msg: 'Failed to retrieve data from Spotify.',
+          priority: NotificationPriority.STANDARD
+        });
+
+        return;
+      }
+
+      this.prepareChart();
+    });
+  }
+
+
+  private buildCategory(): Category {
     let t: Item;
     if (this.uType === 'tracks') {
       t = Item.Track;
@@ -64,53 +106,34 @@ export class ChartComponent implements OnInit, OnDestroy {
       this.period = Period.LongTerm;
     }
 
-    const categories: Category[] = [{type: t, period: this.period}];
-
-    this.knowledgeManager.fetchKnowledge(categories).subscribe(success => {
-      if (!success) {
-        this.displayableItems = [];
-        
-        this.notificationService.notify({
-          type: NotificationType.ERROR, 
-          msg: 'Failed to retrieve data from Spotify.',
-          priority: NotificationPriority.STANDARD
-        });
-
-        return;
-      }
-
-      // get category
-      if (this.uType === 'tracks') {
-        const tracks = this.knowledgeManager.getTracksFromPeriod(this.period);
-        this.resourceManager.fetchResourcesForTracks(tracks!);
-        this.displayableItems = this.resourceManager.getTracksAsDisplayableItems(tracks!);
-
-        if (this.displayableItems) {
-          this.createPlaylistEnabled = true;
-        }
-      } else {
-        const artists = this.knowledgeManager.getArtistsFromPeriod(this.period);
-        this.resourceManager.fetchResourcesForArtists(artists!);
-        this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists!);
-      }
-
-      // reset view to top
-      if (this.virtualScroll) {
-        this.virtualScroll.scrollToIndex(0);
-      }
-    });
+    return {type: t, period: this.period};
   }
 
-  private resetAudio() {
-    if (this.currentlyPlayingAudio >= 0) {
-      const audio = this.displayableItems[this.currentlyPlayingAudio].audio;
-      if (audio) {
-        audio.pause();
+
+  private prepareChart(): void {
+    // get category
+    if (this.uType === 'tracks') {
+      const tracks = this.knowledgeManager.getTracksFromPeriod(this.period);
+      this.resourceManager.fetchResourcesForTracks(tracks);
+      this.displayableItems = this.resourceManager.getTracksAsDisplayableItems(tracks);
+
+      if (this.displayableItems) {
+        this.createPlaylistEnabled = true;
       }
+    } else {
+      const artists = this.knowledgeManager.getArtistsFromPeriod(this.period);
+      
+      //todo can we make this a single call?
+      this.resourceManager.fetchResourcesForArtists(artists);
+      this.displayableItems = this.resourceManager.getArtistsAsDisplayableItems(artists);
     }
 
-    this.currentlyPlayingAudio = -1;
+    // reset view to top
+    if (this.virtualScroll) {
+      this.virtualScroll.scrollToIndex(0);
+    }
   }
+
 
   toggleAudio(index: number) {
     if (this.displayableItems[index].audio) {
@@ -132,6 +155,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     }
   }
 
+
   playAudio(index: number) {
     const audio = this.displayableItems[index].audio;
     if (audio) {
@@ -140,6 +164,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     
     this.currentlyPlayingAudio = index;
   }
+
 
   pauseAudio(index: number) {
     const audio = this.displayableItems[index].audio;
@@ -150,14 +175,18 @@ export class ChartComponent implements OnInit, OnDestroy {
     this.currentlyPlayingAudio = -1;
   }
 
+
   onCreatePlaylist() {
     this.createPlaylist();
   }
 
+
+  // we debounce calls to create playlist 
+  // to avoid creating the same playlist multiple times at once  
   private debounceIntervalMs = 250;
 
   private createPlaylist = debounce(() => {
-    const playlist = 'MyTopify Top Tracks ' + this.knowledgeManager.getDisplayablePeriod(this.period);
+    const playlist = 'MyTopify Top Tracks ' + getDisplayablePeriod(this.period);
     
     this.auth.getCurrentUserId().then(user => {
       if (!user) {

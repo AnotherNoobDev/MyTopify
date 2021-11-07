@@ -5,6 +5,7 @@
 
 import { Injectable } from '@angular/core';
 import { Item, Period } from 'spotify-lib';
+import { ResourceManagerService } from '../shared/resource-manager.service';
 import { Question, GameKnowledgeBase, DisplayableQuestion } from '../shared/types';
 import { getTrackShortName, getFirstArtist } from '../shared/utility';
 
@@ -43,6 +44,10 @@ export class GameService {
   ];
 
   private wasPreloadingTriggered = false;
+
+
+  constructor(private resourceManager: ResourceManagerService) {
+  }
 
 
   setKnowledgeBase(kb: GameKnowledgeBase) {
@@ -92,6 +97,24 @@ export class GameService {
     }
 
     return artist.name;
+  }
+
+
+  getImagesForQuestion(question: Question): HTMLImageElement[] {
+    if (!this.knowledgeBase) {
+      return [];
+    }
+
+    return this.resourceManager.getImagesForQuestion(question, this.knowledgeBase);
+  }
+
+
+  getAudioForQuestion(question: Question): (HTMLAudioElement | undefined)[] | null {
+    if (!this.knowledgeBase) {
+      return null;
+    }
+
+    return this.resourceManager.getAudioForQuestion(question, this.knowledgeBase);
   }
 
 
@@ -173,6 +196,7 @@ export class GameService {
 
 
   /// game state ///
+
   restart() {
     this.atQuestion = -1;
     this.lives = 3;
@@ -180,6 +204,7 @@ export class GameService {
 
     this.rating = undefined;
   }
+
 
   isGameOver() {
     return (this.lives <= 0 || this.atQuestion === this.nQuestions - 1);
@@ -192,17 +217,21 @@ export class GameService {
     return this.lives;
   }
 
+  
   getScore() {
     return this.score;
   }
+
 
   getQuestionNumber() {
     return this.atQuestion + 1;
   }
 
+
   getNumberOfQuestions() {
     return this.nQuestions;
   }
+
 
   getRatingQuote() {
     if (!this.rating) {
@@ -212,6 +241,7 @@ export class GameService {
     return this.ratingQuotes[this.rating!];
   }
 
+
   getRatingImage() {
     if (!this.rating) {
       this.determineRating();
@@ -219,6 +249,7 @@ export class GameService {
 
     return this.ratingImages[this.rating!];
   }
+
 
   private determineRating() {
     if (this.score <= 4) {

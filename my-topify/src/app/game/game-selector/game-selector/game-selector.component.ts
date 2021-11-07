@@ -3,7 +3,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GameConfiguratorService } from '../game-configurator.service';
 import { QuestionGeneratorService } from '../../question-generator.service';
@@ -28,7 +28,7 @@ interface GameSelectionFormValue {
   templateUrl: './game-selector.component.html',
   styleUrls: ['../../../shared/style/common.css', './game-selector.component.css']
 })
-export class GameSelectorComponent implements OnInit, OnDestroy {
+export class GameSelectorComponent implements OnDestroy {
 
   public useTypeArtists = true;
   public useTypeTracks = true;
@@ -39,6 +39,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
 
   private configuringGameSub: Subscription | undefined = undefined;
 
+
   constructor(private gameConfigurator: GameConfiguratorService,
               private questionGenerator: QuestionGeneratorService,
               private game: GameService,
@@ -46,14 +47,13 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
               private router: Router,
               private notificationManager: NotificationsService) { }
 
-  ngOnInit() {
-  }
 
   ngOnDestroy() {
     if (this.configuringGameSub) {
       this.configuringGameSub.unsubscribe();
     }
   }
+
 
   onTypeSelected(form: NgForm) {
     const val = form.value as GameSelectionFormValue;
@@ -72,6 +72,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       this.useTypeTracks = val.type_tracks;
     }
   }
+
 
   onPeriodSelected(form: NgForm) {
     const val = form.value as GameSelectionFormValue;
@@ -100,6 +101,7 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
         }
   }
 
+
   onStartGame(form: NgForm) {
     if (this.configuringGameSub) {
       this.configuringGameSub.unsubscribe();
@@ -113,8 +115,8 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
       useShortTermPeriod: val.period_short_term,
       useMediumTermPeriod: val.period_medium_term,
       useLongTermPeriod: val.period_long_term
-    }).subscribe(success => {
-      if (!success) {
+    }).subscribe(kbGame => {
+      if (!kbGame) {
         this.notificationManager.notify({
           type: NotificationType.ERROR, 
           msg: 'Failed to retrieve data from Spotify.',
@@ -123,10 +125,9 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const kb = this.gameConfigurator.getKnowledgeBase();
-      this.game.setKnowledgeBase(kb);
+      this.game.setKnowledgeBase(kbGame);
       
-      const questions = this.questionGenerator.generateQuestions(kb);
+      const questions = this.questionGenerator.generateQuestions(kbGame);
 
       if (!questions) {
         this.notificationManager.notify({
@@ -143,11 +144,10 @@ export class GameSelectorComponent implements OnInit, OnDestroy {
 
       // start resource fetching
       // TODO? wait until some data is ready (show loading)
-      this.resourceManager.fetchResourcesForGame(questions, kb);
+      this.resourceManager.fetchResourcesForGame(questions, kbGame);
 
       // navigate to game-loop
       this.router.navigate(['game/main']);
     });
   }
-
 }

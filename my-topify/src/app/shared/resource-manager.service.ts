@@ -18,59 +18,94 @@ import { ScreenService } from './screen.service';
 import { Subject } from 'rxjs';
 import { getTrackShortName } from './utility';
 
+
+interface ImageResourceMetadata {
+  urls: ImageURL[];
+  rawWidth: number; // the width of the stored image
+}
+
+interface ImageResource {
+  metadata: ImageResourceMetadata;
+  data: HTMLImageElement;
+}
+
+interface AudioResourceMetadata {
+  url: string;
+}
+
+interface AudioResource {
+  metadata: AudioResourceMetadata;
+  data: HTMLAudioElement;
+}
+
+
 @Injectable({providedIn: 'root'})
 export class ResourceManagerService {
-  private knowledgeBase: GameKnowledgeBase | undefined = undefined;
-  private gameQuestions: Question[] | undefined = undefined;
-
-  private audioStorage: Map<Identifier, HTMLAudioElement> = new Map();
-  private imageStorage: Map<Identifier, HTMLImageElement> = new Map();
+  private audioStorage: Map<Identifier, AudioResource> = new Map();
+  private imageStorage: Map<Identifier, ImageResource> = new Map();
 
   private resourceReloadSubject = new Subject<void>();
 
   private readonly NO_IMG_AVAILABLE: HTMLImageElement;
 
+
   constructor(private screen: ScreenService) {
     // filler image to return in case of errors
-    this.NO_IMG_AVAILABLE = new Image(320, 320);
+    const defaultImageSize = screen.getImageSizeForGameView();
+    this.NO_IMG_AVAILABLE = new Image(defaultImageSize, defaultImageSize);
     this.NO_IMG_AVAILABLE.style.display = 'block';
     this.NO_IMG_AVAILABLE.style.margin = '5px';
     this.NO_IMG_AVAILABLE.src = 'assets/images/no_img_available.jpg';
 
     this.screen.recommendedImgSizeChanged().subscribe(() => {
-      // invalidate images
-      this.imageStorage.clear();
+      this.refetchImages();
 
-      // refetch using the knowledge base
-      if (this.knowledgeBase && this.gameQuestions) {
-        this.fetchResourcesForGame(this.gameQuestions, this.knowledgeBase);
-      }
       // notify
       this.resourceReloadSubject.next();
     });
   }
 
+
+  private refetchImages() {
+    const desiredSize = this.screen.getImageSizeForGameView();
+
+    this.imageStorage.forEach((imgResource, resourceId) => {
+      if (imgResource.metadata.rawWidth >= desiredSize) {
+        // don't get smaller sized images if we already have a larger version in storage
+        imgResource.data.width = desiredSize;
+        imgResource.data.height = desiredSize;
+        return;
+      }
+
+      const newResource = 
+        this.fetchImageResource(imgResource.metadata.urls, desiredSize, desiredSize);
+
+      this.imageStorage.set(resourceId, newResource);
+    });
+  }
+
+
+  /**
+   * Get informed when resources have been reloaded
+   */
   resourceReload() {
     return this.resourceReloadSubject.asObservable();
   }
 
-  getImagesForQuestion(question: Question): HTMLImageElement[] {
-    if (!this.knowledgeBase) {
-      return [this.NO_IMG_AVAILABLE, this.NO_IMG_AVAILABLE];
-    }
 
+  getImagesForQuestion(question: Question, knowledgeBase: GameKnowledgeBase): HTMLImageElement[] {
     const images = [];
 
     switch (question.category.type) {
       case Item.Artist: {}
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getArtist(question.category.period, question.iRight)));
+        images.push(this.getImage(knowledgeBase.getArtist(question.category.period, question.iLeft)!));
+        images.push(this.getImage(knowledgeBase.getArtist(question.category.period, question.iRight)!));
         
         break;
 
       case Item.Track:
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-        images.push(this.getImage(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+        images.push(this.getImage(knowledgeBase.getTrack(question.category.period, question.iLeft)!));
+        images.push(this.getImage(knowledgeBase.getTrack(question.category.period, question.iRight)!));
         
         break;
     }
@@ -78,48 +113,19 @@ export class ResourceManagerService {
     return images;
   }
 
-  getAudioForQuestion(question: Question): (HTMLAudioElement | undefined)[] | null {
+
+  getAudioForQuestion(question: Question, knowledgeBase: GameKnowledgeBase): (HTMLAudioElement | undefined)[] | null {
     if (question.category.type === Item.Artist) {
       return null;
     }
 
-    if (!this.knowledgeBase) {
-      return null;
-    }
-
     const audio: (HTMLAudioElement | undefined)[] = [];
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iLeft)));
-    audio.push(this.getAudio(this.knowledgeBase.getTrack(question.category.period, question.iRight)));
+    audio.push(this.getAudio(knowledgeBase.getTrack(question.category.period, question.iLeft)!));
+    audio.push(this.getAudio(knowledgeBase.getTrack(question.category.period, question.iRight)!));
 
     return audio;
   }
 
-  private getImage(item: Artist | Track | undefined | null): HTMLImageElement {
-    if (!item) {
-      return this.NO_IMG_AVAILABLE;
-    }
-
-    let img: HTMLImageElement | undefined = undefined;
-    if ('album' in item) {
-      img = this.imageStorage.get(item.album.id); 
-    } else {
-      img = this.imageStorage.get(item.id);
-    }
-
-    if (img) {
-      return img;
-    } else {
-      return this.NO_IMG_AVAILABLE;
-    }
-  }
-
-  private getAudio(track: Track | undefined | null): HTMLAudioElement | undefined {
-    if (!track) {
-      return;
-    }
-
-    return this.audioStorage.get(track.id);
-  }
 
   getArtistsAsDisplayableItems(knowledgeBase: ArtistKnowledgeBase): DisplayableItem[] {
     const items: DisplayableItem[] = [];
@@ -136,6 +142,7 @@ export class ResourceManagerService {
     return items;
   }
 
+
   getTracksAsDisplayableItems(knowledgeBase: TrackKnowledgeBase): DisplayableItem[] {
     const items: DisplayableItem[] = [];
 
@@ -143,7 +150,11 @@ export class ResourceManagerService {
       items.push({
         image: this.getImage(track),
         audio: this.getAudio(track),
-        text: {track: getTrackShortName(track.name), artist: track.artists.join(', '), album: track.album.name},
+        text: {
+          track: getTrackShortName(track.name), 
+          artist: track.artists.slice(0, 3).join(', '), 
+          album: track.album.name
+        },
         knowledgeId: track.id
       });
     }
@@ -151,24 +162,51 @@ export class ResourceManagerService {
     return items;
   }
 
-  fetchResourcesForGame(questions: Question[], knowledgeBase: GameKnowledgeBase) {
-    this.knowledgeBase = knowledgeBase;
-    this.gameQuestions = questions;
 
+  private getImage(item: Artist | Track): HTMLImageElement {
+    let img: ImageResource | undefined = undefined;
+
+    if ('album' in item) {
+      img = this.imageStorage.get(item.album.id); 
+    } else {
+      img = this.imageStorage.get(item.id);
+    }
+
+    if (img) {
+      return img.data;
+    } else {
+      return this.NO_IMG_AVAILABLE;
+    }
+  }
+
+
+  private getAudio(track: Track): HTMLAudioElement | undefined {
+    const audio = this.audioStorage.get(track.id);
+
+    if (audio) {
+      return audio.data;
+    } else {
+      return undefined;
+    }
+  }
+
+
+  fetchResourcesForGame(questions: Question[], knowledgeBase: GameKnowledgeBase) {
     for (const question of questions) {
       switch (question.category.type) {
         case Item.Artist:
-          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iLeft));
-          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iRight));
+          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iLeft)!);
+          this.fetchResourcesForArtist(knowledgeBase.getArtist(question.category.period, question.iRight)!);
           break;
 
         case Item.Track:
-          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iLeft));
-          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iRight));
+          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iLeft)!);
+          this.fetchResourcesForTrack(knowledgeBase.getTrack(question.category.period, question.iRight)!);
           break;
       }
     }
   }
+
 
   fetchResourcesForArtists(knowledgeBase: ArtistKnowledgeBase) {
     for (const artist of knowledgeBase.artists) {
@@ -176,82 +214,87 @@ export class ResourceManagerService {
     }
   }
 
+
   fetchResourcesForTracks(knowledgeBase: TrackKnowledgeBase) {
     for (const track of knowledgeBase.tracks) {
       this.fetchResourcesForTrack(track);
     }
   }
 
-  private fetchResourcesForArtist(artist: Artist | undefined | null) {
-    if (!artist) {
-      return;
-    }
 
-    if (this.imageStorage.has(artist.id)) {
-      return;
+  private fetchResourcesForArtist(artist: Artist) {
+    // image
+    if (!this.imageStorage.has(artist.id)) {
+      this.imageStorage.set(
+        artist.id, 
+        this.fetchImageResource(artist.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView())
+      );
     }
-
-    this.imageStorage.set(artist.id, 
-      this.fetchImage(artist.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
   }
 
-  private fetchResourcesForTrack(track: Track | undefined | null) {
-    if (!track) {
-      return;
-    }
 
+  private fetchResourcesForTrack(track: Track) {
     // image
     if (!this.imageStorage.has(track.album.id)) {
-      this.imageStorage.set(track.album.id, 
-        this.fetchImage(track.album.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView()));
+      this.imageStorage.set(
+        track.album.id, 
+        this.fetchImageResource(track.album.images, this.screen.getImageSizeForGameView(), this.screen.getImageSizeForGameView())
+      );
     }
 
     // audio
     if (!this.audioStorage.has(track.id)) {
-      const audio = this.fetchAudio(track.previewURL);
-
-      if (audio) {
-        this.audioStorage.set(track.id, audio);
+      if (!track.previewURL) {
+        return;
       }
+
+      this.audioStorage.set(
+        track.id, 
+        this.fetchAudioResource(track.previewURL)
+      );
     }
   }
 
-  private fetchImage(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): HTMLImageElement {
-    const img = new Image(desiredWidth, desiredHeight);
-    img.style.display = 'block';
-    img.style.margin = '5px';
+
+  private fetchImageResource(availableImages: ImageURL[], desiredWidth: number, desiredHeight: number): ImageResource {
+    const imgElement = new Image(desiredWidth, desiredHeight);
+    imgElement.style.display = 'block';
+    imgElement.style.margin = '5px';
+
+    let metadata: ImageResourceMetadata = {urls: [], rawWidth: desiredWidth};
 
     if (availableImages && availableImages.length > 0) {
-      // TODO? wait for image to preload
-      //img.onload
-      
+      metadata.urls = availableImages;
+
       for (const image of availableImages) {
-        img.src = image.url;
-      
+        imgElement.src = image.url;
+        metadata.rawWidth = image.width;
+
         // select image that is "closest" to desired size
+        // sufficient to choose based on width (all images seem to be square)
         if (image.width && image.width >= desiredWidth) {
           break;
         }
       }
     } else {
-      // filler img
-      img.src = 'assets/images/no_img_available.jpg';
+      // we don't have an img, return filler img
+      imgElement.src = 'assets/images/no_img_available.jpg';
     }
 
+    return {metadata, data: imgElement};
 
-    return img;
+    // TODO? wait for image to load
+    //img.onload  
   }
 
-  private fetchAudio(url: string): HTMLAudioElement | null {
-    if (url) {
-      const audio = new Audio(url);
-      audio.loop = true;
-      return audio;
-    }
 
-    return null;
+  private fetchAudioResource(url: string): AudioResource {
+    const audio = new Audio(url);
+    audio.loop = true;
 
-    // TODO? wait for audio to preload
+    return {metadata: {url}, data: audio};
+
+    // TODO? wait for audio to load
     //audio.addEventListener('canplaythrough', event => {
     //  console.log('can play!');
     //});

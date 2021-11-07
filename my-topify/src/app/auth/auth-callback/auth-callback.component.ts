@@ -13,7 +13,8 @@ import { NotificationPriority, NotificationsService, NotificationType } from 'no
   templateUrl: './auth-callback.component.html',
   styleUrls: ['../../shared/style/common.css', './auth-callback.component.css']
 })
-export class AuthCallbackComponent implements OnInit { 
+export class AuthCallbackComponent implements OnInit {
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private spotifyHttpClient: SpotifyHttpClientService,
@@ -21,11 +22,13 @@ export class AuthCallbackComponent implements OnInit {
               private notificationService: NotificationsService) { 
               }
 
+
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       return;
     }
 
+    // check error state
     const error: string = this.route.snapshot.queryParams.error;
 
     if (error) {
@@ -38,6 +41,7 @@ export class AuthCallbackComponent implements OnInit {
       return;
     }
 
+    // extract and verify callback code and state
     const callbackCode: string = this.route.snapshot.queryParams.code;
     const state: string = this.route.snapshot.queryParams.state;
 
@@ -47,6 +51,7 @@ export class AuthCallbackComponent implements OnInit {
           return;
     }
 
+    // get code verifier
     const codeVerifier = this.authService.getCodeVerifier();
 
     if (!codeVerifier) {
@@ -59,6 +64,7 @@ export class AuthCallbackComponent implements OnInit {
       return;
     }
 
+    // we have everything we need, make access token request and finalize auth
     this.spotifyHttpClient.getAccessToken({
       clientId: this.authService.getClientId(), 
       codeVerifier,
@@ -87,7 +93,8 @@ export class AuthCallbackComponent implements OnInit {
         });
   }
 
-  private isCallbackCodeValid(callbackCode: string) {
+
+  private isCallbackCodeValid(callbackCode: string): boolean {
     if (callbackCode) {
       return true;
     }
@@ -95,7 +102,8 @@ export class AuthCallbackComponent implements OnInit {
     return false;
   }
 
-  private isStateValid(state: string) {
+
+  private isStateValid(state: string): boolean {
     if (state) {
       if (state === this.authService.getState()) {
         return true;

@@ -4,8 +4,11 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
+/**
+ * Get recommended image size to display based on browser window size.
+ */
 @Injectable({providedIn: 'root'})
 export class ScreenService {
   /*
@@ -16,6 +19,7 @@ export class ScreenService {
   private recImgSizeSubject = new Subject<void>();
   private recommendedImageSize: number = 0;
 
+
   constructor() {
     window.addEventListener('resize', this.onWindowResize.bind(this));
 
@@ -23,17 +27,13 @@ export class ScreenService {
     this.onWindowResize();
   }
 
-  recommendedImgSizeChanged() {
-    return this.recImgSizeSubject.asObservable();
-  }
 
-  private onWindowResize() {
-    //console.log('window: ' + window.innerWidth + 'x' + window.innerHeight);
+  private onWindowResize(): void {
     this.checkImageSize();
   }
 
 
-  private checkImageSize() {
+  private checkImageSize(): void {
     let newRecImgSize: number;
 
     if (window.innerWidth > 1024 || window.innerWidth > 1024) {
@@ -59,7 +59,17 @@ export class ScreenService {
     }
   }
 
-  getImageSizeForGameView() {
+  /**
+   * Subscribe to receive notifications on image size changes 
+   */
+  recommendedImgSizeChanged(): Observable<void> {
+    return this.recImgSizeSubject.asObservable();
+  }
+
+  /**
+   * Retrieve the recommended image size for the current screen size
+   */
+  getImageSizeForGameView(): number {
     return this.recommendedImageSize;
   }
 }

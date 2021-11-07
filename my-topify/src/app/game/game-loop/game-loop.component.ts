@@ -9,7 +9,6 @@ import { DisplayableQuestion } from 'src/app/shared/types';
 import { Router } from '@angular/router';
 import { ResourceManagerService } from 'src/app/shared/resource-manager.service';
 import { Subscription } from 'rxjs';
-import { ScreenService } from 'src/app/shared/screen.service';
 import { NotificationPriority, NotificationsService, NotificationType } from 'notifications-lib';
 
 const PRE_SELECT_TIMEOUT = 150; // ms
@@ -79,12 +78,10 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public gameIsOver = false;
 
-  constructor(private screen: ScreenService,
-              public game: GameService,
+
+  constructor(public game: GameService,
               private resourceManager: ResourceManagerService,
               private router: Router,
-              private renderer: Renderer2,
-              private cdRef: ChangeDetectorRef,
               private notificationService: NotificationsService) {
 
                 if (!this.game.isReady()) {
@@ -103,6 +100,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.touchendOnRightHandler = this.handleTouchEndOnRight.bind(this);
   }
 
+
   ngOnInit() {    
     this.resourceReloadSub = this.resourceManager.resourceReload().subscribe(() => {
       this.updateResources();
@@ -111,6 +109,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateQuestion();
     this.updateResources();
   }
+
 
   ngOnDestroy() {
     this.disableUserInteraction();
@@ -125,9 +124,11 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   ngAfterViewInit() {
     this.enableUserInteraction();
   }
+
 
   private enableUserInteraction() {
     if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
@@ -148,6 +149,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     rightElement.addEventListener('touchstart', this.touchstartOnRightHandler, false);
     rightElement.addEventListener('touchend', this.touchendOnRightHandler, false);
   }
+
 
   private disableUserInteraction() {
     if (!this.leftImagePlaceholder || !this.rightImagePlaceholder) {
@@ -170,12 +172,14 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     rightElement.removeEventListener('touchend', this.touchendOnRightHandler, false);
   }
 
+
   private startLeftSelection() {
     // start small timeout to enter selecting mode
     this.preSelectTimerId = window.setTimeout((which: Choice) => {
       this.startSelectionTimer(which);
     }, PRE_SELECT_TIMEOUT, Choice.Left);
   }
+
 
   private handleTouchStartOnLeft(event: Event) {
     event.preventDefault();
@@ -184,6 +188,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.startLeftSelection();
     this.leftTapTime = Date.now();
   }
+
 
   private handleTouchEndOnLeft(event: Event) {
     event.preventDefault();
@@ -197,6 +202,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   private handleTouchStartOnRight(event: Event) {
     event.preventDefault();
     event.stopPropagation();
@@ -204,6 +210,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.startRightSelection();
     this.rightTapTime = Date.now();
   }
+
 
   private handleTouchEndOnRight(event: Event) {
     event.preventDefault();
@@ -216,6 +223,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
       this.toggleAudioRight();
     }
   }
+
 
   private startRightSelection() {
     // start small timeout to enter selecting mode
@@ -230,6 +238,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cancelSelection();
     }, CANCEL_SELECT_TIMEOUT);
   }
+
 
   private cancelSelection() {
     if (this.preSelectTimerId) {
@@ -250,6 +259,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cancelSelectTimerId = undefined;
   }
 
+
   private startSelectionTimer(which: Choice) {
     this.selectingChoice = which;
     this.holdSelectTimerId = window.setTimeout(() => {
@@ -259,6 +269,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     // in selecting mode, wait some time and animate border
     // at the end trigger onAnswer
   }
+
 
   onAnswer(which: Choice) {
     this.disableUserInteraction();
@@ -301,6 +312,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }, SHOW_ANSWER_TIMEOUT);
   }
 
+
   private updateQuestion() {
     if (this.game.isGameOver()) {
       this.gameIsOver = true;
@@ -314,16 +326,18 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     return true;
   }
 
+
   private updateResources() {
     this.pauseAudio();
     this.addResources();
   }
 
+
   private pauseAudio() {
-    // audio
     this.pauseAudioLeft();
     this.pauseAudioRight();
   }
+
 
   private addResources() {
     if (!this.question) {
@@ -331,11 +345,12 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // images 
-    this.images = this.resourceManager.getImagesForQuestion(this.question);
+    this.images = this.game.getImagesForQuestion(this.question);
 
     // audio
-    this.audio = this.resourceManager.getAudioForQuestion(this.question);
+    this.audio = this.game.getAudioForQuestion(this.question);
   }
+
 
   private toggleAudioLeft() {
     if (this.selectingChoice === Choice.Left) {
@@ -354,6 +369,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   private toggleAudioRight() {
     if (this.selectingChoice === Choice.Right) {
       return; // was in selection mode, ignore
@@ -370,6 +386,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
       this.playAudioRight();
     }
   }
+
 
   private playAudioLeft() {
     if (this.audio) {
@@ -389,6 +406,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   private pauseAudioLeft() {
     if (this.audio) {
       const audioTrack = this.audio[0];
@@ -400,6 +418,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
       this.leftAudioPlaying = false;
     }
   }
+
 
   private playAudioRight() {
     if (this.audio) {
@@ -419,6 +438,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   private pauseAudioRight() {
     if (this.audio) {
       const audioTrack = this.audio[1];
@@ -431,6 +451,7 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   onInfo() {
     this.notificationService.notify({
       type: NotificationType.INFO, 
@@ -438,5 +459,4 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
       priority: NotificationPriority.IMMEDIATE
     });
   }
-
 }
