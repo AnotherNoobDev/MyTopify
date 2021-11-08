@@ -42,8 +42,8 @@ export class GameLoopComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public question: DisplayableQuestion | null = null;
 
-  @ViewChild('leftImagePlaceholder', {static: false}) leftImagePlaceholder: ElementRef | undefined = undefined;
-  @ViewChild('rightImagePlaceholder', {static: false}) rightImagePlaceholder: ElementRef | undefined = undefined;
+  @ViewChild('leftImagePlaceholder') leftImagePlaceholder: ElementRef | undefined = undefined;
+  @ViewChild('rightImagePlaceholder') rightImagePlaceholder: ElementRef | undefined = undefined;
 
   public images: HTMLImageElement[] = [];
   private audio: (HTMLAudioElement | undefined)[] | null = null;

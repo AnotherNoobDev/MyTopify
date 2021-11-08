@@ -20,7 +20,7 @@ import { debounce, getDisplayablePeriod } from 'src/app/shared/utility';
 })
 export class ChartComponent implements OnInit, OnDestroy {
 
-  @ViewChild(CdkVirtualScrollViewport, {static: false}) virtualScroll: CdkVirtualScrollViewport | undefined = undefined;
+  @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport | undefined = undefined;
 
   public uType: 'tracks' | 'artists' = 'tracks';
   public uPeriod: 'short_term' | 'medium_term' | 'long_term' = 'long_term';
