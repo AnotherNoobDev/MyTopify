@@ -2,29 +2,9 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
-
-@font-face {
-  font-family: Monoton;
-  src: url('assets/fonts/Monoton/Monoton-Regular.ttf');
-  unicode-range: U+004D, U+0059, U+0054, U+004F, U+0050, U+0049, U+0046;
-  font-display: swap;
-}
-
 @font-face {
   font-family: WalterTurncoat;
   src: url('assets/fonts/Walter_Turncoat/WalterTurncoat-Regular.ttf');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: BadScript;
-  src: url('assets/fonts/Bad_Script/BadScript-Regular.ttf');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Vibur;
-  src: url('assets/fonts/Vibur/Vibur-Regular.ttf');
   font-display: swap;
 }
 
@@ -34,17 +14,17 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: Budmo;
-  src: url('assets/fonts/budmo/tt/budmo jiggler.ttf');
-  font-display: swap;
-}
 
+:root {
+  /* theme */
+  --color-sky-magenta: #B37BA4;
+  --color-hunyadi-yellow: #F4AC45;
+  --color-moonstone: #559CAD;
+  --color-night: #121619;
 
-:root {  
-  /* Set neon color */
-  --neon-color-left: #04d9ff;
-  --neon-color-right: #bc13fe;
+  /* neon borders */
+  --neon-color-left: var(--color-sky-magenta);
+  --neon-color-right: var(--color-moonstone);
   --neon-color-wrong: #ff073a;
   --neon-color-correct: #39ff14;
   
@@ -70,22 +50,5 @@
 }
 
 body {
-  background-color: black;
-  background-image: url('assets/images/background.jpg');
-  background-position: center center;
-  background-repeat: no-repeat;
-
-  /* Background image is fixed in the viewport so that it doesn't move when 
-     the content's height is greater than the image's height */
-  background-attachment: fixed;
-
-  /* This is what makes the background image rescale based
-    on the container's size */
-    background-size: cover;
-}
-
-@media only screen and (max-width: 480px) {
-  body {
-    background-image: url('assets/images/background_mobile.jpg');
-  }
+  background-color: var(--color-night);
 }

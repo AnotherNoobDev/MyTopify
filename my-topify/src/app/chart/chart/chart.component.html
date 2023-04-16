@@ -59,7 +59,7 @@
         <p *ngIf="item.text.track" class="filler-text">{{(i + 1) + '. ' + item.text.track}}</p>
         <p *ngIf="item.text.track" class="track-text track-text-small">{{item.text.artist}}</p>
         <p *ngIf="!item.text.track" class="filler-text">{{(i + 1) + '. '}}</p>
-        <p *ngIf="!item.text.track" class="artist-text">{{item.text.artist}}</p>
+        <p *ngIf="!item.text.track" class="artist-text artist-text-small">{{item.text.artist}}</p>
       </div>
     </div>
   </cdk-virtual-scroll-viewport>

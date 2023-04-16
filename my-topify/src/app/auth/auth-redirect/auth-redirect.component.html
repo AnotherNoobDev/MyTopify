@@ -5,20 +5,21 @@
 
 <div class="page-view-column page-view-column-top">
   <div class="title">
-    <p class="title-item">My</p>
-    <p class="title-item">Topify</p>
+    <p class="title-first title-item">My</p>
+    <p class="title-second title-item">Topify</p>
   </div>
 
-  <div id="blackboard" class="blackboard-text-only">
+  <div id="blackboard" class="blackboard-text-only" style="width:70%">
     <div id="blackboard-content" class="blackboard-content-text-only">
       <p>Your favorite tracks and artists.</p> 
       <p>Can you guess them yourself?</p>
-      <p style="color: var(--blackboard-emphasis-secondary)">Data don't lie ¯\_(ツ)_/¯</p>
     </div>
   </div>
+  
   <div class="spotify-auth no-select" (click)="redirectToSpotify()">
     <img id="spotify-icon" src="/assets/images/spotify.png" alt="Spotify Icon">
     <p class="spotify-text">Login with Spotify</p>
   </div>
+
 </div>
 

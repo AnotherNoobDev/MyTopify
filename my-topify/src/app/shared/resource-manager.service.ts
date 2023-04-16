@@ -16,7 +16,7 @@ import {
   DisplayableItem } from './types';
 import { ScreenService } from './screen.service';
 import { Subject } from 'rxjs';
-import { getTrackShortName } from './utility';
+import { getArtistsShort, getTrackShortName } from './utility';
 
 
 interface ImageResourceMetadata {
@@ -152,7 +152,7 @@ export class ResourceManagerService {
         audio: this.getAudio(track),
         text: {
           track: getTrackShortName(track.name), 
-          artist: track.artists.slice(0, 3).join(', '), 
+          artist: getArtistsShort(track.artists, 40), 
           album: track.album.name
         },
         knowledgeId: track.id

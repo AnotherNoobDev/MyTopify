@@ -34,11 +34,8 @@
   margin-top: 15px;
   font-size: min(5vw, 25px) !important;
   text-transform: none !important;
+  color: white;
   white-space: nowrap;
-}
-
-.track-text-menu small {
-  font-size: 0.6em;
 }
 
 .menu-item-fixed {

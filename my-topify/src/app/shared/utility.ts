@@ -20,6 +20,23 @@ export function getTrackShortName(trackName: string): string {
 }
 
 
+export function getArtistsShort(artists: string[], desiredLen: number): string {
+  let count = 3;
+  let res = "";
+
+  while (count >= 1) {
+    res = artists.slice(0, count).join(', ');
+    if (res.length < desiredLen) {
+      return res;
+    }
+
+    count--;
+  }
+  
+  return res.substring(0, desiredLen);
+}
+
+
 export function getFirstArtist(artists: string): string {
   const artistSeparator = ',';
 

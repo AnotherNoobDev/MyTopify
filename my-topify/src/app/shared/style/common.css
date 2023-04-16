@@ -3,7 +3,9 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
  
-.page-view-column {
+ @import url('https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap');
+ 
+ .page-view-column {
   position:fixed;
   width:100%;
   height:100%;
@@ -24,25 +26,25 @@
 }
 
 .title {
-  margin-top: min(5vh, 40px);
+  margin-top: min(10vh, 80px);
   margin-bottom: min(5vh, 40px);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center; 
-  color: lightyellow;
-  font-size: min(17vw, 80px);
-  font-family: Monoton;
+  color: var(--color-sky-magenta);
+  font-size: max(60px, min(17vw, 17vh, 300px));
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
   text-transform: uppercase;
-  text-shadow: 
-    0 0 10px yellow,
-    0 0 20px orange,
-    0 0 40px brown,
-    0 0 80px purple;
 }
 
-.title-small {
-  font-size: min(12vw, 60px) !important;
+.title-first {
+  color: var(--color-sky-magenta);
+}
+
+.title-second {
+  color: var(--color-moonstone);
 }
 
 .title-item {
@@ -61,21 +63,15 @@
   align-items: center;
   width: 100%;
   max-width: 1100px;
-  height: min(6em, 200px);
-  min-height: min(6em, 200px);
-  background-color: black;
-  background-image: url('/assets/images/blackboard_h.jpg');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  height: min(7.2em, 240px);
+  min-height: min(7.2em, 240px);
+  background-color: transparent;
+  border: 5px var(--color-hunyadi-yellow);
+  border-style: dashed solid;
   margin-top: min(1vw, 20px);
   margin-bottom: min(1vw, 20px);
 }
 
-@media only screen and (max-width: 480px) {
-  #blackboard {
-    background-image: url('/assets/images/blackboard_h_mobile.jpg');
-  }
-}
 
 .blackboard-text-only {
   font-size: min(5vw, 30px) !important;
@@ -85,8 +81,8 @@
 
 .blackboard-game-config {
   font-size: min(5vw, 30px) !important;
-  height: min(13em, 420px) !important;
-  min-height: min(13em, 420px) !important;
+  height: min(14.25em, 460px) !important;
+  min-height: min(14.25em, 460px) !important;
 }
 
 #blackboard-content {
@@ -100,12 +96,6 @@
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
-}
-
-#blackboard-content:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 .spotify-auth {
@@ -174,61 +164,35 @@
 
 .track-text {
   margin: 0;
-  color: yellow;
+  color: var(--color-moonstone);
   font-size: min(4.5vw, 40px);
-  font-family: BadScript;
+  font-family: 'Lato', sans-serif;
   text-transform: uppercase;
-  text-shadow: 
-    0 0 10px goldenrod,
-    0 0 20px orangered,
-    0 0 40px mediumblue,
-    0 0 80px purple;
 }
 
 .track-text-small {
   font-size: min(5vw, 30px) !important;
-  font-family: TextMeOne !important;
   margin-top: 10px;
-}
-
-.chart-item-text .track-text {
-  text-shadow: none;
 }
 
 .artist-text {
   margin: 0;
-  color: lightyellow;
+  color: var(--color-hunyadi-yellow);
   font-size: min(7vw, 50px);
-  font-family: Budmo;
+  font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
-  text-shadow: 
-    0 0 10px yellow,
-    0 0 20px orange,
-    0 0 40px brown,
-    0 0 80px purple;
 }
 
-.chart-item-text .artist-text {
-  text-shadow: none;
+.artist-text-small {
+  font-size: min(4.5vw, 40px);
 }
 
 .filler-text {
   margin: 0;
   font-size: min(6vw, 40px);
   text-transform: lowercase;
-  color: #c6e2ff;
-  font-family: Vibur;
-  text-shadow:
-    0 0 6px rgba(202,228,225,0.92),
-    0 0 30px rgba(202,228,225,0.34),
-    0 0 12px rgba(30,132,242,0.52),
-    0 0 21px rgba(30,132,242,0.92),
-    0 0 34px rgba(30,132,242,0.78),
-    0 0 54px rgba(30,132,242,0.92);
-}
-
-.chart-item-text .filler-text {
-  text-shadow: none;
+  color: var(--color-sky-magenta);
+  font-family: TextMeOne;
 }
 
 .ripple {
@@ -309,7 +273,7 @@
   background: radial-gradient(
     ellipse 50% 100%,
    rgba(0,0,0,1.0) 50%,
-   rgba(0,0,0,0.9)
+   rgba(0,0,0,0.97)
   );
   z-index: 2;
   cursor: pointer;
@@ -334,4 +298,8 @@
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+.menu-content {
+  flex: 1;
 }

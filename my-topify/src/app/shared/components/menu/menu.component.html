@@ -4,5 +4,13 @@
 -->
 
 <div [ngClass]="('overlay ' + (showMenu? 'on' : 'off'))" (click)="onCloseMenu()">
-  <app-menu-content></app-menu-content>
+  <div class="page-view-column page-view-column-top">
+    <div class="title menu-title">
+      <p class="title-first title-item">My</p>
+      <p class="title-second title-item">Topify</p>
+    </div>
+    <div class="menu-content">
+      <app-menu-content></app-menu-content>
+    </div>
+  </div>
 </div>
